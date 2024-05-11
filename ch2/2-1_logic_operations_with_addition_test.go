@@ -8,17 +8,17 @@ func Fuzz_LogicOperationsWithAddition(f *testing.F) {
 			-x == ^x+1,
 			-x == ^(x - 1),
 			^x == -x-1,
-			-^x == x+1,
+			-^x == x+1, // addition can be implemented with not and negation
 			^-x == x-1,
 			x+y == x-^y-1,
-			x+y == (x^y)+2*(x&y),
+			x+y == (x^y)+2*(x&y), // this has carry probability of 0.25, when normally it is 0.5
 			x+y == (x|y)+(x&y),
 			x+y == 2*(x|y)-(x^y),
 			x-y == x+^y+1,
 			x-y == (x^y)-2*(^x&y),
 			x-y == (x&(^y))-(^x&y),
 			x-y == 2*(x&^y)-(x^y),
-			x^y == (x|y)-(x&y),
+			x^y == (x|y)-(x&y), // shows how to do XOR in RISC with only three basic instructions
 			x&^y == (x|y)-y,
 			x&^y == x-(x&y),
 			^(x - y) == y-x-1,
