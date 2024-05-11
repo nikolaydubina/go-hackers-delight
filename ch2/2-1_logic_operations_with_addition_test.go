@@ -23,8 +23,8 @@ func Fuzz_LogicOperationsWithAddition(f *testing.F) {
 			x&^y == x-(x&y),
 			^(x - y) == y-x-1,
 			^(x - y) == ^x+y,
-			// x === y == (x&y) - (x|y) - 1
-			//         == (x&y) + ^(x|y)
+			^(x ^ y) == (x&y)-(x|y)-1, // bitwise equality (===)
+			^(x ^ y) == (x&y)+^(x|y),  // bitwise equality (===)
 			x|y == (x&^y)+y,
 			x&y == (^x|y)-^x,
 		}
