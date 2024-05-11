@@ -1,3 +1,0 @@
-go test fuzz v1
-rune('\x04')
-rune('\x00')
