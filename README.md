@@ -2,6 +2,8 @@
 
 [![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
 
+This is an interactive Go showcase for "[Hacker's Delight](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)" 2nd Edition by Henrey S.Warren Jr, 2013.
+
 ## Ch2
 
 > **Right-to-Left Computability.** A function mapping words to words can be implemented with word-parallel `add`, `substract`, `and`, `or` and `not` instructions if and only if
@@ -15,4 +17,7 @@ It can be shown that in the ordinary addition of binary numbers with each bit in
 
 ----
 
-
+## References
+  
+- [wiki: Hackers Delight](https://en.wikipedia.org/wiki/Hacker%27s_Delight)
+- [showcase in `C`](https://github.com/hcs0/Hackers-Delight)
