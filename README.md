@@ -1,5 +1,7 @@
 # go-hackers-delight
 
+[![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
+
 
 ## Ch2
 
