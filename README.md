@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
 
-This is an interactive Go showcase for "[Hacker's Delight](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)" 2nd Edition by Henrey S.Warren Jr, 2013.
+An interactive Go showcase for "[Hacker's Delight](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)" 2nd Edition by Henrey S.Warren Jr, 2013.
 
 ## Ch2
 
@@ -14,8 +14,6 @@ This is an interactive Go showcase for "[Hacker's Delight](https://www.amazon.co
 ----
 
 It can be shown that in the ordinary addition of binary numbers with each bit independently equally likely to be 0 or 1, a carry occurs at each position with probability about 0.5.
-
-----
 
 ## References
   
