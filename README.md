@@ -23,4 +23,5 @@ It can be shown that in the ordinary addition of binary numbers with each bit in
 - book generator guide: https://github.com/hongtaoh/onlinebook
 - book generator: [VuePress](https://github.com/vuejs/vuepress)
 - book generator: [HugoBook](https://github.com/alex-shpak/hugo-book)
+- book generator: [mkDocks + Material](https://github.com/squidfunk/mkdocs-material)
 - [LeanPub + Git](https://help.leanpub.com/en/articles/2916385-getting-started-using-leanpub-s-git-and-github-writing-mode-to-write-and-publish-a-book)
