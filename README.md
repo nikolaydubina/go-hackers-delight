@@ -22,8 +22,8 @@ It can be shown that in the ordinary addition of binary numbers with each bit in
   
 - [wiki: Hackers Delight](https://en.wikipedia.org/wiki/Hacker%27s_Delight)
 - [showcase in `C`](https://github.com/hcs0/Hackers-Delight)
-- book generator: [mdBook](https://github.com/rust-lang/mdBook)
 - book generator guide: https://github.com/hongtaoh/onlinebook
+- book generator: [mdBook](https://github.com/rust-lang/mdBook)
 - book generator: [VuePress](https://github.com/vuejs/vuepress)
 - book generator: [HugoBook](https://github.com/alex-shpak/hugo-book)
 - book generator: [MkDocks + Material](https://github.com/squidfunk/mkdocs-material)
