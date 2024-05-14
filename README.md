@@ -17,6 +17,7 @@ It can be shown that in the ordinary addition of binary numbers with each bit in
 
 ## References
 
+> [!WARNING]
 > None of book/documentation generators support interactive Go Playground.
   
 - [wiki: Hackers Delight](https://en.wikipedia.org/wiki/Hacker%27s_Delight)
