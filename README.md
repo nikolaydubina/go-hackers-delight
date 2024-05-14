@@ -16,6 +16,8 @@ An interactive Go showcase for "[Hacker's Delight](https://www.amazon.com/Hacker
 It can be shown that in the ordinary addition of binary numbers with each bit independently equally likely to be 0 or 1, a carry occurs at each position with probability about 0.5.
 
 ## References
+
+> None of book/documentation generators support interactive Go Playground.
   
 - [wiki: Hackers Delight](https://en.wikipedia.org/wiki/Hacker%27s_Delight)
 - [showcase in `C`](https://github.com/hcs0/Hackers-Delight)
