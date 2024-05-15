@@ -8,6 +8,11 @@ An interactive Go showcase for "[Hacker's Delight](https://www.amazon.com/Hacker
 
 ## Ch2
 
+It is advisable to avoid branches in simple functions.
+This book shows many examples on how to compute common functions with few branch-free instructions.
+
+----
+
 > **Right-to-Left Computability.** A function mapping words to words can be implemented with word-parallel `add`, `substract`, `and`, `or` and `not` instructions if and only if
 > each bit of of the result depends only on the bits at and to the right of each input operand.
 
