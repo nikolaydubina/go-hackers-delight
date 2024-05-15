@@ -32,32 +32,24 @@ func FuzzAvgInt32(f *testing.F) {
 		}
 	}
 	f.Fuzz(func(t *testing.T, x, y int32) {
-		t.Run("ceil", func(t *testing.T) {
-			avg := ch2.AvgCeil(x, y)
+		sum := int64(x) + int64(y)
 
-			var a, b int64 = int64(x), int64(y)
-			sum := a + b
+		t.Run("ceil", func(t *testing.T) {
 			var v int32 = int32(sum / 2)
 			if sum%2 == 1 {
 				v += 1
 			}
-
-			if avg != v {
+			if avg := ch2.AvgCeil(x, y); avg != v {
 				t.Error("x", x, "y", y, "got", avg, "exp", v)
 			}
 		})
 
 		t.Run("floor", func(t *testing.T) {
-			avg := ch2.Avg(x, y)
-
-			var a, b int64 = int64(x), int64(y)
-			sum := a + b
 			var v int32 = int32(sum / 2)
 			if sum%2 == -1 {
 				v -= 1
 			}
-
-			if avg != v {
+			if avg := ch2.Avg(x, y); avg != v {
 				t.Error("x", x, "y", y, "got", avg, "exp", v)
 			}
 		})
@@ -76,29 +68,21 @@ func FuzzAvgUint32(f *testing.F) {
 		}
 	}
 	f.Fuzz(func(t *testing.T, x, y uint32) {
-		t.Run("ceil", func(t *testing.T) {
-			avg := ch2.AvgCeil(x, y)
+		sum := int64(x) + int64(y)
 
-			var a, b int64 = int64(x), int64(y)
-			sum := a + b
+		t.Run("ceil", func(t *testing.T) {
 			var v uint32 = uint32(sum / 2)
 			if sum%2 == 1 {
 				v += 1
 			}
-
-			if avg != v {
+			if avg := ch2.AvgCeil(x, y); avg != v {
 				t.Error("x", x, "y", y, "got", avg, "exp", v)
 			}
 		})
 
 		t.Run("floor", func(t *testing.T) {
-			avg := ch2.Avg(x, y)
-
-			var a, b int64 = int64(x), int64(y)
-			sum := a + b
 			var v uint32 = uint32(sum / 2)
-
-			if avg != v {
+			if avg := ch2.Avg(x, y); avg != v {
 				t.Error("x", x, "y", y, "got", avg, "exp", v)
 			}
 		})
