@@ -8,13 +8,13 @@ import (
 	"github.com/nikolaydubina/go-hackers-delight/ch2"
 )
 
-func ExampleAvg() {
-	fmt.Print(ch2.Avg[int32](-100, -200))
-	// Output: -150
+func ExampleAvgFloor() {
+	fmt.Print(ch2.AvgFloor[int32](-101, -200))
+	// Output: -151
 }
 
 func ExampleAvgCeil() {
-	fmt.Print(ch2.Avg[int32](-100, -200))
+	fmt.Print(ch2.AvgCeil[int32](-101, -200))
 	// Output: -150
 }
 
@@ -49,7 +49,7 @@ func FuzzAvgInt32(f *testing.F) {
 			if sum%2 == -1 {
 				v -= 1
 			}
-			if avg := ch2.Avg(x, y); avg != v {
+			if avg := ch2.AvgFloor(x, y); avg != v {
 				t.Error("x", x, "y", y, "got", avg, "exp", v)
 			}
 		})
@@ -82,7 +82,7 @@ func FuzzAvgUint32(f *testing.F) {
 
 		t.Run("floor", func(t *testing.T) {
 			var v uint32 = uint32(sum / 2)
-			if avg := ch2.Avg(x, y); avg != v {
+			if avg := ch2.AvgFloor(x, y); avg != v {
 				t.Error("x", x, "y", y, "got", avg, "exp", v)
 			}
 		})
