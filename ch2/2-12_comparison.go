@@ -76,3 +76,6 @@ func HigherZero2(x int32) int32 { return (x >> 1) - x }
 func HigherZero3(x int32) int32 { return -x & ^x }
 
 func HigherEqualZero(x int32) int32 { return ^x }
+
+// TODO: comparison to/from unsigned comparison
+// TODO: comparison from carry bits

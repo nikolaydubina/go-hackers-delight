@@ -33,6 +33,10 @@ jobs:
           go test -fuzztime 5s -fuzz Fuzz_DeMorganLawsExtended ./ch2
           go test -fuzztime 5s -fuzz Fuzz_LogicOperationsWithAddition ./ch2
           go test -fuzztime 5s -fuzz Fuzz_InequalitiesAmongLogicAndArithmetic ./ch2
+          go test -fuzztime 5s -fuzz FuzzAvgInt32 ./ch2
+          go test -fuzztime 5s -fuzz FuzzAvgUint32 ./ch2
+          go test -fuzztime 5s -fuzz FuzzSign ./ch2
+          go test -fuzztime 5s -fuzz FuzzISIGN ./ch2
           go test -fuzztime 5s -fuzz FuzzCompareInt32 ./ch2
           go test -fuzztime 5s -fuzz FuzzCompareUint32 ./ch2
           go test -fuzztime 5s -fuzz FuzzCompareZeroInt32 ./ch2
