@@ -30,9 +30,12 @@ jobs:
 
       - name: Fuzz
         run: |
-          go test -fuzztime 5s -fuzz Fuzz_DeMorganLawsExtended ./...
-          go test -fuzztime 5s -fuzz Fuzz_LogicOperationsWithAddition ./...
-          go test -fuzztime 5s -fuzz Fuzz_InequalitiesAmongLogicAndArithmetic ./...
+          go test -fuzztime 5s -fuzz Fuzz_DeMorganLawsExtended ./ch2
+          go test -fuzztime 5s -fuzz Fuzz_LogicOperationsWithAddition ./ch2
+          go test -fuzztime 5s -fuzz Fuzz_InequalitiesAmongLogicAndArithmetic ./ch2
+          go test -fuzztime 5s -fuzz FuzzCompareInt32 ./ch2
+          go test -fuzztime 5s -fuzz FuzzCompareUint32 ./ch2
+          go test -fuzztime 5s -fuzz FuzzCompareZeroInt32 ./ch2
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
