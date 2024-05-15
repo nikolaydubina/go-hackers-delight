@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
 
-An interactive Go showcase for "[Hacker's Delight](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)" 2nd Edition by Henrey S.Warren Jr, 2013.
+An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685) 2nd Edition by Henrey S.Warren Jr, 2013.
 
 * Fuzz tests cover majority of functions
 
