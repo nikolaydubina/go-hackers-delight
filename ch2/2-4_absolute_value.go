@@ -31,5 +31,5 @@ func NAbs3(x int32) int32 {
 	return (2 * x & y) - x
 }
 
-// AbsFastMult when you have fast instruction for +1/-1 multiplication.
-func AbsFastMult(x int32) int32 { return (x>>30 | 1) * x }
+// AbsFastMul when you have fast instruction for +1/-1 multiplication.
+func AbsFastMul(x int32) int32 { return (x>>30 | 1) * x }
