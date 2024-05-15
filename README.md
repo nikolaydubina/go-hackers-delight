@@ -4,6 +4,8 @@
 
 An interactive Go showcase for "[Hacker's Delight](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)" 2nd Edition by Henrey S.Warren Jr, 2013.
 
+* Fuzz tests cover majority of functions
+
 ## Ch2
 
 > **Right-to-Left Computability.** A function mapping words to words can be implemented with word-parallel `add`, `substract`, `and`, `or` and `not` instructions if and only if
