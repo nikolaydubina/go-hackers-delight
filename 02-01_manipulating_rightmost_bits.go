@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // TurnOffRightMostBit this can be used to test if integer is power of 2
 func TurnOffRightMostBit(x int64) int64 { return x & (x - 1) }

@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // Sign can be calculated in four RISC instructions with comparison operators.
 // We are converting to uint32 to get logical right shift, since there is no int32 logical right shift in Go. This can cause generating more instructions.

@@ -1,8 +1,8 @@
-package ch2
+package hd_test
 
 import "testing"
 
-func Fuzz_LogicOperationsWithAddition(f *testing.F) {
+func FuzzLogicOperationsWithAddition(f *testing.F) {
 	f.Fuzz(func(t *testing.T, x, y int32) {
 		v := []bool{
 			-x == ^x+1,                          //

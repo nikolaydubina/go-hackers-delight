@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // ISIGN is sign-transfer function, as known in FORTRAN.
 func ISIGN(x, y int32) int32 {

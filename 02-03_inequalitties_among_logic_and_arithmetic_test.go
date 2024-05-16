@@ -1,4 +1,4 @@
-package ch2
+package hd_test
 
 import "testing"
 
@@ -6,7 +6,7 @@ func willSumOverflow(x, y uint64) bool { return (x+y < x) || (x+y < y) }
 
 func absDiff(x, y uint64) uint64 { return max(x, y) - min(x, y) }
 
-func Fuzz_InequalitiesAmongLogicAndArithmetic(f *testing.F) {
+func FuzzInequalitiesAmongLogicAndArithmetic(f *testing.F) {
 	f.Fuzz(func(t *testing.T, x, y uint64) {
 		v := []bool{
 			(x ^ y) <= (x | y),

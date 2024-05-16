@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // ShiftRightSignedFromUnsigned computes signed shift from unsigned shift.
 // This compiles to five or six RISC instructions.

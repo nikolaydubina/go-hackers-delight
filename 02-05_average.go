@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // AvgFloor does not cause overflow. Rounded down.
 // This is same as unsigned version, but uses signed-shift right.

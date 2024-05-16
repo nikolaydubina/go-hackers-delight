@@ -10,7 +10,7 @@ permissions: read-all
 
 jobs:
   build:
-    name: Build
+    name: Test
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
@@ -29,17 +29,7 @@ jobs:
         run: go test -v -coverprofile=coverage.txt -covermode=atomic ./...
 
       - name: Fuzz
-        run: |
-          go test -fuzztime 5s -fuzz Fuzz_DeMorganLawsExtended ./ch2
-          go test -fuzztime 5s -fuzz Fuzz_LogicOperationsWithAddition ./ch2
-          go test -fuzztime 5s -fuzz Fuzz_InequalitiesAmongLogicAndArithmetic ./ch2
-          go test -fuzztime 5s -fuzz FuzzAvgInt32 ./ch2
-          go test -fuzztime 5s -fuzz FuzzAvgUint32 ./ch2
-          go test -fuzztime 5s -fuzz FuzzSign ./ch2
-          go test -fuzztime 5s -fuzz FuzzISIGN ./ch2
-          go test -fuzztime 5s -fuzz FuzzCompareInt32 ./ch2
-          go test -fuzztime 5s -fuzz FuzzCompareUint32 ./ch2
-          go test -fuzztime 5s -fuzz FuzzCompareZeroInt32 ./ch2
+        run: go test -list . | grep Fuzz | xargs -I {} go test -fuzz {} -fuzztime 5s .
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2

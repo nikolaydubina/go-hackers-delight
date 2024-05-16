@@ -1,15 +1,15 @@
-package ch2_test
+package hd_test
 
 import (
 	"fmt"
 	"math"
 	"testing"
 
-	"github.com/nikolaydubina/go-hackers-delight/ch2"
+	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func ExampleISIGN() {
-	fmt.Println(ch2.ISIGN(10, -100000), ch2.ISIGN(-10, 100000))
+	fmt.Println(hd.ISIGN(10, -100000), hd.ISIGN(-10, 100000))
 	// Output: -10 10
 }
 
@@ -27,10 +27,10 @@ func FuzzISIGN(f *testing.F) {
 	}
 	f.Fuzz(func(t *testing.T, x, y int32) {
 		vs := []int32{
-			ch2.ISIGN(x, y),
-			ch2.ISIGN2(x, y),
-			ch2.ISIGN3(x, y),
-			ch2.ISIGN4(x, y),
+			hd.ISIGN(x, y),
+			hd.ISIGN2(x, y),
+			hd.ISIGN3(x, y),
+			hd.ISIGN4(x, y),
 		}
 		for i, q := range vs {
 			v := x

@@ -1,20 +1,20 @@
-package ch2_test
+package hd_test
 
 import (
 	"fmt"
 	"math"
 	"testing"
 
-	"github.com/nikolaydubina/go-hackers-delight/ch2"
+	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func ExampleAbs() {
-	fmt.Print(ch2.Abs(-42))
+	fmt.Print(hd.Abs(-42))
 	// Output: 42
 }
 
 func ExampleNAbs() {
-	fmt.Print(ch2.NAbs(-42))
+	fmt.Print(hd.NAbs(-42))
 	// Output: -42
 }
 
@@ -37,10 +37,10 @@ func FuzzAbs(f *testing.F) {
 
 		t.Run("abs", func(t *testing.T) {
 			vs := []int32{
-				ch2.Abs(x),
-				ch2.Abs2(x),
-				ch2.Abs3(x),
-				ch2.AbsFastMul(x),
+				hd.Abs(x),
+				hd.Abs2(x),
+				hd.Abs3(x),
+				hd.AbsFastMul(x),
 			}
 			for i, v := range vs {
 				if v != abs {
@@ -51,9 +51,9 @@ func FuzzAbs(f *testing.F) {
 
 		t.Run("nabs", func(t *testing.T) {
 			vs := []int32{
-				ch2.NAbs(x),
-				ch2.NAbs2(x),
-				ch2.NAbs3(x),
+				hd.NAbs(x),
+				hd.NAbs2(x),
+				hd.NAbs3(x),
 			}
 			for i, v := range vs {
 				if v != -abs {

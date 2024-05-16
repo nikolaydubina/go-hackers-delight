@@ -1,12 +1,12 @@
-package ch2_test
+package hd_test
 
 import (
 	"fmt"
 
-	"github.com/nikolaydubina/go-hackers-delight/ch2"
+	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func ExampleNextHigherNumberWithSameNumberOfOnes() {
-	fmt.Printf("%08b", ch2.NextHigherNumberWithSameNumberOfOnes(0b0011110000))
+	fmt.Printf("%08b", hd.NextHigherNumberWithSameNumberOfOnes(0b0011110000))
 	// Output: 100000111
 }

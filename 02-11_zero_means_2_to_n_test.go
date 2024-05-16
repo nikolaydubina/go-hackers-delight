@@ -1,4 +1,4 @@
-package ch2
+package hd_test
 
 import "testing"
 

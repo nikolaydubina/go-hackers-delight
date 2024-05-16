@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // NextHigherNumberWithSameNumberOfOnes is useful in bitsets stored in integers to find next set of same cardinality.
 // This function utilizes the theorem of Right-to-Left Computability.

@@ -1,15 +1,15 @@
-package ch2_test
+package hd_test
 
 import (
 	"fmt"
 	"math"
 	"testing"
 
-	"github.com/nikolaydubina/go-hackers-delight/ch2"
+	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func ExampleEqual() {
-	fmt.Println(ch2.Equal(10, 10)>>31, ch2.Equal(10, 11)>>31, ch2.Equal(-10, -10)>>31, ch2.Equal(-10, -11)>>31, ch2.Equal(-10, 10)>>31)
+	fmt.Println(hd.Equal(10, 10)>>31, hd.Equal(10, 11)>>31, hd.Equal(-10, -10)>>31, hd.Equal(-10, -11)>>31, hd.Equal(-10, 10)>>31)
 	// Output: -1 0 -1 0 0
 }
 
@@ -31,10 +31,10 @@ func FuzzCompareUint32(f *testing.F) {
 			got uint32
 			exp bool
 		}{
-			{ch2.Less4(x, y), x < y},
-			{ch2.LessUnsigned(x, y), x < y},
-			{ch2.LessUnsigned2(x, y), x < y},
-			{ch2.LessOrEqualUnsigned(x, y), x <= y},
+			{hd.Less4(x, y), x < y},
+			{hd.LessUnsigned(x, y), x < y},
+			{hd.LessUnsigned2(x, y), x < y},
+			{hd.LessOrEqualUnsigned(x, y), x <= y},
 		}
 		for i, q := range v {
 			if isMostSignificantSet(q.got) != q.exp {
@@ -62,19 +62,19 @@ func FuzzCompareInt32(f *testing.F) {
 			got int32
 			exp bool
 		}{
-			{ch2.Equal(x, y), x == y},
-			{ch2.Equal2(x, y), x == y},
-			{ch2.Equal3(x, y), x == y},
-			{ch2.Equal4(x, y), x == y},
-			{ch2.Equal5(x, y), x == y},
-			{ch2.NotEqual(x, y), x != y},
-			{ch2.NotEqual2(x, y), x != y},
-			{ch2.NotEqual3(x, y), x != y},
-			{ch2.Less(x, y), x < y},
-			{ch2.Less2(x, y), x < y},
-			{ch2.Less4(x, y), x < y},
-			{ch2.LessOrEqual(x, y), x <= y},
-			{ch2.LessOrEqual2(x, y), x <= y},
+			{hd.Equal(x, y), x == y},
+			{hd.Equal2(x, y), x == y},
+			{hd.Equal3(x, y), x == y},
+			{hd.Equal4(x, y), x == y},
+			{hd.Equal5(x, y), x == y},
+			{hd.NotEqual(x, y), x != y},
+			{hd.NotEqual2(x, y), x != y},
+			{hd.NotEqual3(x, y), x != y},
+			{hd.Less(x, y), x < y},
+			{hd.Less2(x, y), x < y},
+			{hd.Less4(x, y), x < y},
+			{hd.LessOrEqual(x, y), x <= y},
+			{hd.LessOrEqual2(x, y), x <= y},
 		}
 		for i, q := range v {
 			if isMostSignificantSet(q.got) != q.exp {
@@ -100,22 +100,22 @@ func FuzzCompareZeroInt32(f *testing.F) {
 			got int32
 			exp bool
 		}{
-			{ch2.EqualZero(x), x == 0},
-			{ch2.EqualZero2(x), x == 0},
-			{ch2.EqualZero3(x), x == 0},
-			{ch2.EqualZero4(x), x == 0},
-			{ch2.EqualZero5(x), x == 0},
-			{ch2.NotEqualZero(x), x != 0},
-			{ch2.NotEqualZero2(x), x != 0},
-			{ch2.NotEqualZero3(x), x != 0},
-			{ch2.NotEqualZero4(x), x != 0},
-			{ch2.LessZero(x), x < 0},
-			{ch2.LessOrEqualZero(x), x <= 0},
-			{ch2.LessOrEqualZero2(x), x <= 0},
-			{ch2.HigherZero(x), x > 0},
-			{ch2.HigherZero2(x), x > 0},
-			{ch2.HigherZero3(x), x > 0},
-			{ch2.HigherEqualZero(x), x >= 0},
+			{hd.EqualZero(x), x == 0},
+			{hd.EqualZero2(x), x == 0},
+			{hd.EqualZero3(x), x == 0},
+			{hd.EqualZero4(x), x == 0},
+			{hd.EqualZero5(x), x == 0},
+			{hd.NotEqualZero(x), x != 0},
+			{hd.NotEqualZero2(x), x != 0},
+			{hd.NotEqualZero3(x), x != 0},
+			{hd.NotEqualZero4(x), x != 0},
+			{hd.LessZero(x), x < 0},
+			{hd.LessOrEqualZero(x), x <= 0},
+			{hd.LessOrEqualZero2(x), x <= 0},
+			{hd.HigherZero(x), x > 0},
+			{hd.HigherZero2(x), x > 0},
+			{hd.HigherZero3(x), x > 0},
+			{hd.HigherEqualZero(x), x >= 0},
 		}
 		for i, q := range v {
 			if isMostSignificantSet(q.got) != q.exp {

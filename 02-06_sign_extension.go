@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // ExtendSign8 sign-extends a 8-bit number to a 32-bit number.
 // Sign of 8-bit number is stored in 8th-bit.

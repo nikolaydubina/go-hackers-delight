@@ -1,9 +1,9 @@
-package ch2
+package hd_test
 
 import "testing"
 
 // De Morgan's Laws can be thought of as distributing the _not_ sign.
-func Fuzz_DeMorganLawsExtended(f *testing.F) {
+func FuzzDeMorganLawsExtended(f *testing.F) {
 	f.Fuzz(func(t *testing.T, x, y int32) {
 		v := []bool{
 			^(x & y) == ^x|^y,

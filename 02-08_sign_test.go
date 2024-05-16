@@ -1,15 +1,15 @@
-package ch2_test
+package hd_test
 
 import (
 	"fmt"
 	"math"
 	"testing"
 
-	"github.com/nikolaydubina/go-hackers-delight/ch2"
+	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func ExampleSign() {
-	fmt.Println(ch2.Sign(-10), ch2.Sign(10), ch2.Sign(0))
+	fmt.Println(hd.Sign(-10), hd.Sign(10), hd.Sign(0))
 	// Output: -1 1 0
 }
 
@@ -24,7 +24,7 @@ func FuzzSign(f *testing.F) {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
-		q := ch2.Sign(x)
+		q := hd.Sign(x)
 
 		var v int32
 		switch {

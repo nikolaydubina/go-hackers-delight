@@ -1,4 +1,4 @@
-package ch2
+package hd
 
 // Abs can be computed in three or four branch-free instructions.
 func Abs(x int32) int32 {
