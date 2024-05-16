@@ -13,8 +13,6 @@ func ExampleEqual() {
 	// Output: -1 0 -1 0 0
 }
 
-func isMostSignificantSet[T int32 | uint32](x T) bool { return !(x>>31 == 0) }
-
 func FuzzCompareUint32(f *testing.F) {
 	var vs = []uint32{
 		0,
@@ -37,7 +35,7 @@ func FuzzCompareUint32(f *testing.F) {
 			{hd.LessOrEqualUnsigned(x, y), x <= y},
 		}
 		for i, q := range v {
-			if isMostSignificantSet(q.got) != q.exp {
+			if hd.IsMostSignificantSet(q.got) != q.exp {
 				t.Error(i, x)
 			}
 		}
@@ -77,7 +75,7 @@ func FuzzCompareInt32(f *testing.F) {
 			{hd.LessOrEqual2(x, y), x <= y},
 		}
 		for i, q := range v {
-			if isMostSignificantSet(q.got) != q.exp {
+			if hd.IsMostSignificantSet(q.got) != q.exp {
 				t.Error(i, x)
 			}
 		}
@@ -118,7 +116,7 @@ func FuzzCompareZeroInt32(f *testing.F) {
 			{hd.HigherEqualZero(x), x >= 0},
 		}
 		for i, q := range v {
-			if isMostSignificantSet(q.got) != q.exp {
+			if hd.IsMostSignificantSet(q.got) != q.exp {
 				t.Error(i, x)
 			}
 		}
