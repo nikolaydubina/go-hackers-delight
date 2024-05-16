@@ -66,10 +66,8 @@ func FuzzOverflowInt32(f *testing.F) {
 		}{
 			{sumOverflow, hd.IsAddOverflow(x, y)},
 			{sumOverflow, hd.IsAddOverflow2(x, y)},
-			{sumOverflow, hd.IsAddOverflow3(x, y)},
 			{subOverflow, hd.IsSubOverflow(x, y)},
 			{subOverflow, hd.IsSubOverflow2(x, y)},
-			{subOverflow, hd.IsSubOverflow3(x, y)},
 		}
 		for i, q := range v {
 			if hd.IsMostSignificantSet(q.got) != q.exp {

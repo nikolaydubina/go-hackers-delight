@@ -7,17 +7,13 @@ package hd
 // This version does not use carry bit and is efficient.
 func IsAddOverflow(x, y int32) int32 { return ^(x ^ y) & ((x + y) ^ x) }
 
-func IsAddOverflow2(x, y int32) int32 { return ^(x ^ y) & ((x + y) ^ x) }
-
-func IsAddOverflow3(x, y int32) int32 { return ((x + y) ^ x) & ((x + y) ^ y) }
+func IsAddOverflow2(x, y int32) int32 { return ((x + y) ^ x) & ((x + y) ^ y) }
 
 // IsSubOverflow sets most significant bit if overflow occurs.
 // This version does not use carry bit and is efficient.
 func IsSubOverflow(x, y int32) int32 { return (x ^ y) & ((x - y) ^ x) }
 
-func IsSubOverflow2(x, y int32) int32 { return (x ^ y) & ((x - y) ^ x) }
-
-func IsSubOverflow3(x, y int32) int32 { return ((x - y) ^ x) & (^((x - y) ^ y)) }
+func IsSubOverflow2(x, y int32) int32 { return ((x - y) ^ x) & (^((x - y) ^ y)) }
 
 // TODO: with overflow interrupts
 // TODO: carry with 2^31 version
