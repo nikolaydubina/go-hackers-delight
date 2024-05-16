@@ -29,7 +29,7 @@ jobs:
         run: go test -v -coverprofile=coverage.txt -covermode=atomic ./...
 
       - name: Fuzz
-        run: go test -list . | grep Fuzz | xargs -P 8 -I {} go test -fuzz {} -fuzztime 5s .
+        run: go test -list . | grep Fuzz | xargs -P 8 -I {} go test -fuzz {} -fuzztime 10s .
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
