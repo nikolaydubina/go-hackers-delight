@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
 
-An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)[^1][^2] 2nd Edition by Henrey S.Warren Jr, 2013.
+An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)[^1][^2][^3] 2nd Edition by Henrey S.Warren Jr, 2013.
 
 * Fuzz tests cover majority of functions
 
@@ -25,3 +25,4 @@ It can be shown that in the ordinary addition of binary numbers with each bit in
 
 [^1]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
 [^2]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
+[^3]: showcase in `Rust` — https://github.com/victoryang00/Delight
