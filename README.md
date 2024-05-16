@@ -1,10 +1,9 @@
 # go-hackers-delight
 
 [![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
+![fuzzing](https://img.shields.io/badge/fuzzing-active-brightgreen)
 
 An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)[^1][^2][^3] 2nd Edition by Henrey S.Warren Jr, 2013.
-
-* Fuzz tests cover majority of functions
 
 ## Ch2
 
