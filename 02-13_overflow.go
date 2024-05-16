@@ -33,3 +33,47 @@ func IsSubOverflowUnsigned2(x, y uint32) uint32 { return (x >> 1) - (y >> 1) - (
 func IsSubOverflowUnsigned3(x, y uint32) bool { return x < y }
 
 func IsSubOverflowUnsigned4(x, y, sub uint32) bool { return sub > x }
+
+func IsMulOverflow(x, y int32) bool {
+	// changed to boolean version, since ternary nor "conditional-and" are not supported in Go.
+	if y == 0 {
+		return false
+	}
+	c := uint32(^(x^y)>>31) + 1<<31
+	return uint32(Abs(x)) > (c / uint32((Abs(y))))
+}
+
+// IsDivOverflow uses around seven instructions with branches, and it is not easy to improve this.
+func IsDivOverflow(x, y int32) bool { return y == 0 || (x == -1<<31 && y == -1) }
+
+func IsMulOverflowUnsigned(x, y uint32) bool {
+	// changed to boolean version, since ternary nor "conditional-and" are not supported in Go.
+	if y == 0 {
+		return false
+	}
+	return uint32(x) > (0xFFFFFFFF / uint32(y))
+}
+
+// IsMulOverflowUnsignedNLZ counts number of leading zeros to detect overflow.
+func IsMulOverflowUnsignedNLZ(x, y uint32) bool {
+	m, n := NLZ(x), NLZ(y)
+	if m+n <= 30 {
+		return true
+	}
+	t := x * (y >> 1)
+	if int32(t) < 0 {
+		return true
+	}
+	z := t * 2
+	if (y & 1) != 0 {
+		z += x
+		if z < x {
+			return true
+		}
+	}
+	return false
+}
+
+func IsDivOverflowUnsigned(x, y uint32) bool { return y == 0 }
+
+// TODO: division overflow with long-division instructions

@@ -46,7 +46,11 @@ func FuzzOverflowInt32(f *testing.F) {
 		1,
 		-1,
 		math.MinInt32,
+		math.MinInt32 / 2,
+		math.MinInt32 + 1,
 		math.MaxInt32,
+		math.MaxInt32 / 2,
+		math.MaxInt32 - 1,
 	}
 	for _, x := range vs {
 		for _, y := range vs {
@@ -57,8 +61,12 @@ func FuzzOverflowInt32(f *testing.F) {
 		a, b := float64(x), float64(y)
 		sum := a + b
 		sub := a - b
+		mul := a * b
+		div := a / b
 		sumOverflow := sum > math.MaxInt32 || sum < math.MinInt32
 		subOverflow := sub > math.MaxInt32 || sub < math.MinInt32
+		mulOverflow := mul > math.MaxInt32 || mul < math.MinInt32
+		divOverflow := div > math.MaxInt32 || div < math.MinInt32
 
 		v := []struct {
 			exp bool
@@ -74,6 +82,15 @@ func FuzzOverflowInt32(f *testing.F) {
 				t.Error(i, x, y)
 			}
 		}
+
+		if mulOverflow != hd.IsMulOverflow(x, y) {
+			t.Error("mul", x, y)
+		}
+
+		// in Go 0/0 is panic at runtime, therefore overflow value is not determined for this case
+		if x > 0 && divOverflow != hd.IsDivOverflow(x, y) {
+			t.Error("div", x, y)
+		}
 	})
 }
 
@@ -82,6 +99,8 @@ func FuzzOverflowUint32(f *testing.F) {
 		0,
 		1,
 		math.MaxUint32,
+		math.MaxUint32 / 2,
+		math.MaxUint32 - 1,
 	}
 	for _, x := range vs {
 		for _, y := range vs {
@@ -92,8 +111,12 @@ func FuzzOverflowUint32(f *testing.F) {
 		a, b := float64(x), float64(y)
 		sum := a + b
 		sub := a - b
+		mul := a * b
+		div := a / b
 		sumOverflow := sum > math.MaxUint32 || sum < 0
 		subOverflow := sub > math.MaxUint32 || sub < 0
+		mulOverflow := mul > math.MaxUint32 || mul < 0
+		divOverflow := div > math.MaxUint32 || div < 0
 
 		v := []struct {
 			exp bool
@@ -107,11 +130,18 @@ func FuzzOverflowUint32(f *testing.F) {
 			{subOverflow, hd.IsMostSignificantSet(hd.IsSubOverflowUnsigned2(x, y))},
 			{subOverflow, hd.IsSubOverflowUnsigned3(x, y)},
 			{subOverflow, hd.IsSubOverflowUnsigned4(x, y, x-y)},
+			{mulOverflow, hd.IsMulOverflowUnsigned(x, y)},
+			{mulOverflow, hd.IsMulOverflowUnsignedNLZ(x, y)},
 		}
 		for i, q := range v {
 			if q.got != q.exp {
 				t.Error(i, x, y)
 			}
+		}
+
+		// in Go 0/0 is panic at runtime, therefore overflow value is not determined for this case
+		if x > 0 && divOverflow != hd.IsDivOverflowUnsigned(x, y) {
+			t.Error("div", x, y)
 		}
 	})
 }
