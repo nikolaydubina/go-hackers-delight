@@ -1,6 +1,6 @@
 // Overflow means result of operation result is too large or too small to fit into the variable.
 // Many hardware supply bits for overflow (e.g. MIPS does not have), but high-lever languages may not have access to it.
-// Unless stated opposite, formulas bellow assume carry to be 1 for stronger bounds.
+// Unless stated opposite, formulas bellow assume carry to be 0 (version when carry is one does not work; and cannot get carry in Go).
 package hd
 
 // IsAddOverflow sets most significant bit if overflow occurs.
