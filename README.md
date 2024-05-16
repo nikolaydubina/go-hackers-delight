@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
 
-An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685) 2nd Edition by Henrey S.Warren Jr, 2013.
+An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)[^1][^2] 2nd Edition by Henrey S.Warren Jr, 2013.
 
 * Fuzz tests cover majority of functions
 
@@ -22,7 +22,6 @@ This book shows many examples on how to compute common functions with few branch
 
 It can be shown that in the ordinary addition of binary numbers with each bit independently equally likely to be 0 or 1, a carry occurs at each position with probability about 0.5.
 
-## References
 
-- [wiki: Hackers Delight](https://en.wikipedia.org/wiki/Hacker%27s_Delight)
-- [showcase in `C`](https://github.com/hcs0/Hackers-Delight)
+[^1]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
+[^2]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
