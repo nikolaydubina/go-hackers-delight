@@ -1,24 +1,45 @@
 package hd_test
 
-import "testing"
+import (
+	"math"
+	"testing"
 
-func willSumOverflow(x, y uint64) bool { return (x+y < x) || (x+y < y) }
-
-func absDiff(x, y uint64) uint64 { return max(x, y) - min(x, y) }
+	hd "github.com/nikolaydubina/go-hackers-delight"
+)
 
 func FuzzInequalitiesAmongLogicAndArithmetic(f *testing.F) {
-	f.Fuzz(func(t *testing.T, x, y uint64) {
+	var vs = []uint32{
+		0,
+		1,
+		math.MaxInt32,
+		math.MaxInt32 / 2,
+		math.MaxInt32 - 1,
+	}
+	for _, x := range vs {
+		for _, y := range vs {
+			f.Add(x, y)
+		}
+	}
+	f.Fuzz(func(t *testing.T, x, y uint32) {
 		v := []bool{
 			(x ^ y) <= (x | y),
 			(x | y) >= max(x, y),
 			(x & y) <= min(x, y),
-			((x | y) <= (x + y)) && !willSumOverflow(x, y),
-			//((x | y) > (x + y)) && willSumOverflow(x, y), // TODO: find why does not work
-			absDiff(x, y) <= (x ^ y),
+			hd.AbsDiff(x, y) <= (x ^ y),
 		}
 		for i, q := range v {
 			if !q {
 				t.Error(i, x, y)
+			}
+		}
+
+		if isAddOverflow := hd.IsMostSignificantSet(hd.IsAddOverflowUnsigned(x, y)); isAddOverflow {
+			if (x | y) <= (x + y) {
+				t.Error(x, y)
+			}
+		} else {
+			if (x | y) > (x + y) {
+				t.Error(x, y)
 			}
 		}
 	})

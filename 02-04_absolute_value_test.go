@@ -18,6 +18,11 @@ func ExampleNAbs() {
 	// Output: -42
 }
 
+func ExampleAbsDiff() {
+	fmt.Print(hd.AbsDiff(1, 100))
+	// Output: 99
+}
+
 func FuzzAbs(f *testing.F) {
 	var vs = []int32{
 		0,
