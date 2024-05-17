@@ -8,7 +8,7 @@ import (
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
-func FuzzExchangeRegisters(f *testing.F) {
+func FuzzExchangeRegistersFull(f *testing.F) {
 	var vs = []int32{
 		0,
 		1,
