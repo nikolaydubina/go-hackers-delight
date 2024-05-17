@@ -23,7 +23,7 @@ func ExampleAbsDiff() {
 	// Output: 99
 }
 
-func FuzzAbs(f *testing.F) {
+func FuzzAbsNormal(f *testing.F) {
 	var vs = []int32{
 		0,
 		1,
