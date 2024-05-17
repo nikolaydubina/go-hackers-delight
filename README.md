@@ -16,7 +16,7 @@ An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hacker
 > This is the first book that promises to tell the dep, dark secrets of computer arithmetic, and it delivers in spades. It contains every trick I knew plus many, many more.
 > A godsend for library developers, compiler writers, and lovers of elegant hacks.
 > It deserves a spot on your self right next to Knuth.
-> In the tehn years since the first edition came out, it's been absolutely invaluable to my work at Sun and Google.
+> In the ten years since the first edition came out, it's been absolutely invaluable to my work at Sun and Google.
 > — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun Microsystems, Chief Java Architect at Google 2004~2012]
 
 [^1]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
