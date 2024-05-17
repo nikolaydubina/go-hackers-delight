@@ -5,10 +5,6 @@
 
 An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)[^1][^2][^3] 2nd Edition by Henrey S.Warren Jr, 2013.
 
-> In Hacker’s Delight, Second Edition, Hank Warren once again compiles an irresistible collection of programming hacks: timesaving techniques, algorithms, and tricks that help programmers build more elegant and efficient software, while also gaining deeper insights into their craft.
-> Warren’s hacks are eminently practical, but they’re also intrinsically interesting, and sometimes unexpected, much like the solution to a great puzzle. They are, in a word, a delight to any programmer who is excited by the opportunity to improve.
-> — Amazon
-
 > The author, an IBM researcher working on systems ranging from the IBM 704 to the PowerPC, collected what he called "programming tricks" over the course of his career.
 > These tricks concern efficient low-level manipulation of bit strings and numbers. According to the book's foreword by [Guy L. Steele](https://en.wikipedia.org/wiki/Guy_L._Steele_Jr.) [PhD, ACM Award, AAAI Fellow, Sun Fellow, core Java design], the target audience includes compiler writers and people writing high-performance code.
 > — Wikipedia
