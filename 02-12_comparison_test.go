@@ -70,6 +70,7 @@ func FuzzCompareInt32(f *testing.F) {
 			{hd.NotEqual3(x, y), x != y},
 			{hd.Less(x, y), x < y},
 			{hd.Less2(x, y), x < y},
+			{hd.Less3(x, y), x < y},
 			{hd.Less4(x, y), x < y},
 			{hd.LessOrEqual(x, y), x <= y},
 			{hd.LessOrEqual2(x, y), x <= y},

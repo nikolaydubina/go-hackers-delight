@@ -22,8 +22,7 @@ func Less(x, y int32) int32 { return (x - y) ^ ((x ^ y) & ((x - y) ^ x)) }
 
 func Less2(x, y int32) int32 { return (x & ^y) | (^(x ^ y) & (x - y)) }
 
-// TODO: doz version
-//func Less3(x, y int32) int32 { return NAbs(Doz(y, x)) }
+func Less3(x, y int32) int32 { return NAbs(DOZ(y, x)) }
 
 // Less4 utilizes the fact that x/2 - y/2 never overflows.
 // Stores result in most significant bit.
