@@ -19,30 +19,6 @@ An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hacker
 > In the tehn years since the first edition came out, it's been absolutely invaluable to my work at Sun and Google.
 > — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun Microsystems, Chief Java Architect at Google 2004~2012]
 
-## Ch2
-
-It is advisable to avoid branches in simple functions.
-This book shows many examples on how to compute common functions with few branch-free instructions.
-
-----
-
-> **Right-to-Left Computability.** A function mapping words to words can be implemented with word-parallel `add`, `substract`, `and`, `or` and `not` instructions if and only if
-> each bit of of the result depends only on the bits at and to the right of each input operand.
-
-— all these operands themselves depend only on right bits, so any of their composition also depends on the right bits.
-
-----
-
-It can be shown that in the ordinary addition of binary numbers with each bit independently equally likely to be 0 or 1, a carry occurs at each position with probability about 0.5.
-
-----
-
-> If a computer's instruction set includes an instruction for each of 16 Boolean functions of two variables,
-> then any Boolean function of three variables can be implemented with four (or fewer) instructions.
-> (and four variables with seven instructions).
-
-----
-
 [^1]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
 [^2]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
 [^3]: showcase in `Rust` — https://github.com/victoryang00/Delight
