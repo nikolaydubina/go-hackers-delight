@@ -1,7 +1,9 @@
-// Double-Length add and sub can be implemented in five instructions by using only 31 bits and storing carry in most significant bit.
-// Bellow simplified versions.
 package hd
 
+// DoubleLengthInt32FromUint64 unpacks two uint32 from single uint64.
+// This is known as Double-Length arithmetics.
+// This can be implemented in five instructions by using only 31 bits and storing carry in most significant bit.
+// Here is only simplified versions.
 func DoubleLengthInt32FromUint64(x uint64) [2]uint32 { return [2]uint32{uint32(x), uint32(x >> 32)} }
 
 // AddDoubleLength of uint64 numbers encoded in two uint32.

@@ -1,13 +1,13 @@
 package hd
 
-type unsigned interface {
+type Unsigned interface {
 	uint | uint8 | uint16 | uint32 | uint64
 }
 
-type signed interface {
+type Signed interface {
 	int | int8 | int16 | int32 | int64
 }
 
-type integers interface {
-	signed | unsigned
+type Int interface {
+	Signed | Unsigned
 }

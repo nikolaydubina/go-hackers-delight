@@ -1,15 +1,15 @@
 package hd
 
-func RoundDownBlockPowerOfTwo[T unsigned](x T, k int) T { return x & (-T(1) << k) }
+func RoundDownBlockPowerOfTwo[T Unsigned](x T, k int) T { return x & (-T(1) << k) }
 
-func RoundDownBlockPowerOfTwo2[T unsigned](x T, k int) T { return (x >> k) << k }
+func RoundDownBlockPowerOfTwo2[T Unsigned](x T, k int) T { return (x >> k) << k }
 
-func RoundUpBlockPowerOfTwo[T unsigned](x T, k int) T {
+func RoundUpBlockPowerOfTwo[T Unsigned](x T, k int) T {
 	var t T = (1 << k) - 1 // if k is const, this is const too
 	return (x + t) & ^t
 }
 
-func RoundUpBlockPowerOfTwo2[T unsigned](x T, k int) T {
+func RoundUpBlockPowerOfTwo2[T Unsigned](x T, k int) T {
 	var t T = -T(1) << k // if k is const, this is const too
 	return (x - t - 1) & t
 }

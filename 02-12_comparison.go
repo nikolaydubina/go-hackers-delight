@@ -1,5 +1,4 @@
-// Comparison functions are are couple branch-free instructions that store result in the most significant bit.
-// Comparison with zero functions are derived from comparison functions.
+// Comparison functions are a couple branch-free instructions that store result in the most significant bit.
 package hd
 
 func Equal(x, y int32) int32 { return Abs(x-y) - 1 }

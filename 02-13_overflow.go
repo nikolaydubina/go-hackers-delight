@@ -1,7 +1,10 @@
-// Overflow means result of operation result is too large or too small to fit into the variable.
-// Many hardware supply bits for overflow (e.g. MIPS does not have), but high-lever languages may not have access to it.
-// Unless stated opposite, formulas bellow assume carry to be 0 (version when carry is one does not work; and cannot get carry in Go).
+// Overflow means result of operation is too large or too small to fit into the variable.
+// Many hardware supply bits for overflow, but high-lever languages may not have access to it (rejected Go [overflow proposal]).
+//
+// [overflow proposal]: https://github.com/golang/go/issues/31500
 package hd
+
+// Unless stated opposite, formulas bellow assume carry to be 0 (version when carry is one does not work; and cannot get carry in Go).
 
 // IsAddOverflow sets most significant bit if overflow occurs.
 // This version does not use carry bit and is efficient.
@@ -14,9 +17,6 @@ func IsAddOverflow2(x, y int32) int32 { return ((x + y) ^ x) & ((x + y) ^ y) }
 func IsSubOverflow(x, y int32) int32 { return (x ^ y) & ((x - y) ^ x) }
 
 func IsSubOverflow2(x, y int32) int32 { return ((x - y) ^ x) & (^((x - y) ^ y)) }
-
-// TODO: with overflow interrupts
-// TODO: carry with 2^31 version
 
 func IsAddOverflowUnsigned(x, y uint32) uint32 { return (x & y) | ((x | y) & ^(x + y)) }
 
@@ -77,3 +77,5 @@ func IsMulOverflowUnsignedNLZ(x, y uint32) bool {
 func IsDivOverflowUnsigned(x, y uint32) bool { return y == 0 }
 
 // TODO: division overflow with long-division instructions
+// TODO: with overflow interrupts
+// TODO: carry with 2^31 version
