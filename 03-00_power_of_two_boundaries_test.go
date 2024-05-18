@@ -96,20 +96,12 @@ func FuzzRoundToPowerOfTwo(f *testing.F) {
 		f.Add(x)
 	}
 
-	// pre-computed powers of two possible in int32
-	powers := [...]uint32{
-		0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096,
-		8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576,
-		2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728,
-		268435456, 536870912, 1073741824, 2147483648,
-	}
-
 	f.Fuzz(func(t *testing.T, x uint32) {
 		// definition
 		var l, h uint32
 		if x > 0 {
-			l = powers[0]
-			for _, p := range powers {
+			for _, p := range hd.PowerOfTwo[:32] {
+				p := uint32(p)
 				if p <= x {
 					l = p
 				}
@@ -155,29 +147,22 @@ func FuzzIsPowerOfTwoBoundaryCrossed(f *testing.F) {
 		math.MaxUint32 - 1,
 	}
 
-	// pre-computed powers of two possible in int32
-	powers := [...]uint32{
-		2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096,
-		8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576,
-		2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728,
-		268435456, 536870912, 1073741824, 2147483648,
-	}
 	for _, a := range vs {
 		for _, l := range vs {
-			for i := range powers {
+			for i := range hd.PowerOfTwo[:32] {
 				f.Add(a, l, uint8(i))
 			}
 		}
 	}
 
 	f.Fuzz(func(t *testing.T, a, l uint32, ib uint8) {
-		if int(ib) >= len(powers) {
+		if int(ib) >= 31 {
 			t.Skip()
 		}
 		if l < 3 {
 			t.Skip()
 		}
-		b := powers[ib]
+		b := uint32(hd.PowerOfTwo[ib])
 
 		// naive approach, relying on uint64 to protect overflows
 		isCrossed := (uint64(a) / uint64(b)) != ((uint64(a) + uint64(l) - 1) / uint64(b))

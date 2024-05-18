@@ -60,31 +60,22 @@ func FuzzIsInRangePowerTwo(f *testing.F) {
 		math.MaxUint32 - 1,
 	}
 
-	// pre-computed powers of two possible in int32
-	powers := [...]uint32{
-		1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096,
-		8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576,
-		2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728,
-		268435456, 536870912, 1073741824, 2147483648,
-	}
-
 	for _, x := range vs {
 		for _, a := range vs {
-			for ip := range powers {
+			for ip := range hd.PowerOfTwo[:31] {
 				f.Add(x, a, uint8(ip))
 			}
 		}
 	}
 	f.Fuzz(func(t *testing.T, x, a uint32, ip uint8) {
-		if int(ip) >= len(powers) {
+		if int(ip) >= 31 {
 			t.Skip()
 		}
-		p := powers[ip]
+		p := hd.PowerOfTwo[ip]
 
 		t.Run("IsInRangePowerTwo", func(t *testing.T) {
-			exp := x <= (p - 1)
+			exp := x <= uint32(p-1)
 			got := hd.IsInRangePowerTwo(x, int(ip))
-
 			if exp != got {
 				t.Errorf("IsInRangePowerTwo: %v %v %v %0X %0X %v %v", x, a, ip, x-a, uint(x-a)>>ip, got, exp)
 			}
