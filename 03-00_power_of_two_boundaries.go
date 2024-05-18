@@ -14,7 +14,8 @@ func RoundUpBlockPowerOfTwo2[T unsigned](x T, k int) T {
 	return (x - t - 1) & t
 }
 
-// FLPTwo is floor to nearest power of two. Values >= 2^31 will be zero.
+// FLPTwo is Floor to nearest Power of Two.
+// Values >= 2^31 will be zero.
 func FLPTwo(x uint32) uint32 { return 1 << (31 - NLZ(x)) }
 
 func FLPTwo2(x uint32) uint32 { return 1 << (NLZ(x) ^ 31) }
@@ -40,7 +41,8 @@ func FLPTwo5(x uint32) uint32 {
 	return y
 }
 
-// CLPTwo is ceil to nearest power of two. Values >= 2^31 will be zero.
+// CLPTwo is Ceil to nearest Power of Two.
+// Values >= 2^31 will be zero.
 func CLPTwo(x uint32) uint32 { return 1 << (32 - NLZ(x-1)) }
 
 func CLPTwo2(x uint32) uint32 { return 0x80000000 >> (NLZ(x-1) - 1) }
