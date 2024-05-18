@@ -1,14 +1,9 @@
 package hd
 
-type unsigned interface {
-	uint | uint8 | uint16 | uint32 | uint64
-}
-
 func RoundDownBlockPowerOfTwo[T unsigned](x T, k int) T { return x & (-T(1) << k) }
 
 func RoundDownBlockPowerOfTwo2[T unsigned](x T, k int) T { return (x >> k) << k }
 
-// RoundUpBlockPowerOfTwo where k is log2 of power of two you want to round to.
 func RoundUpBlockPowerOfTwo[T unsigned](x T, k int) T {
 	var t T = (1 << k) - 1 // if k is const, this is const too
 	return (x + t) & ^t

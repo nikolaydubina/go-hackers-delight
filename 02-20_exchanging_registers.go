@@ -1,9 +1,5 @@
 package hd
 
-type integers interface {
-	int | uint | int8 | uint8 | int16 | uint16 | int32 | uint32 | int64 | uint64
-}
-
 // ExchangeRegisters illustrates very old trick on how to exchange two registers without using third one.
 // This is swap operation. Also known as multiple assignment in Go.
 func ExchangeRegisters[T integers](x, y T) (T, T) {
