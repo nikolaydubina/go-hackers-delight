@@ -111,15 +111,18 @@ func FuzzOverflowUint32(f *testing.F) {
 	f.Add(uint32(0x0000FFFF), uint32(0x0001FFFF)) // 4 * 4 + 3 * 4 + 3 = 31 bits leading zeroes n + m
 
 	f.Fuzz(func(t *testing.T, x, y uint32) {
-		a, b := float64(x), float64(y)
+		a, b := uint64(x), uint64(y)
 		sum := a + b
 		sub := a - b
 		mul := a * b
-		div := a / b
-		sumOverflow := sum > math.MaxUint32 || sum < 0
-		subOverflow := sub > math.MaxUint32 || sub < 0
-		mulOverflow := mul > math.MaxUint32 || mul < 0
-		divOverflow := div > math.MaxUint32 || div < 0
+		div := uint64(0)
+		if b > 0 {
+			div = a / b
+		}
+		sumOverflow := sum > math.MaxUint32
+		subOverflow := sub > math.MaxUint32
+		mulOverflow := mul > math.MaxUint32
+		divOverflow := div > math.MaxUint32
 
 		v := []struct {
 			exp bool
@@ -142,9 +145,14 @@ func FuzzOverflowUint32(f *testing.F) {
 			}
 		}
 
-		// in Go 0/0 is panic at runtime, therefore overflow value is not determined for this case
-		if x > 0 && divOverflow != hd.IsDivOverflowUnsigned(x, y) {
-			t.Error("div", x, y)
-		}
+		t.Run("IsDivOverflowUnsigned", func(t *testing.T) {
+			if y == 0 {
+				t.Skip("cannot divide by 0")
+			}
+
+			if divOverflow != hd.IsDivOverflowUnsigned(x, y) {
+				t.Error("div", x, y)
+			}
+		})
 	})
 }

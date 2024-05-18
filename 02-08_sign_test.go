@@ -13,6 +13,16 @@ func ExampleSign() {
 	// Output: -1 1 0
 }
 
+func ExampleIsMostSignificantSet_int32() {
+	fmt.Println(hd.IsMostSignificantSet(int32(-1)), hd.IsMostSignificantSet(int32(1)), hd.IsMostSignificantSet(int32(math.MaxInt32)))
+	// Output: true false false
+}
+
+func ExampleIsMostSignificantSet_uint32() {
+	fmt.Println(hd.IsMostSignificantSet(uint32(0xFFFFFFFF)), hd.IsMostSignificantSet(uint32(10)))
+	// Output: true false
+}
+
 func FuzzSign(f *testing.F) {
 	var vs = []int32{
 		0,
