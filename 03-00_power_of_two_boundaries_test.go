@@ -141,3 +141,62 @@ func FuzzRoundToPowerOfTwo(f *testing.F) {
 		}
 	})
 }
+
+func FuzzIsPowerOfTwoBoundaryCrossed(f *testing.F) {
+	var vs = []uint32{
+		0,
+		1,
+		10,
+		100,
+		1000000,
+		math.MaxInt32,
+		math.MaxInt32 / 2,
+		math.MaxInt32 - 1,
+		math.MaxUint32,
+		math.MaxUint32 / 2,
+		math.MaxUint32 - 1,
+	}
+
+	// pre-computed powers of two possible in int32
+	powers := [...]uint32{
+		2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096,
+		8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576,
+		2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728,
+		268435456, 536870912, 1073741824, 2147483648,
+	}
+	for _, a := range vs {
+		for _, l := range vs {
+			for i := range powers {
+				f.Add(a, l, uint8(i))
+			}
+		}
+	}
+
+	f.Fuzz(func(t *testing.T, a, l uint32, ib uint8) {
+		if int(ib) >= len(powers) {
+			t.Skip()
+		}
+		if l < 3 {
+			t.Skip()
+		}
+		b := powers[ib]
+
+		// naive approach, relying on uint64 to protect overflows
+		isCrossed := (uint64(a) / uint64(b)) != ((uint64(a) + uint64(l) - 1) / uint64(b))
+
+		vs := []struct {
+			exp bool
+			got bool
+		}{
+			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed(a, l, b)},
+			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed2(a, l, b)},
+			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed3(a, l, b)},
+			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed4(a, l, b)},
+		}
+		for i, v := range vs {
+			if v.got != v.exp {
+				t.Error(i, a, l, b, "exp", v.exp, "got", v.got)
+			}
+		}
+	})
+}

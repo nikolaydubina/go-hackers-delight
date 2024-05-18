@@ -61,7 +61,8 @@ func CLPTwo3(x uint32) uint32 {
 	return x + 1
 }
 
-// IsPowerOfTwoBoundaryCrossed checks if adding l to a crosses power of two boundary of block-size b.
+// IsPowerOfTwoBoundaryCrossed checks if adding l to a crosses power of block of size b.
+// b size has to be power of two.
 // This and versions bellow are five or six RISC instructions.
 // b has to be power of two and likely to be a constant.
 func IsPowerOfTwoBoundaryCrossed(a, l, b uint32) bool { return -(a | -b) < l }
@@ -70,6 +71,6 @@ func IsPowerOfTwoBoundaryCrossed2(a, l, b uint32) bool { return (^(a | -b) + 1) 
 
 func IsPowerOfTwoBoundaryCrossed3(a, l, b uint32) bool { return ((^a & (b - 1)) + 1) < l }
 
-func IsPowerOfTwoBoundaryCrossed4(a, l, b uint32) bool { return (8 - (a & (b - 1))) < l }
+func IsPowerOfTwoBoundaryCrossed4(a, l, b uint32) bool { return (b - (a & (b - 1))) < l }
 
 // TODO: round power of two signed
