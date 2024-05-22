@@ -12,7 +12,7 @@ An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hacker
 > A godsend for library developers, compiler writers, and lovers of elegant hacks.
 > It deserves a spot on your self right next to Knuth.
 > In the ten years since the first edition came out, it's been absolutely invaluable to my work at Sun and Google.  
-> — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun Microsystems, Chief Java Architect at Google 2004~2012]
+> — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun, Chief Java Architect at Google 2004~2012]
 
 [^1]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
 [^2]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
