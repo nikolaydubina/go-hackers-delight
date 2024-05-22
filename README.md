@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
 ![fuzzing](https://img.shields.io/badge/fuzzing-active-brightgreen)
 
-An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685)[^1][^2][^3] 2nd Edition by Henrey S.Warren Jr, 2013.
+An interactive Go showcase of "Hacker's Delight"[^1][^2][^3][^4] 2nd Edition by Henrey S.Warren Jr, 2013.
 
 > If you write optimizing compilers or high-performance code, you must read this book.  
 > — [Guy L. Steele](https://en.wikipedia.org/wiki/Guy_L._Steele_Jr.) [PhD, ACM Award, AAAI Fellow, Sun Fellow, core Java design]
@@ -14,6 +14,7 @@ An interactive Go showcase of ["Hacker's Delight"](https://www.amazon.com/Hacker
 > In the ten years since the first edition came out, it's been absolutely invaluable to my work at Sun and Google.  
 > — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun, Chief Java Architect at Google 2004~2012]
 
-[^1]: https://en.wikipedia.org/wiki/Hacker%27s_Delight
-[^2]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
-[^3]: showcase in `Rust` — https://github.com/victoryang00/Delight
+[^1]: Amazon: https://www.amazon.com/Hackers-Delight-2nd-Henry-Warren/dp/0321842685
+[^2]: Wiki: https://en.wikipedia.org/wiki/Hacker%27s_Delight
+[^3]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
+[^4]: showcase in `Rust` — https://github.com/victoryang00/Delight
