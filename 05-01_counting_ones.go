@@ -82,3 +82,38 @@ func CompareCountOnes(x, y uint32) int {
 		yp = yp & (yp - 1)
 	}
 }
+
+// CSA is Carry Save Adder
+func CSA(a, b, c uint32) (h, l uint32) {
+	u := a ^ b
+	v := c
+	h = (a & b) | (u & v)
+	l = u ^ v
+	return h, l
+}
+
+// CountOnesArrayGroup8 utilizes CSA for faster count ones computation.
+// It is executing with 3x less instructions than direct version with CountOnes per uint32.
+func CountOnesArrayGroup8(A []uint32) uint32 {
+	var tot uint32
+	var ones, twos, twosA, twosB, fours, foursA, foursB, eights uint32
+
+	var i int = 0
+	for ; i <= (len(A) - 8); i += 8 {
+		twosA, ones = CSA(ones, A[i], A[i+1])
+		twosB, ones = CSA(ones, A[i+2], A[i+3])
+		foursA, twos = CSA(twos, twosA, twosB)
+		twosA, ones = CSA(ones, A[i+4], A[i+5])
+		twosB, ones = CSA(ones, A[i+6], A[i+7])
+		foursB, twos = CSA(twos, twosA, twosB)
+		eights, fours = CSA(fours, foursA, foursB)
+		tot = tot + CountOnes(eights)
+	}
+	tot = (8 * tot) + (4 * CountOnes(fours)) + (2 * CountOnes(twos)) + CountOnes(ones)
+
+	for ; i < len(A); i++ { // Simply add in the last
+		tot += CountOnes(A[i]) // 0 to 7 elements.
+	}
+
+	return tot
+}
