@@ -67,3 +67,18 @@ func CountOnes5(x uint32) uint32 {
 	y = y >> 60
 	return uint32(y)
 }
+
+func CompareCountOnes(x, y uint32) int {
+	xp := x & ^y
+	yp := y &^ x
+	for {
+		if xp == 0 {
+			return int(yp) | -int(yp)
+		}
+		if yp == 0 {
+			return 1
+		}
+		xp = xp & (xp - 1)
+		yp = yp & (yp - 1)
+	}
+}

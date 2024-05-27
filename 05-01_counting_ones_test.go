@@ -55,3 +55,70 @@ func FuzzCountOnes(f *testing.F) {
 		}
 	})
 }
+
+func ExampleCompareCountOnes_same() {
+	var x uint32 = 0b0000_0100_0100_01110
+	var y uint32 = 0b0000_0100_0100_01110
+	fmt.Println(hd.CompareCountOnes(x, y))
+	// Output: 0
+}
+
+func ExampleCompareCountOnes_left_smaller() {
+	var x uint32 = 0b0000_0100_0100_01110
+	var y uint32 = 0b0000_0100_0100_01111
+	fmt.Println(hd.CompareCountOnes(x, y))
+	// Output: -1
+}
+
+func ExampleCompareCountOnes_left_bigger() {
+	var x uint32 = 0b0000_0100_0100_01111
+	var y uint32 = 0b0000_0100_0100_01110
+	fmt.Println(hd.CompareCountOnes(x, y))
+	// Output: 1
+}
+
+func FuzzCompareCountOnes(f *testing.F) {
+	var vs = []uint32{
+		0,
+		1,
+		math.MaxInt32,
+		math.MaxInt32 / 2,
+		math.MaxInt32 - 1,
+		math.MaxUint32,
+		math.MaxUint32 / 2,
+		math.MaxUint32 - 1,
+	}
+	for _, x := range vs {
+		for _, y := range vs {
+			f.Add(x, y)
+		}
+	}
+
+	f.Fuzz(func(t *testing.T, x, y uint32) {
+		// definition
+		var nx, ny uint32 = 0, 0
+		for i := range 32 {
+			if (x & (1 << i)) != 0 {
+				nx++
+			}
+			if (y & (1 << i)) != 0 {
+				ny++
+			}
+		}
+
+		switch v := hd.CompareCountOnes(x, y); v {
+		case 1:
+			if nx < ny {
+				t.Errorf("< %v %032b %032b", v, x, y)
+			}
+		case 0:
+			if nx != ny {
+				t.Errorf("= %v %032b %032b", v, x, y)
+			}
+		case -1:
+			if nx > ny {
+				t.Errorf("> %v %032b %032b", v, x, y)
+			}
+		}
+	})
+}
