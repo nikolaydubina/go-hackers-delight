@@ -22,3 +22,35 @@ func NLZ(x uint32) uint32 {
 	x = x * 0xFD7049FF // Multiplier is 7 * 255 ** 3, Gorvsky
 	return nlz_goryavsky[(x >> 26)]
 }
+
+// NLZ2 uses binary search.
+func NLZ2(x uint32) uint32 {
+	var y uint32 = 0
+	var n uint32 = 32
+
+	y = x >> 16
+	if y != 0 {
+		n = n - 16
+		x = y
+	}
+	y = x >> 8
+	if y != 0 {
+		n = n - 8
+		x = y
+	}
+	y = x >> 4
+	if y != 0 {
+		n = n - 4
+		x = y
+	}
+	y = x >> 2
+	if y != 0 {
+		n = n - 2
+		x = y
+	}
+	y = x >> 1
+	if y != 0 {
+		return n - 2
+	}
+	return n - x
+}

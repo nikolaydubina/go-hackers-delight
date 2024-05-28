@@ -48,6 +48,7 @@ func FuzzNLZ(f *testing.F) {
 
 		vs := []uint32{
 			hd.NLZ(x),
+			hd.NLZ2(x),
 		}
 		for i, got := range vs {
 			if n != uint32(got) {
