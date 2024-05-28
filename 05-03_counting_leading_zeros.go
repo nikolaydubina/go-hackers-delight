@@ -54,3 +54,9 @@ func NLZ2(x uint32) uint32 {
 	}
 	return n - x
 }
+
+func NLZEq(x, y uint32) bool { return (x ^ y) <= (x & y) }
+
+func NLZLess(x, y uint32) bool { return (x & ^y) > y }
+
+func NLZLessEq(x, y uint32) bool { return (y & ^x) <= x }

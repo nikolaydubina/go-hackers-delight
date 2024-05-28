@@ -18,7 +18,7 @@ func ExampleNLZ_long() {
 	// Output: 2
 }
 
-func FuzzNLZ(f *testing.F) {
+func FuzzNLZCompute(f *testing.F) {
 	var vs = []uint32{
 		0,
 		1,
@@ -53,6 +53,43 @@ func FuzzNLZ(f *testing.F) {
 		for i, got := range vs {
 			if n != uint32(got) {
 				t.Error(i, "x", fmt.Sprintf("%032b", x), "exp", n, "got", got)
+			}
+		}
+	})
+}
+
+func FuzzNLZCompare(f *testing.F) {
+	var vs = []uint32{
+		0,
+		1,
+		math.MaxInt32,
+		math.MaxInt32 / 2,
+		math.MaxInt32 - 1,
+		math.MaxUint32,
+		math.MaxUint32 / 2,
+		math.MaxUint32 - 1,
+	}
+	for _, x := range vs {
+		for _, y := range vs {
+			f.Add(x, y)
+		}
+	}
+	f.Fuzz(func(t *testing.T, x, y uint32) {
+		if x == 0 || y == 0 {
+			t.Skip()
+		}
+
+		vs := []struct {
+			exp bool
+			got bool
+		}{
+			{exp: hd.NLZ(x) == hd.NLZ(y), got: hd.NLZEq(x, y)},
+			{exp: hd.NLZ(x) < hd.NLZ(y), got: hd.NLZLess(x, y)},
+			{exp: hd.NLZ(x) <= hd.NLZ(y), got: hd.NLZLessEq(x, y)},
+		}
+		for i, tc := range vs {
+			if tc.exp != tc.got {
+				t.Error(i, tc)
 			}
 		}
 	})
