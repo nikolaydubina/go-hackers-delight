@@ -64,3 +64,14 @@ func NLZLessEq(x, y uint32) bool { return (y & ^x) <= x }
 // BitSize returns minimum number of bits requires to represent number in two's complement signed number.
 // This function uses NLZ.
 func BitSize(x int32) int { return int(32 - NLZ(uint32(x)^(uint32(x)<<1))) }
+
+var ntz_reiser = [...]int{
+	32, 0, 1, 26, 2, 23, 27,
+	u, 3, 16, 24, 30, 28, 11, u, 13, 4,
+	7, 17, u, 25, 22, 31, 15, 29, 10, 12,
+	6, u, 21, 14, 9, 5, 20, 8, 19, 18,
+}
+
+// NTZ is Number of Trailing Zeroes.
+// This implementation uses John Reiser variant of David Seal method.
+func NTZ(x uint32) int { return ntz_reiser[((x & -x) % 37)] }

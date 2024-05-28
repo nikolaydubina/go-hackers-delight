@@ -114,3 +114,47 @@ func ExampleBitSize_bit32() {
 	fmt.Println(hd.BitSize(0xFFFF_FFFF >> 1))
 	// Output: 32
 }
+
+func ExampleNTZ() {
+	fmt.Println(hd.NTZ(0b0000_1101_0000))
+	// Output: 4
+}
+
+func FuzzNTZCompute(f *testing.F) {
+	var vs = []uint32{
+		0,
+		1,
+		math.MaxInt32,
+		math.MaxInt32 / 2,
+		math.MaxInt32 - 1,
+		math.MaxUint32,
+		math.MaxUint32 / 2,
+		math.MaxUint32 - 1,
+	}
+	for _, x := range vs {
+		f.Add(x)
+	}
+	f.Fuzz(func(t *testing.T, x uint32) {
+		if x == 0 {
+			t.Skip()
+		}
+
+		// definition
+		var n uint32 = 0
+		for i := range 32 {
+			if (x & (1 << i)) != 0 {
+				n = uint32(i)
+				break
+			}
+		}
+
+		vs := []int{
+			hd.NTZ(x),
+		}
+		for i, got := range vs {
+			if n != uint32(got) {
+				t.Error(i, "x", fmt.Sprintf("%032b", x), "exp", n, "got", got)
+			}
+		}
+	})
+}
