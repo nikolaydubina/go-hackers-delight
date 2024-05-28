@@ -20,5 +20,5 @@ func NLZ(x uint32) uint32 {
 	x = x | (x >> 8)
 	x = x & ^(x >> 16) // Goryavsky
 	x = x * 0xFD7049FF // Multiplier is 7 * 255 ** 3, Gorvsky
-	return nlz_goryavsky[x>>26]
+	return nlz_goryavsky[(x >> 26)]
 }
