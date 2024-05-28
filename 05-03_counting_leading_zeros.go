@@ -2,7 +2,7 @@ package hd
 
 const u = 99
 
-var nlz_goryavsky = [...]uint32{
+var nlz_goryavsky = [...]int{
 	32, 20, 19, u, u, 18, u, 7, 10, 17, u, u, 14, u, 6, u,
 	u, 9, u, 16, u, u, 1, 26, u, 13, u, u, 24, 5, u, u,
 	u, 21, u, 8, 11, u, 15, u, u, u, u, 2, 27, 0, 25, u,
@@ -13,7 +13,8 @@ var nlz_goryavsky = [...]uint32{
 // This is algorithm from Robert Harley.
 // It consists of 14 instructions branch-free.
 // It uses Julius Goryavsky variation for smaller lookup table size.
-func NLZ(x uint32) uint32 {
+// NLZ has direct relationship of log2 as well, and can be used to compute it directly.
+func NLZ(x uint32) int {
 	x = x | (x >> 1) // Propagate leftmost
 	x = x | (x >> 2) // 1-bit to the right
 	x = x | (x >> 4)
@@ -24,9 +25,9 @@ func NLZ(x uint32) uint32 {
 }
 
 // NLZ2 uses binary search.
-func NLZ2(x uint32) uint32 {
+func NLZ2(x uint32) int {
 	var y uint32 = 0
-	var n uint32 = 32
+	n := 32
 
 	y = x >> 16
 	if y != 0 {
@@ -52,7 +53,7 @@ func NLZ2(x uint32) uint32 {
 	if y != 0 {
 		return n - 2
 	}
-	return n - x
+	return n - int(x)
 }
 
 func NLZEq(x, y uint32) bool { return (x ^ y) <= (x & y) }
@@ -74,4 +75,31 @@ var ntz_reiser = [...]int{
 
 // NTZ is Number of Trailing Zeroes.
 // This implementation uses John Reiser variant of David Seal method.
+// Among applications of NTZ is R.W.Gosper Loop Detection Algorithm.
 func NTZ(x uint32) int { return ntz_reiser[((x & -x) % 37)] }
+
+// LoopDetectionGosper uses R.W.Gosper algorithm to detect start index of a loop and it's period.
+// loop is defined on sequence: X_n+1 = f(X_n); X_0, X_1, ..., X_μ-1, X_μ, ... X_μ+λ
+// This is [HAK #132].
+func LoopDetectionGosper(f func(int) int, x0 int) (μLower, μUpper, λ int) {
+	T := [33]int{}
+
+	T[0] = x0
+	Xn := x0
+	for n := 1; ; n++ {
+		Xn = f(Xn)
+		kmax := 31 - NLZ(uint32(n)) // Floor (log2 n)
+		for k := 0; k <= kmax; k++ {
+			if Xn == T[k] {
+				// Compute m = max({i | i < n and ntz(i+1) = k})
+				m := ((((n >> k) - 1) | 1) << k) - 1
+				λ = n - m
+				lgl := 31 - NLZ(uint32(λ-1)) // Ceil(log2 lambda) - 1
+				μUpper = m
+				μLower = m - max(1, 1<<lgl) + 1
+				return μLower, μUpper, λ
+			}
+		}
+		T[NTZ(uint32(n)+1)] = Xn // No match
+	}
+}

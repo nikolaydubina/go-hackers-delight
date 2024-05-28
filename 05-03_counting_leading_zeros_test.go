@@ -46,7 +46,7 @@ func FuzzNLZCompute(f *testing.F) {
 			}
 		}
 
-		vs := []uint32{
+		vs := []int{
 			hd.NLZ(x),
 			hd.NLZ2(x),
 		}
@@ -157,4 +157,15 @@ func FuzzNTZCompute(f *testing.F) {
 			}
 		}
 	})
+}
+
+func ExampleLoopDetectionGosper() {
+	f := func(v int) int {
+		if v < 100 {
+			return v + 1
+		}
+		return 1
+	}
+	fmt.Println(hd.LoopDetectionGosper(f, 0))
+	// Output: 0 63 100
 }
