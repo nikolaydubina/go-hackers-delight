@@ -46,7 +46,7 @@ func FuzzNLZCompute(f *testing.F) {
 			}
 		}
 
-		vs := []int{
+		vs := []uint{
 			hd.NLZ(x),
 			hd.NLZ2(x),
 		}
