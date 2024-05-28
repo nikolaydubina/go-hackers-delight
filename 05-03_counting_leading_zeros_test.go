@@ -94,3 +94,23 @@ func FuzzNLZCompare(f *testing.F) {
 		}
 	})
 }
+
+func ExampleBitSize_zero() {
+	fmt.Println(hd.BitSize(0))
+	// Output: 0
+}
+
+func ExampleBitSize_bit6() {
+	fmt.Println(hd.BitSize(0b0000_1101))
+	// Output: 5
+}
+
+func ExampleBitSize_bit7() {
+	fmt.Println(hd.BitSize(0b0011_1101))
+	// Output: 7
+}
+
+func ExampleBitSize_bit32() {
+	fmt.Println(hd.BitSize(0xFFFF_FFFF >> 1))
+	// Output: 32
+}

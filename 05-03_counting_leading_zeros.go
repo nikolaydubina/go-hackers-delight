@@ -60,3 +60,7 @@ func NLZEq(x, y uint32) bool { return (x ^ y) <= (x & y) }
 func NLZLess(x, y uint32) bool { return (x & ^y) > y }
 
 func NLZLessEq(x, y uint32) bool { return (y & ^x) <= x }
+
+// BitSize returns minimum number of bits requires to represent number in two's complement signed number.
+// This function uses NLZ.
+func BitSize(x int32) int { return int(32 - NLZ(uint32(x)^(uint32(x)<<1))) }
