@@ -84,3 +84,13 @@ func FuzzFindFirstStringOnes(f *testing.F) {
 		}
 	})
 }
+
+func ExampleLenLongestStringOnes() {
+	fmt.Println(hd.LenLongestStringOnes(0b0000_0000_0000_0000_1100_1110_1111_1000))
+	// Output: 5
+}
+
+func ExampleLenShortestStringOnes() {
+	fmt.Println(hd.LenShortestStringOnes(0xFF0FF0))
+	// Output: 8 8
+}
