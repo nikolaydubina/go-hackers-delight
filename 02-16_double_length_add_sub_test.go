@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -23,19 +22,8 @@ func ExampleSubDoubleLength() {
 }
 
 func FuzzDoubleLength(f *testing.F) {
-	var vs = []uint64{
-		0,
-		1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-		math.MaxUint32 + 1,
-		math.MaxUint64,
-		math.MaxUint64 / 2,
-		math.MaxUint64 - 1,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzUint64 {
+		for _, y := range fuzzUint64 {
 			f.Add(x, y)
 		}
 	}

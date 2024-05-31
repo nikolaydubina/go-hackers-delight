@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -24,14 +23,7 @@ func ExampleAbsDiff() {
 }
 
 func FuzzAbsNormal(f *testing.F) {
-	var vs = []int32{
-		0,
-		1,
-		-1,
-		math.MinInt32,
-		math.MaxInt32,
-	}
-	for _, x := range vs {
+	for _, x := range fuzzInt32 {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
@@ -71,15 +63,8 @@ func FuzzAbsNormal(f *testing.F) {
 }
 
 func FuzzAbsDiffInt(f *testing.F) {
-	var vs = []int32{
-		0,
-		1,
-		-1,
-		math.MinInt32,
-		math.MaxInt32,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzInt32 {
+		for _, y := range fuzzInt32 {
 			f.Add(x, y)
 		}
 	}
@@ -96,13 +81,8 @@ func FuzzAbsDiffInt(f *testing.F) {
 }
 
 func FuzzAbsDiffUint(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxUint32,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzUint32 {
+		for _, y := range fuzzUint32 {
 			f.Add(x, y)
 		}
 	}

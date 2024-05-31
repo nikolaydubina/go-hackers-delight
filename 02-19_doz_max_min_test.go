@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -19,19 +18,8 @@ func ExampleDOZU() {
 }
 
 func FuzzDOZ(f *testing.F) {
-	var vs = []int32{
-		0,
-		1,
-		-1,
-		math.MinInt32,
-		math.MinInt32 / 2,
-		math.MinInt32 + 1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzInt32 {
+		for _, y := range fuzzInt32 {
 			f.Add(x, y)
 		}
 	}

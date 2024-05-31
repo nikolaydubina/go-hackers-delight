@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -14,17 +13,7 @@ func ExampleCountOnes() {
 }
 
 func FuzzCountOnes(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-	}
-	for _, x := range vs {
+	for _, x := range fuzzUint32 {
 		f.Add(x)
 	}
 
@@ -78,18 +67,8 @@ func ExampleCompareCountOnes_left_bigger() {
 }
 
 func FuzzCompareCountOnes(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzUint32 {
+		for _, y := range fuzzUint32 {
 			f.Add(x, y)
 		}
 	}

@@ -1,29 +1,18 @@
 package hd_test
 
 import (
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func FuzzArithmeticBoundPropagateLogical(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
-			for _, minx := range vs {
-				for _, maxx := range vs {
-					for _, miny := range vs {
-						for _, maxy := range vs {
+	for _, x := range fuzzUint32 {
+		for _, y := range fuzzUint32 {
+			for _, minx := range fuzzUint32 {
+				for _, maxx := range fuzzUint32 {
+					for _, miny := range fuzzUint32 {
+						for _, maxy := range fuzzUint32 {
 							f.Add(x, y, minx, maxx, miny, maxy)
 						}
 					}

@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -14,14 +13,8 @@ func ExampleISIGN() {
 }
 
 func FuzzISIGN(f *testing.F) {
-	var vs = []int32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MinInt32,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzInt32 {
+		for _, y := range fuzzInt32 {
 			f.Add(x, y)
 		}
 	}

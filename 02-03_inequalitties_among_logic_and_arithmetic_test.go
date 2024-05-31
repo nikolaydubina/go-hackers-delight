@@ -1,22 +1,14 @@
 package hd_test
 
 import (
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func FuzzInequalitiesAmongLogicAndArithmetic(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzUint32 {
+		for _, y := range fuzzUint32 {
 			f.Add(x, y)
 		}
 	}

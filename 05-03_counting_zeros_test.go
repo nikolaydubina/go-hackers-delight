@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -19,17 +18,7 @@ func ExampleNLZ_long() {
 }
 
 func FuzzNLZCompute(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-	}
-	for _, x := range vs {
+	for _, x := range fuzzUint32 {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
@@ -59,18 +48,8 @@ func FuzzNLZCompute(f *testing.F) {
 }
 
 func FuzzNLZCompare(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzUint32 {
+		for _, y := range fuzzUint32 {
 			f.Add(x, y)
 		}
 	}
@@ -121,17 +100,7 @@ func ExampleNTZ() {
 }
 
 func FuzzNTZCompute(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-	}
-	for _, x := range vs {
+	for _, x := range fuzzUint32 {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {

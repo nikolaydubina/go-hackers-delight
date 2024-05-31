@@ -1,27 +1,15 @@
 package hd_test
 
 import (
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
 func FuzzIsInRangeNormal(f *testing.F) {
-	var vs = []int32{
-		0,
-		1,
-		-1,
-		math.MinInt32,
-		math.MinInt32 / 2,
-		math.MinInt32 + 1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-	}
-	for _, x := range vs {
-		for _, a := range vs {
-			for _, b := range vs {
+	for _, x := range fuzzInt32 {
+		for _, a := range fuzzInt32 {
+			for _, b := range fuzzInt32 {
 				f.Add(x, a, b)
 			}
 		}
@@ -49,19 +37,8 @@ func FuzzIsInRangeNormal(f *testing.F) {
 }
 
 func FuzzIsInRangePowerTwo(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-		math.MaxInt32 / 2,
-		math.MaxInt32 - 1,
-		math.MaxUint32,
-		math.MaxUint32 / 2,
-		math.MaxUint32 - 1,
-	}
-
-	for _, x := range vs {
-		for _, a := range vs {
+	for _, x := range fuzzUint32 {
+		for _, a := range fuzzUint32 {
 			for ip := range hd.PowerOfTwo[:31] {
 				f.Add(x, a, uint8(ip))
 			}

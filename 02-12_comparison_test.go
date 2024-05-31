@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -14,13 +13,8 @@ func ExampleEqual() {
 }
 
 func FuzzCompareUint32(f *testing.F) {
-	var vs = []uint32{
-		0,
-		1,
-		math.MaxInt32,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzUint32 {
+		for _, y := range fuzzUint32 {
 			f.Add(x, y)
 		}
 	}
@@ -43,15 +37,8 @@ func FuzzCompareUint32(f *testing.F) {
 }
 
 func FuzzCompareInt32(f *testing.F) {
-	var vs = []int32{
-		0,
-		1,
-		-1,
-		math.MinInt32,
-		math.MaxInt32,
-	}
-	for _, x := range vs {
-		for _, y := range vs {
+	for _, x := range fuzzInt32 {
+		for _, y := range fuzzInt32 {
 			f.Add(x, y)
 		}
 	}
@@ -84,14 +71,7 @@ func FuzzCompareInt32(f *testing.F) {
 }
 
 func FuzzCompareZeroInt32(f *testing.F) {
-	var vs = []int32{
-		0,
-		1,
-		-1,
-		math.MinInt32,
-		math.MaxInt32,
-	}
-	for _, v := range vs {
+	for _, v := range fuzzInt32 {
 		f.Add(v)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
