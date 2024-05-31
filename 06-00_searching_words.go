@@ -80,9 +80,8 @@ func LenShortestStringOnes(x uint32) (p, n int) {
 	if x == 0 {
 		return 32, 0
 	}
-	var b, e uint32
-	b = ^(x >> 1) & x
-	e = x & ^(x << 1)
+	b := ^(x >> 1) & x
+	e := x & ^(x << 1)
 	var k int
 	for k = 1; (b & e) == 0; k++ {
 		e = e << 1
