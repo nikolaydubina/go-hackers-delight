@@ -25,6 +25,12 @@ func ZByteL1(x uint32) int {
 	}
 }
 
+func ZByteL64(x uint64) int {
+	y := (x & 0x7F7F_7F7F_7F7F_7F7F) + 0x7F7F_7F7F_7F7F_7F7F
+	y = ^(y | x | 0x7F7F_7F7F_7F7F_7F7F)
+	return NLZ64Basic(y) >> 3
+}
+
 // FindInByte m in x illustrates that to find specific byte you need to XOR with repeated value.
 func FindInByte(x uint32, m byte) int { return ZByteL(x ^ (uint32(m) * 0x0101_0101)) }
 

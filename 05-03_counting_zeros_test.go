@@ -27,20 +27,14 @@ func FuzzNLZCompute(f *testing.F) {
 		}
 
 		// definition
-		var n uint32 = 0
-		for i := range 32 {
-			if (x & (1 << (31 - i))) != 0 {
-				n = uint32(i)
-				break
-			}
-		}
+		n := hd.NLZBasic(x)
 
 		vs := []uint{
 			hd.NLZ(x),
 			hd.NLZ2(x),
 		}
 		for i, got := range vs {
-			if n != uint32(got) {
+			if n != int(got) {
 				t.Error(i, "x", fmt.Sprintf("%032b", x), "exp", n, "got", got)
 			}
 		}

@@ -24,6 +24,18 @@ func NLZ(x uint32) uint {
 	return nlz_goryavsky[(x >> 26)]
 }
 
+// NLZBasic is basic algorithm.
+func NLZBasic(x uint32) int {
+	n := 0
+	for i := range 32 {
+		if (x & (1 << (31 - i))) != 0 {
+			n = i
+			break
+		}
+	}
+	return n
+}
+
 // NLZ2 uses binary search.
 func NLZ2(x uint32) uint {
 	var y uint32 = 0
@@ -54,6 +66,16 @@ func NLZ2(x uint32) uint {
 		return uint(n - 2)
 	}
 	return uint(n - int(x))
+}
+
+// NLZ64Basic is basic algorithm for 64bit numbers.
+func NLZ64Basic(x uint64) int {
+	for i := range 64 {
+		if (x & (1 << (63 - i))) != 0 {
+			return i
+		}
+	}
+	return 0
 }
 
 func NLZEq(x, y uint32) bool { return (x ^ y) <= (x & y) }

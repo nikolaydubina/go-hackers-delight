@@ -30,6 +30,11 @@ func FuzzZByteL(f *testing.F) {
 	})
 }
 
+func ExampleZByteL64() {
+	fmt.Println(hd.ZByteL64(0x11_12_00_00_FF_FF_00_11))
+	// Output: 2
+}
+
 func ExampleFindInByte() {
 	fmt.Println(hd.FindInByte(0x12_00_FF_00, 0xFF))
 	// Output: 2

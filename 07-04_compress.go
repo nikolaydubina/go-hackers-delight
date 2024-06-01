@@ -71,3 +71,5 @@ func Expand(x, m uint32) uint32 {
 
 	return x & m0 // Clear out extraneous bits.
 }
+
+// TODO: compress left, GeneralizedUnshuffle (aka SheepAndGoats, SAG), bitgather, GRP
