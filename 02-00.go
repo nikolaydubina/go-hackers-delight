@@ -1,5 +1,5 @@
 /*
-# Chapter 2
+# Chapter 2: Basics
 
 For better performance, it is advisable to avoid branches in simple functions.
 

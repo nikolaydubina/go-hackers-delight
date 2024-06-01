@@ -45,9 +45,24 @@ func FuzzMultiplyMultiWord(f *testing.F) {
 		w16 := make([]uint16, len(u16)+len(v16))
 		hd.MultiplyMultiWord(w16, u16[:], v16[:])
 
-		got := hd.Int64From4x16b([4]uint16{w16[0], w16[1], w16[2], w16[3]})
+		if got := hd.Int64From4x16b([4]uint16{w16[0], w16[1], w16[2], w16[3]}); got != exp {
+			t.Errorf("u=%d v=%d exp=%d got=%d", u, v, exp, got)
+		}
+	})
+}
 
-		if got != exp {
+func FuzzMultiplyHighOrderSigned(f *testing.F) {
+	for _, u := range fuzzInt32 {
+		for _, v := range fuzzInt32 {
+			f.Add(u, v)
+		}
+	}
+	f.Fuzz(func(t *testing.T, u, v int32) {
+		iu := int64(u)
+		iv := int64(v)
+		exp := int32(uint64(iu*iv) >> 32)
+
+		if got := hd.MultiplyHighOrderSigned(u, v); got != exp {
 			t.Errorf("u=%d v=%d exp=%d got=%d", u, v, exp, got)
 		}
 	})

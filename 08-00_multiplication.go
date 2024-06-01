@@ -1,3 +1,22 @@
+/*
+# Chapter 8: Multiplication
+
+Any multiplication can be decomposed in a summation of left shifts.
+For example x * 13 binary (1101) is:
+- t1 := x << 2
+- t2 := x << 3
+- result := t1 + t2 + x
+
+This is decomposed into result := 8x + 4x + x.
+
+For every multiplication there are multiple paths possible that utilize registers and shifts.
+These paths can have fewer or more instructions and registers to accomplish this.
+In general, it is nontrivial to find minimum number instructions required and which these instructions are.
+Theorem bellow gives upper bound.
+
+Theorem. Multiplication of a variable x by an n-bit constant m, m >= 1,
+can be accomplished with at most n instructions of the type add, subtract, and shift left by any given amount.
+*/
 package hd
 
 func Int64To4x16b(v int64) [4]uint16 {
@@ -53,3 +72,25 @@ func MultiplyMultiWord(w, u, v []uint16) {
 		}
 	}
 }
+
+// MultiplyHighOrderSigned (aka mulhns) multiplies two signed integers and returns the high-order half of the product.
+// This executes in 16 RISC instructions.
+func MultiplyHighOrderSigned(u, v int32) int32 {
+	var u0, v0, w0 uint32
+	var u1, v1, w1, w2, t int32
+
+	u0 = uint32(u & 0xFFFF)
+	u1 = u >> 16
+	v0 = uint32(v & 0xFFFF)
+	v1 = v >> 16
+	w0 = u0 * v0
+	t = int32((uint32(u1) * v0) + (w0 >> 16))
+	w1 = t & 0xFFFF
+	w2 = t >> 16
+	w1 = int32((u0 * uint32(v1))) + w1
+
+	return (u1 * v1) + w2 + (w1 >> 16)
+}
+
+// TODO: MultiplyHighOrderUnsigned
+// TODO: MultiplyHighOrderUnsigned from MultiplyHighOrderSigned and other way around
