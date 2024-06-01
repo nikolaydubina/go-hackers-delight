@@ -17,7 +17,7 @@ func ExampleCompress() {
 	// Output: 00000000000000001011011000000000
 }
 
-func FuzzCompress(f *testing.F) {
+func FuzzCompressEquality(f *testing.F) {
 	for _, x := range fuzzUint32 {
 		for _, m := range fuzzUint32 {
 			f.Add(x, m)
@@ -33,6 +33,19 @@ func FuzzCompress(f *testing.F) {
 			if v != exp {
 				t.Errorf("%d: %d != %d", i, v, exp)
 			}
+		}
+	})
+}
+
+func FuzzCompressIdentity(f *testing.F) {
+	for _, x := range fuzzUint32 {
+		for _, m := range fuzzUint32 {
+			f.Add(x, m)
+		}
+	}
+	f.Fuzz(func(t *testing.T, x, m uint32) {
+		if (x & m) != hd.Expand(hd.Compress(x, m), m) {
+			t.Error(x, m)
 		}
 	})
 }
