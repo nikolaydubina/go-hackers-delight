@@ -14,6 +14,7 @@ var nlz_goryavsky = [...]uint{
 // It consists of 14 instructions branch-free.
 // It uses Julius Goryavsky variation for smaller lookup table size.
 // NLZ has direct relationship of log2 as well, and can be used to compute it directly.
+// Some instruction sets, such as ARM M1 chips, include single assembly instruction for this operation.
 func NLZ(x uint32) uint {
 	x = x | (x >> 1) // Propagate leftmost
 	x = x | (x >> 2) // 1-bit to the right
