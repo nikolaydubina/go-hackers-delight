@@ -69,6 +69,16 @@ func NLZ2(x uint32) uint {
 	return uint(n - int(x))
 }
 
+// NLZ16Basic is basic algorithm for 16bit numbers.
+func NLZ16Basic(x uint16) int {
+	for i := range 16 {
+		if (x & (1 << (15 - i))) != 0 {
+			return i
+		}
+	}
+	return 0
+}
+
 // NLZ64Basic is basic algorithm for 64bit numbers.
 func NLZ64Basic(x uint64) int {
 	for i := range 64 {
