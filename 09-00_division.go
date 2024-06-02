@@ -50,31 +50,33 @@ func DivideMultiWord(q, r, u, v []uint16) {
 
 	s := NLZ16Basic(v[n-1]) // originally it was NLZ() - 16, but algorithm also expects s be in [0,16] thus only NLZ is taken
 
-	vn := make([]uint16, 2*n) // Normalized form of v.
+	// Normalized form of v
+	vn := make([]uint16, 2*n)
 	for i := n - 1; i > 0; i-- {
 		vn[i] = (v[i] << s) | (v[i-1] >> (16 - s))
 	}
 	vn[0] = v[0] << s
 
-	un := make([]uint16, (2 * (m + 1))) // Normalized form of u.
+	// Normalized form of u
+	un := make([]uint16, (2 * (m + 1)))
 	un[m] = u[m-1] >> (16 - s)
 	for i := m - 1; i > 0; i-- {
 		un[i] = (u[i] << s) | (u[i-1] >> (16 - s))
 	}
 	un[0] = u[0] << s
 
-	for j := m - n; j >= 0; j-- { // Main loop.
+	// Main loop
+	for j := m - n; j >= 0; j-- {
 		// Compute estimate qhat of q[j].
 		// Estimated quotient digit and reminder.
 		qhat := (uint32(un[j+n])*b + uint32(un[j+n-1])) / uint32(vn[n-1])
 		rhat := (uint32(un[j+n])*b + uint32(un[j+n-1])) - (qhat * uint32(vn[n-1]))
 
-	again:
-		if qhat >= b || (qhat*uint32(vn[n-2])) > ((rhat*b)+uint32(un[j+n-2])) {
-			qhat = qhat - 1
-			rhat = rhat + uint32(vn[n-1])
-			if rhat < b {
-				goto again
+		for qhat >= b || (qhat*uint32(vn[n-2])) > ((rhat*b)+uint32(un[j+n-2])) {
+			qhat -= 1
+			rhat += uint32(vn[n-1])
+			if rhat >= b {
+				break
 			}
 		}
 
@@ -95,7 +97,7 @@ func DivideMultiWord(q, r, u, v []uint16) {
 		// This occurs with probability 2/65536 = 0.00003
 		q[j] = uint16(qhat)
 		if t < 0 {
-			q[j] = q[j] - 1
+			q[j] -= 1
 			k = 0
 			for i := 0; i < n; i++ {
 				t = int32(un[i+j]) + int32(vn[i]) + k
