@@ -19,19 +19,6 @@ can be accomplished with at most n instructions of the type add, subtract, and s
 */
 package hd
 
-func Int64To4x16b(v int64) [4]uint16 {
-	return [4]uint16{
-		uint16((v & (0xFFFF << 00)) >> 00),
-		uint16((v & (0xFFFF << 16)) >> 16),
-		uint16((v & (0xFFFF << 32)) >> 32),
-		uint16((uint64(v) & (0xFFFF << 48)) >> 48),
-	}
-}
-
-func Int64From4x16b(v [4]uint16) int64 {
-	return int64(v[0]) | int64(v[1])<<16 | int64(v[2])<<32 | int64(v[3])<<48
-}
-
 // MultiplyMultiWord (aka mulmns) multiplies two multiwords word-wise. w = u * v
 // This does not overflow.
 // We are using uint16 and uint32 to avoid overflow in word multiplication.

@@ -1,25 +1,5 @@
 package hd
 
-func Uint64ToNx16b(v uint64) []uint16 {
-	if v == 0 {
-		return []uint16{0}
-	}
-	var out []uint16
-	for ; v > 0; v >>= 16 {
-		out = append(out, uint16((v & 0xFFFF)))
-	}
-	return out
-}
-
-func Uint64FromNx16b(v []uint16) uint64 {
-	var out uint64
-	for i := len(v) - 1; i >= 0; i-- {
-		out <<= 16
-		out |= uint64(v[i])
-	}
-	return out
-}
-
 // DivideMultiWord is Knuth algorithm for integer division.
 // It stores quotient in q and remainder in r.
 func DivideMultiWord(q, r, u, v []uint16) {

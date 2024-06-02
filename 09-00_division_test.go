@@ -1,27 +1,10 @@
 package hd_test
 
 import (
-	"fmt"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
-
-func ExampleUint64ToNx16b_small() {
-	fmt.Println(hd.Uint64ToNx16b(5))
-	// Output: [5]
-}
-
-func FuzzUint64ToNx16b(f *testing.F) {
-	for _, x := range fuzzUint64 {
-		f.Add(x)
-	}
-	f.Fuzz(func(t *testing.T, x uint64) {
-		if x != hd.Uint64FromNx16b(hd.Uint64ToNx16b(x)) {
-			t.Error("x", x)
-		}
-	})
-}
 
 func FuzzDivideMultiWord(f *testing.F) {
 	for _, u := range fuzzUint64 {
@@ -44,8 +27,8 @@ func FuzzDivideMultiWord(f *testing.F) {
 		expQ := u / v
 		expR := u % v
 
-		u16 := hd.Uint64ToNx16b(u)
-		v16 := hd.Uint64ToNx16b(v)
+		u16 := hd.IntToNx16b(u)
+		v16 := hd.IntToNx16b(v)
 		q16 := make([]uint16, len(u16))
 		r16 := make([]uint16, len(u16))
 
