@@ -1,8 +1,14 @@
+/*
+# Chapter 9: Integer Division
+
+  - Short Division is division of single word by another (e.g. 32bit / 32bit => 32bit). This is typical division operator available in high level languages.
+  - Long Division is division of multi-word by single word (e.g. 64bit / 32bit => 32bit).
+*/
 package hd
 
-// DivideMultiWord is Knuth algorithm for integer division.
+// DivideMultiWordUnsigned is Knuth algorithm for integer division.
 // It stores quotient in q and remainder in r.
-func DivideMultiWord(q, r, u, v []uint16) {
+func DivideMultiWordUnsigned(q, r, u, v []uint16) {
 	m, n := len(u), len(v)
 	const b = 65536 // Number base (16 bits).
 
@@ -95,3 +101,5 @@ func DivideMultiWord(q, r, u, v []uint16) {
 		}
 	}
 }
+
+// TODO: unsigned short division from signed short division

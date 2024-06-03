@@ -32,7 +32,7 @@ func FuzzDivideMultiWord(f *testing.F) {
 		q16 := make([]uint16, len(u16))
 		r16 := make([]uint16, len(u16))
 
-		hd.DivideMultiWord(q16, r16, u16, v16)
+		hd.DivideMultiWordUnsigned(q16, r16, u16, v16)
 
 		if got := hd.Uint64FromNx16b(q16); got != expQ {
 			t.Errorf("u=%d %v v=%d %v: Q: exp=%d got=%d %v", u, u16, v, v16, expQ, got, q16)
