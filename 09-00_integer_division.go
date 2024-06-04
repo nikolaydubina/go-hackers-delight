@@ -126,6 +126,7 @@ func DivLongUnsigned64b32b(x uint64, y uint32) (q, r uint32) {
 }
 
 // DivLongUnsigned64b32b2 is alternative version based on multiword division.
+// If overflow, it returns maximum quotient and reminder.
 func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 	u1 := uint32(x >> 32)
 	u0 := uint32(x)
