@@ -12,7 +12,7 @@ func ExampleMultiplyMultiWord() {
 	v := []uint16{5, 6, 7}
 	w := make([]uint16, len(u)+len(v))
 
-	hd.MultiplyMultiWord(w, u, v)
+	hd.MulMultiWord(w, u, v)
 
 	fmt.Println(w)
 	// Output: [5 16 34 52 45 28 0]
@@ -32,7 +32,7 @@ func FuzzMultiplyMultiWord(f *testing.F) {
 		u16 := hd.IntToNx16b(iu)
 		v16 := hd.IntToNx16b(iv)
 		w16 := make([]uint16, len(u16)+len(v16))
-		hd.MultiplyMultiWord(w16, u16, v16)
+		hd.MulMultiWord(w16, u16, v16)
 
 		if got := hd.Int64FromNx16b(w16); got != exp {
 			t.Errorf("u=%d v=%d exp=%d got=%d", u, v, exp, got)

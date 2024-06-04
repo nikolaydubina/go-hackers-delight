@@ -6,9 +6,9 @@
 */
 package hd
 
-// DivideMultiWordUnsigned is Knuth algorithm for integer division.
+// DivMultiWordUnsigned is Knuth algorithm for integer division.
 // It stores quotient in q and remainder in r.
-func DivideMultiWordUnsigned(q, r, u, v []uint16) {
+func DivMultiWordUnsigned(q, r, u, v []uint16) {
 	m, n := len(u), len(v)
 	const b = 65536 // Number base (16 bits).
 
@@ -103,3 +103,23 @@ func DivideMultiWordUnsigned(q, r, u, v []uint16) {
 }
 
 // TODO: unsigned short division from signed short division
+
+// DivLongUnsigned64b (aka divlu) performs long division of 64-bit unsigned integer by 32-bit unsigned integer.
+// This algorithm is slightly modified to store both lower and higher 32 bits of dividend into 64-bit number.
+// This algorithm uses shift-and-subtract operations. It illustrates how hardware is doing such division.
+// It does not work for overflow cases.
+func DivLongUnsigned64b(x uint64, y uint32) (q, r uint32) {
+	xh := uint32(x >> 32)
+	xl := uint32(x)
+
+	for i := 1; i <= 32; i++ {
+		t := int32(xh) >> 31 // All 1's if (x31) = 1
+		xh = (xh << 1) | (xl >> 31)
+		xl = xl << 1
+		if (xh | uint32(t)) >= y {
+			xh = xh - y
+			xl = xl + 1
+		}
+	}
+	return xl, xh
+}

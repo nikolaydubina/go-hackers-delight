@@ -19,12 +19,12 @@ can be accomplished with at most n instructions of the type add, subtract, and s
 */
 package hd
 
-// MultiplyMultiWord (aka mulmns) multiplies two multiwords word-wise. w = u * v
+// MulMultiWord (aka mulmns) multiplies two multiwords word-wise. w = u * v
 // This does not overflow.
 // We are using uint16 and uint32 to avoid overflow in word multiplication.
 // Most important word can be negative when converted to int16.
 // Refer to routines Int64To4x16b and Int64From4x16b for conversion.
-func MultiplyMultiWord(w, u, v []uint16) {
+func MulMultiWord(w, u, v []uint16) {
 	if len(w) != (len(u) + len(v)) {
 		panic("len(w) != len(u) + len(v)")
 	}
