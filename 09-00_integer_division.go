@@ -108,6 +108,7 @@ func DivMultiWordUnsigned(q, r, u, v []uint16) {
 // This algorithm is slightly modified to store both lower and higher 32 bits of dividend into 64-bit number.
 // This algorithm uses shift-and-subtract operations. It illustrates how hardware is doing such division.
 // It does not work for overflow cases.
+// This executes in 321 to 385 RISC instructions.
 func DivLongUnsigned64b(x uint64, y uint32) (q, r uint32) {
 	xh := uint32(x >> 32)
 	xl := uint32(x)
