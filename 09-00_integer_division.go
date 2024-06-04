@@ -182,3 +182,4 @@ func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 }
 
 // TODO: double word division from long division (aka 64 / 64 => 64 from 64 / 32 => 32)
+// TODO: signed double word division from unsigned double word division
