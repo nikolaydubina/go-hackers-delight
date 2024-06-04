@@ -57,14 +57,15 @@ func FuzzDivLongUnsigned64b(f *testing.F) {
 			t.Skip()
 		}
 
-		if (x / uint64(y)) > math.MaxUint32 {
-			t.Skip()
-		}
-
 		expQ := uint32(x / uint64(y))
 		expR := uint32(x % uint64(y))
 
 		t.Run("DivLongUnsigned64b32b", func(t *testing.T) {
+			// Overflow. This code does not work. Skip.
+			if (x / uint64(y)) > math.MaxUint32 {
+				t.Skip()
+			}
+
 			q, r := hd.DivLongUnsigned64b32b(x, y)
 
 			if q != expQ {
@@ -77,6 +78,12 @@ func FuzzDivLongUnsigned64b(f *testing.F) {
 
 		t.Run("DivLongUnsigned64b32b2", func(t *testing.T) {
 			q, r := hd.DivLongUnsigned64b32b2(x, y)
+
+			// Overflow. Special values returned.
+			if (x / uint64(y)) > math.MaxUint32 {
+				expQ = math.MaxUint32
+				expR = math.MaxUint32
+			}
 
 			if q != expQ {
 				t.Errorf("x=%d y=%d: Q: exp=%d got=%d", x, y, expQ, q)

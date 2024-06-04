@@ -180,3 +180,5 @@ func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 	r = (un21*b + un0 - q0*y) >> s // Unnormalize the reminder.
 	return q1*b + q0, r
 }
+
+// TODO: double word division from long division (aka 64 / 64 => 64 from 64 / 32 => 32)
