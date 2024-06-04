@@ -64,13 +64,27 @@ func FuzzDivLongUnsigned64b(f *testing.F) {
 		expQ := uint32(x / uint64(y))
 		expR := uint32(x % uint64(y))
 
-		q, r := hd.DivLongUnsigned64b(x, y)
+		t.Run("DivLongUnsigned64b32b", func(t *testing.T) {
+			q, r := hd.DivLongUnsigned64b32b(x, y)
 
-		if q != expQ {
-			t.Errorf("x=%d y=%d: Q: exp=%d got=%d", x, y, expQ, q)
-		}
-		if r != expR {
-			t.Errorf("x=%d y=%d: R: exp=%d got=%d", x, y, expR, r)
-		}
+			if q != expQ {
+				t.Errorf("x=%d y=%d: Q: exp=%d got=%d", x, y, expQ, q)
+			}
+			if r != expR {
+				t.Errorf("x=%d y=%d: R: exp=%d got=%d", x, y, expR, r)
+			}
+		})
+
+		t.Run("DivLongUnsigned64b32b2", func(t *testing.T) {
+			q, r := hd.DivLongUnsigned64b32b2(x, y)
+
+			if q != expQ {
+				t.Errorf("x=%d y=%d: Q: exp=%d got=%d", x, y, expQ, q)
+			}
+			if r != expR {
+				t.Errorf("x=%d y=%d: R: exp=%d got=%d", x, y, expR, r)
+			}
+		})
+
 	})
 }

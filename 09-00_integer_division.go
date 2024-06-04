@@ -104,12 +104,12 @@ func DivMultiWordUnsigned(q, r, u, v []uint16) {
 
 // TODO: unsigned short division from signed short division
 
-// DivLongUnsigned64b (aka divlu) performs long division of 64-bit unsigned integer by 32-bit unsigned integer.
+// DivLongUnsigned64b32b (aka divlu) performs long division of 64-bit unsigned integer by 32-bit unsigned integer.
 // This algorithm is slightly modified to store both lower and higher 32 bits of dividend into 64-bit number.
 // This algorithm uses shift-and-subtract operations. It illustrates how hardware is doing such division.
 // It does not work for overflow cases.
 // This executes in 321 to 385 RISC instructions.
-func DivLongUnsigned64b(x uint64, y uint32) (q, r uint32) {
+func DivLongUnsigned64b32b(x uint64, y uint32) (q, r uint32) {
 	xh := uint32(x >> 32)
 	xl := uint32(x)
 
@@ -123,4 +123,60 @@ func DivLongUnsigned64b(x uint64, y uint32) (q, r uint32) {
 		}
 	}
 	return xl, xh
+}
+
+// DivLongUnsigned64b32b2 is alternative version based on multiword division.
+func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
+	u1 := uint32(x >> 32)
+	u0 := uint32(x)
+
+	const b = 65536 // Number base (16 bits).
+
+	// Overflow, return maximum quotient and reminder.
+	if u1 >= y {
+		return 0xFFFF_FFFF, 0xFFFF_FFFF
+	}
+
+	s := int32(NLZ(y)) // Shift amount. 0 <= s <= 31
+	y <<= s            // Normalize divisor.
+
+	// Break divisor up into two 16-bit digits. Norm. divisor digits.
+	vn1, vn0 := (y >> 16), (y & 0xFFFF)
+
+	// Dividend digit pairs.
+	un32 := (u1 << s) | ((u0 >> (32 - s)) & uint32((-s >> 31)))
+	un10 := u0 << s // Shift dividend left.
+
+	// Break dividend up into dividend into two digits. Norm. dividend LSD's.
+	un1, un0 := (un10 >> 16), (un10 & 0xFFFF)
+
+	// Compute the first quotient digit q1.
+	q1 := un32 / vn1
+	rhat := un32 - q1*vn1
+
+	for q1 >= b || q1*vn0 > b*rhat+un1 {
+		q1 -= 1
+		rhat += vn1
+		if rhat >= b {
+			break
+		}
+	}
+
+	// Multiply and subtract.
+	un21 := un32*b + un1 - q1*y
+
+	// Compute the second quotient digit q0.
+	q0 := un21 / vn1
+	rhat = un21 - q0*vn1
+
+	for q0 >= b || q0*vn0 > b*rhat+un0 {
+		q0 -= 1
+		rhat += vn1
+		if rhat >= b {
+			break
+		}
+	}
+
+	r = (un21*b + un0 - q0*y) >> s // Unnormalize the reminder.
+	return q1*b + q0, r
 }

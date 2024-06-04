@@ -5,6 +5,9 @@ import "math"
 var fuzzUint32 = [...]uint32{
 	0,
 	1,
+	math.MaxInt16,
+	math.MaxInt16 / 2,
+	math.MaxInt16 - 1,
 	math.MaxInt32,
 	math.MaxInt32 / 2,
 	math.MaxInt32 - 1,
@@ -16,6 +19,9 @@ var fuzzUint32 = [...]uint32{
 var fuzzUint64 = [...]uint64{
 	0,
 	1,
+	math.MaxUint16,
+	math.MaxUint16 / 2,
+	math.MaxUint16 - 1,
 	math.MaxInt32,
 	math.MaxInt32 / 2,
 	math.MaxInt32 - 1,
