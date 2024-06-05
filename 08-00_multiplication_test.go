@@ -7,7 +7,7 @@ import (
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
-func ExampleMultiplyMultiWord() {
+func ExampleMulMultiWord() {
 	u := []uint16{1, 2, 3, 4}
 	v := []uint16{5, 6, 7}
 	w := make([]uint16, len(u)+len(v))
