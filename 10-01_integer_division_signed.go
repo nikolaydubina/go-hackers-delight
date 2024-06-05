@@ -1,5 +1,10 @@
 package hd
 
+import (
+	"fmt"
+	"sync"
+)
+
 // DivPow2 returns n / 2 ** k for 1 <= k < 31.
 // This is illustration, for performance k should be fixed at compile time.
 // This is four branch-free instructions.
@@ -66,4 +71,89 @@ func DivMod7(n int32) (q, r int32) {
 	return q, n - (q * 7)
 }
 
-// TODO: compute magic number for any divisor + how to apply it. note, this requires care for assembly instructions and overflows.
+// DivModConst performs division by constant.
+// This code should be generated at compile time depending on the value of compile time constant k and result of MagicSigned execution.
+func DivModConst(n, k int32) (q, r int32) {
+	M, s := MulSignedMagicCached(k)   // compile time
+	q = MultiplyHighOrderSigned(M, n) //
+	if k > 0 && M < 0 {               // branch generated at compile time
+		q += n
+	}
+	if k < 0 && M > 0 { // branch generated at compile time
+		q -= n
+	}
+	if s > 0 { // branch generated at compile time
+		q >>= s
+	}
+	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if
+	q += t                      // n is negative.
+	return q, n - (q * k)
+}
+
+type magicSignedMul struct {
+	M int32
+	s int32
+}
+
+var mulSignedMagicCache = make(map[int32]magicSignedMul)
+var mulSignedMagicCacheMtx = sync.Mutex{}
+
+func MulSignedMagicCached(d int32) (M, s int32) {
+	mulSignedMagicCacheMtx.Lock()
+	defer mulSignedMagicCacheMtx.Unlock()
+
+	if v, ok := mulSignedMagicCache[d]; !ok {
+		M, s = MulSignedMagic(d)
+		mulSignedMagicCache[d] = magicSignedMul{M: M, s: s}
+		return v.M, v.s
+	}
+	return mulSignedMagicCache[d].M, mulSignedMagicCache[d].s
+}
+
+// MulSignedMagic computes magic number and shift amount for signed integer division.
+// This values can be computed at compile time.
+// Code using big numbers can be simplified, such as in the case of Python or math.Big, it is no listed here.
+func MulSignedMagic(d int32) (M, s int32) {
+	if d > -2 && d < 2 { // Original condition was testing against boundaries of int32, which is not necessary.
+		panic(fmt.Errorf("d(%v) is out of range", d))
+	}
+
+	const two31 uint32 = 0x8000_0000 // 2 ** 31
+	var ad uint32 = uint32(Abs(d))
+
+	t := two31 + (uint32(d) >> 31)
+	anc := t - 1 - (t % ad)  // Absolute value of nc.
+	q1 := two31 / anc        // Init q1 = 2 ** p / |nc|.
+	r1 := two31 - (q1 * anc) // Init r1 = rem(2 ** p, |nc|).
+	q2 := two31 / ad         // Init q2 = 2 ** p / |d|.
+	r2 := two31 - (q2 * ad)  // Init r2 = rem(2 ** p, |d|).
+
+	var p int32 = 31
+	for {
+		p++
+		q1 *= 2 // Update q1 = 2 ** p / |nc|.
+		r1 *= 2 // Update r1 = rem(2 ** p, |nc|).
+		if r1 >= anc {
+			q1++
+			r1 -= anc
+		}
+
+		q2 *= 2 // Update q2 = 2 ** p / |d|.
+		r2 *= 2 // Update r2 = rem(2 ** p, |d|).
+		if r2 >= ad {
+			q2++
+			r2 -= ad
+		}
+
+		if delta := ad - r2; !((q1 < delta) || ((q1 == delta) && (r1 == 0))) {
+			break
+		}
+	}
+
+	M = int32(q2 + 1)
+	if d < 0 {
+		M = -M
+	}
+
+	return M, p - 32
+}
