@@ -54,7 +54,7 @@ func DivMod5(n int32) (q, r int32) {
 	const M int32 = 0x6666_6667       // Magic (2 ** 33 + 3) / 5
 	q = MultiplyHighOrderSigned(M, n) // (mulhs), multiply signed, q = floor(M*n/2**32), this can be a single instruction on many architectures.
 	q >>= 1
-	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if
+	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if negative
 	q += t                      // n is negative.
 	return q, n - (q * 5)
 }
@@ -66,28 +66,32 @@ func DivMod7(n int32) (q, r int32) {
 	q = MultiplyHighOrderSigned(M, n) // (mulhs), multiply signed, q = floor(M*n/2**32), this can be a single instruction on many architectures.
 	q += n
 	q >>= 2
-	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if
+	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if negative
 	q += t                      // n is negative.
 	return q, n - (q * 7)
 }
 
-// DivModConst performs division by constant.
+// DivModSignedConst performs division by constant.
 // This code should be generated at compile time depending on the value of compile time constant k and result of MagicSigned execution.
-func DivModConst(n, k int32) (q, r int32) {
-	M, s := MulSignedMagicCached(k)   // compile time
-	q = MultiplyHighOrderSigned(M, n) //
-	if k > 0 && M < 0 {               // branch generated at compile time
+func DivModSignedConst(n, d int32) (q, r int32) {
+	M, s := MulSignedMagicCached(d) // compile time
+
+	q = MultiplyHighOrderSigned(M, n)
+
+	// branches bellow generated at compile time conditional on compile constants k, M, s.
+	if d > 0 && M < 0 {
 		q += n
 	}
-	if k < 0 && M > 0 { // branch generated at compile time
+	if d < 0 && M > 0 {
 		q -= n
 	}
-	if s > 0 { // branch generated at compile time
+	if s > 0 {
 		q >>= s
 	}
-	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if
+
+	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if negative
 	q += t                      // n is negative.
-	return q, n - (q * k)
+	return q, n - (q * d)
 }
 
 type magicSignedMul struct {
@@ -102,10 +106,9 @@ func MulSignedMagicCached(d int32) (M, s int32) {
 	mulSignedMagicCacheMtx.Lock()
 	defer mulSignedMagicCacheMtx.Unlock()
 
-	if v, ok := mulSignedMagicCache[d]; !ok {
+	if _, ok := mulSignedMagicCache[d]; !ok {
 		M, s = MulSignedMagic(d)
 		mulSignedMagicCache[d] = magicSignedMul{M: M, s: s}
-		return v.M, v.s
 	}
 	return mulSignedMagicCache[d].M, mulSignedMagicCache[d].s
 }
