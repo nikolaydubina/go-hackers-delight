@@ -57,7 +57,7 @@ func FuzzDivMod3(f *testing.F) {
 			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 
-		if gotQ, gotR := hd.DivModConst(x, 3); q != gotQ || r != gotR {
+		if gotQ, gotR := hd.DivModSignedConst(x, 3); q != gotQ || r != gotR {
 			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 	})
@@ -74,7 +74,7 @@ func FuzzDivMod5(f *testing.F) {
 			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 
-		if gotQ, gotR := hd.DivModConst(x, 5); q != gotQ || r != gotR {
+		if gotQ, gotR := hd.DivModSignedConst(x, 5); q != gotQ || r != gotR {
 			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 	})
@@ -91,7 +91,7 @@ func FuzzDivMod7(f *testing.F) {
 			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 
-		if gotQ, gotR := hd.DivModConst(x, 7); q != gotQ || r != gotR {
+		if gotQ, gotR := hd.DivModSignedConst(x, 7); q != gotQ || r != gotR {
 			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 	})
