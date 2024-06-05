@@ -62,6 +62,7 @@ func MulMultiWord(w, u, v []uint16) {
 
 // MultiplyHighOrderSigned (aka mulhns) multiplies two signed integers and returns the high-order half of the product.
 // This executes in 16 RISC instructions.
+// Go has math.bits.Mul32(x,y uint32) (hi, lo uint32), but it does not have signed version.
 func MultiplyHighOrderSigned(u, v int32) int32 {
 	var u0, v0, w0 uint32
 	var u1, v1, w1, w2, t int32
