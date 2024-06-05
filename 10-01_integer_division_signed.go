@@ -65,3 +65,5 @@ func DivMod7(n int32) (q, r int32) {
 	q += t                      // n is negative.
 	return q, n - (q * 7)
 }
+
+// TODO: compute magic number for any divisor + how to apply it. note, this requires care for assembly instructions and overflows.
