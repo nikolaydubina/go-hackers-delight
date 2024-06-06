@@ -74,6 +74,10 @@ func DivMod7(n int32) (q, r int32) {
 // DivModSignedConst performs division by constant.
 // This code should be generated at compile time depending on the value of compile time constant k and result of MagicSigned execution.
 func DivModSignedConst(n, d int32) (q, r int32) {
+	if d < 0 {
+		panic(fmt.Errorf("TODO: why integer signed division by negative constants is not working?"))
+	}
+
 	M, s := MulSignedMagicCached(d) // compile time
 
 	q = MultiplyHighOrderSigned(M, n)
