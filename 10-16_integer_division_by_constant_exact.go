@@ -42,7 +42,7 @@ func MultiplicativeInverseNewton(d uint32) uint32 {
 	if (d % 2) == 0 {
 		panic("even number")
 	}
-	for xn := d; ; xn = xn * (2 - d*xn) {
+	for xn := d; ; xn *= 2 - (d * xn) {
 		if (d * xn) == 1 {
 			return xn
 		}
