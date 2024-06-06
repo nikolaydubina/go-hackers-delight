@@ -1,16 +1,14 @@
 package hd
 
-// LRUCache is eight-way set associative cache with LRU replacement policy that uses reference matrix method.
-// This can count up to 8 lines, indexed [0, 7].
-// Least significant byte holds row 0.
+// LRUCache is eight-way set associative cache with least-recently-used replacement policy that uses reference matrix method.
 // The whole structure fits into single 64bit register.
-// Line is is references by i-th byte of the register.
+// Internally, least significant byte of uint64 holds row 0 of reference matrix.
 type LRUCache struct{ m uint64 }
 
-// Add line i to the cache.
+// Hit value i ast most recently used.
 // This is five or six instructions on 64bit RISC.
 // Values of i should be in [0, 7].
-func (c *LRUCache) Add(i uint8) {
+func (c *LRUCache) Hit(i uint8) {
 	c.m |= (0xFF << (8 * i))
 	c.m &= ^(0x0101_0101_0101_0101 << i)
 }

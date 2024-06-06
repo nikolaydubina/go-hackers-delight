@@ -9,20 +9,20 @@ import (
 func TestLRUCache(t *testing.T) {
 	var cache hd.LRUCache
 
-	cache.Add(0)
-	cache.Add(1)
-	cache.Add(2)
-	cache.Add(3)
-	cache.Add(4)
-	cache.Add(5)
-	cache.Add(6)
-	cache.Add(7)
+	cache.Hit(0)
+	cache.Hit(1)
+	cache.Hit(2)
+	cache.Hit(3)
+	cache.Hit(4)
+	cache.Hit(5)
+	cache.Hit(6)
+	cache.Hit(7)
 
 	if cache.LeastRecentlyUsed() != 0 {
 		t.Errorf("expected %d, got %d: cache=%032b", 0, cache.LeastRecentlyUsed(), cache)
 	}
 
-	cache.Add(0)
+	cache.Hit(0)
 	if cache.LeastRecentlyUsed() != 1 {
 		t.Errorf("expected %d, got %d: cache=%032b", 1, cache.LeastRecentlyUsed(), cache)
 	}
@@ -37,8 +37,8 @@ func FuzzLRUCache(f *testing.F) {
 		x = x % 8
 		count++
 
-		cache.Add(x)
-		cacheBasic.Add(x)
+		cache.Hit(x)
+		cacheBasic.Hit(x)
 
 		// fill out the cache
 		if count < 8 {
@@ -58,7 +58,7 @@ type LRUCacheBasic struct {
 
 func NewLRUCacheBasic() *LRUCacheBasic { return &LRUCacheBasic{vals: [8]uint8{0, 1, 2, 3, 4, 5, 6, 7}} }
 
-func (m *LRUCacheBasic) Add(i uint8) {
+func (m *LRUCacheBasic) Hit(i uint8) {
 	i = i % 8
 	for j, v := range m.vals {
 		if v == i {
