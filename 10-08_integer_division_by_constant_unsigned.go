@@ -2,7 +2,6 @@ package hd
 
 import (
 	"math/bits"
-	"sync"
 )
 
 func DivModUnsignedPowTwo(n uint32, k int) (q, r uint32) { return n >> k, n - (n >> k << k) }
@@ -29,7 +28,7 @@ func DivModUnsignedConst(n, d uint32) (q, r uint32) {
 		return n, 0
 	}
 
-	M, a, s := DivModUnsignedMagicProvider(d) // compile time
+	M, a, s := DivModUnsignedConstMagic(d) // compile time
 
 	q, _ = bits.Mul32(M, n) // mulhu
 
@@ -46,44 +45,15 @@ func DivModUnsignedConst(n, d uint32) (q, r uint32) {
 		if (s - 1) > 0 {
 			q = t >> (s - 1)
 		}
-
 	}
 
 	return q, n - (q * d)
 }
 
-var mulUnsignedMagicCache = NewMulUnsignedMagicCache()
-var DivModUnsignedMagicProvider = mulUnsignedMagicCache.MulUnsignedMagic
-
-type MulUnsignedMagicCache struct {
-	m   map[uint32]uint32
-	s   map[uint32]int32
-	a   map[uint32]int32
-	mtx *sync.Mutex
-}
-
-func NewMulUnsignedMagicCache() MulUnsignedMagicCache {
-	return MulUnsignedMagicCache{
-		m:   make(map[uint32]uint32),
-		s:   make(map[uint32]int32),
-		a:   make(map[uint32]int32),
-		mtx: &sync.Mutex{},
-	}
-}
-
-func (v MulUnsignedMagicCache) MulUnsignedMagic(d uint32) (M uint32, a, s int32) {
-	v.mtx.Lock()
-	defer v.mtx.Unlock()
-	if _, ok := v.m[d]; !ok {
-		v.m[d], v.a[d], v.s[d] = MulUnsignedMagic(d)
-	}
-	return v.m[d], v.a[d], v.s[d]
-}
-
-// MulUnsignedMagic computes magic for unsigned constant multiplication.
+// DivModUnsignedConstMagic computes magic for unsigned constant multiplication.
 // This values can be computed at compile time.
 // Code using big numbers can be simplified, such as in the case of Python or math.Big, it is no listed here.
-func MulUnsignedMagic(d uint32) (M uint32, a, s int32) {
+func DivModUnsignedConstMagic(d uint32) (M uint32, a, s int32) {
 	var nc uint32 = 0xFFFF_FFFF - ((-d) % d) // Unsigned arithmetic here. -1 changed to 0xFFFF_FFFF for unsigned arithmetic.
 	var p int32 = 31
 

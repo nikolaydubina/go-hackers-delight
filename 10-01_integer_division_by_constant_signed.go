@@ -2,7 +2,6 @@ package hd
 
 import (
 	"fmt"
-	"sync"
 )
 
 // DivSignedPowTwo returns n / 2 ** k for 1 <= k < 31.
@@ -71,9 +70,6 @@ func DivModSignedSeven(n int32) (q, r int32) {
 	return q, n - (q * 7)
 }
 
-var mulSignedMagicCache = NewMulSignedMagicCache()
-var DivModSignedConstMagicProvider = mulSignedMagicCache.MulSignedMagic
-
 // DivModSignedConst performs division by constant.
 // This code should be generated at compile time depending on the value of compile time constant k and result of MagicSigned execution.
 func DivModSignedConst(n, d int32) (q, r int32) {
@@ -81,7 +77,7 @@ func DivModSignedConst(n, d int32) (q, r int32) {
 		panic(fmt.Errorf("TODO: why integer signed division by negative constants is not working?"))
 	}
 
-	M, s := DivModSignedConstMagicProvider(d) // compile time
+	M, s := DivModSignedConstMagic(d) // compile time
 
 	q = MultiplyHighOrderSigned(M, n)
 
@@ -101,33 +97,10 @@ func DivModSignedConst(n, d int32) (q, r int32) {
 	return q, n - (q * d)
 }
 
-type MulSignedMagicCache struct {
-	m   map[int32]int32
-	s   map[int32]int32
-	mtx *sync.Mutex
-}
-
-func NewMulSignedMagicCache() MulSignedMagicCache {
-	return MulSignedMagicCache{
-		m:   make(map[int32]int32),
-		s:   make(map[int32]int32),
-		mtx: &sync.Mutex{},
-	}
-}
-
-func (v MulSignedMagicCache) MulSignedMagic(d int32) (M, s int32) {
-	v.mtx.Lock()
-	defer v.mtx.Unlock()
-	if _, ok := v.m[d]; !ok {
-		v.m[d], v.s[d] = MulSignedMagic(d)
-	}
-	return v.m[d], v.s[d]
-}
-
-// MulSignedMagic computes magic number and shift amount for signed integer division.
+// DivModSignedConstMagic computes magic number and shift amount for signed integer division.
 // This values can be computed at compile time.
 // Code using big numbers can be simplified, such as in the case of Python or math.Big, it is no listed here.
-func MulSignedMagic(d int32) (M, s int32) {
+func DivModSignedConstMagic(d int32) (M, s int32) {
 	if d > -2 && d < 2 {
 		panic(fmt.Errorf("d(%v) is out of range", d))
 	}

@@ -127,7 +127,7 @@ func TestMagicSigned(t *testing.T) {
 	}
 	for i, tc := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			M, s := hd.MulSignedMagic(tc.d)
+			M, s := hd.DivModSignedConstMagic(tc.d)
 			if M != tc.M || s != tc.s {
 				t.Errorf("MagicSigned(%d) = (%x, %d); want (%x, %d)", tc.d, M, s, tc.M, tc.s)
 			}
@@ -141,8 +141,6 @@ func FuzzDivModSignedConst(f *testing.F) {
 			f.Add(x, y)
 		}
 	}
-
-	s := hd.NewMulSignedMagicCache()
 
 	f.Fuzz(func(t *testing.T, x, y int32) {
 		if y > -2 && y < 2 {
@@ -160,7 +158,7 @@ func FuzzDivModSignedConst(f *testing.F) {
 		expR := x % y
 
 		if q, r := hd.DivModSignedConst(x, y); expQ != q || expR != r {
-			M, s := s.MulSignedMagic(y)
+			M, s := hd.DivModSignedConstMagic(y)
 			t.Errorf("DivModConst(%d, %d) = (%d, %d); want (%d, %d), M(%v) s(%v)", x, y, q, r, expQ, expR, M, s)
 		}
 	})
