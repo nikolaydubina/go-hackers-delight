@@ -30,34 +30,31 @@ func ExampleMultiplicativeInverseEuclidInt() {
 func uint32FromHex(x int32) uint32 { return uint32(x) }
 
 func TestMultiplicativeInverse(t *testing.T) {
-	tests := []struct {
-		d uint32
-		i uint32
-	}{
-		{d: uint32FromHex(-7), i: 0x4924_9249},
-		{d: uint32FromHex(-5), i: 0x3333_3333},
-		{d: uint32FromHex(-3), i: 0x5555_5555},
-		{d: uint32FromHex(-1), i: 0xFFFF_FFFF},
-		{d: 1, i: 1},
-		{d: 3, i: 0xAAAA_AAAB},
-		{d: 5, i: 0xCCCC_CCCD},
-		{d: 7, i: 0xB6DB_6DB7},
-		{d: 9, i: 0x38E3_8E39},
-		{d: 11, i: 0xBA2E_8BA3},
-		{d: 13, i: 0xC4EC_4EC5},
-		{d: 15, i: 0xEEEE_EEEF},
-		{d: 25, i: 0xC28F_5C29},
-		{d: 125, i: 0x26E9_78D5},
-		{d: 625, i: 0x3AFB_7E91},
+	tests := map[uint32]uint32{
+		uint32FromHex(-7): 0x4924_9249,
+		uint32FromHex(-5): 0x3333_3333,
+		uint32FromHex(-3): 0x5555_5555,
+		uint32FromHex(-1): 0xFFFF_FFFF,
+		1:                 0x0000_0001,
+		3:                 0xAAAA_AAAB,
+		5:                 0xCCCC_CCCD,
+		7:                 0xB6DB_6DB7,
+		9:                 0x38E3_8E39,
+		11:                0xBA2E_8BA3,
+		13:                0xC4EC_4EC5,
+		15:                0xEEEE_EEEF,
+		25:                0xC28F_5C29,
+		125:               0x26E9_78D5,
+		625:               0x3AFB_7E91,
 	}
-	for _, tt := range tests {
+	for d, i := range tests {
 		vs := []uint32{
-			hd.MultiplicativeInverseEuclid(tt.d),
-			hd.MultiplicativeInverseNewton(tt.d),
+			hd.MultiplicativeInverseEuclid(d),
+			hd.MultiplicativeInverseNewton(d),
 		}
-		for i, v := range vs {
-			if tt.i != v {
-				t.Errorf("d(%d) = %d; want %d; method %d", tt.d, v, tt.i, i)
+		for j, v := range vs {
+			if i != v {
+				t.Errorf("%d: d(%d) = %d; want %d", j, d, v, i)
 			}
 		}
 	}

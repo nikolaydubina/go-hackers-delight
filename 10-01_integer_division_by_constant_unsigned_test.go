@@ -1,7 +1,7 @@
 package hd_test
 
 import (
-	"strconv"
+	"fmt"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -59,32 +59,31 @@ func FuzzDivModUnsignedSeven(f *testing.F) {
 
 func TestMulUnsignedMagic(t *testing.T) {
 	type tc struct {
-		d uint32
 		M uint32
 		s int32
 		a int32
 	}
-	tests := []tc{
-		{d: 1, M: 0x0000_0000, a: 1, s: 0},
-		{d: 3, M: 0xAAAA_AAAB, a: 0, s: 1},
-		{d: 5, M: 0xCCCC_CCCD, a: 0, s: 2},
-		{d: 7, M: 0x2492_4925, a: 1, s: 3},
-		{d: 9, M: 0x38E3_8E39, a: 0, s: 1},
-		{d: 10, M: 0xCCCC_CCCD, a: 0, s: 3},
-		{d: 11, M: 0xBA2E_8BA3, a: 0, s: 3},
-		{d: 12, M: 0xAAAA_AAAB, a: 0, s: 3},
-		{d: 25, M: 0x51EB_851F, a: 0, s: 3},
-		{d: 125, M: 0x1062_4DD3, a: 0, s: 3},
-		{d: 625, M: 0xD1B7_1759, a: 0, s: 9},
+	tests := map[uint32]tc{
+		1:   {M: 0x0000_0000, a: 1, s: 0},
+		3:   {M: 0xAAAA_AAAB, a: 0, s: 1},
+		5:   {M: 0xCCCC_CCCD, a: 0, s: 2},
+		7:   {M: 0x2492_4925, a: 1, s: 3},
+		9:   {M: 0x38E3_8E39, a: 0, s: 1},
+		10:  {M: 0xCCCC_CCCD, a: 0, s: 3},
+		11:  {M: 0xBA2E_8BA3, a: 0, s: 3},
+		12:  {M: 0xAAAA_AAAB, a: 0, s: 3},
+		25:  {M: 0x51EB_851F, a: 0, s: 3},
+		125: {M: 0x1062_4DD3, a: 0, s: 3},
+		625: {M: 0xD1B7_1759, a: 0, s: 9},
 	}
 	for _, k := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10} {
-		tests = append(tests, tc{d: 1 << k, M: 1 << (32 - k), a: 0, s: 0})
+		tests[1<<k] = tc{M: 1 << (32 - k), a: 0, s: 0}
 	}
-	for i, tc := range tests {
-		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			M, a, s := hd.DivModUnsignedConstMagic(tc.d)
+	for d, tc := range tests {
+		t.Run(fmt.Sprintf("%v", d), func(t *testing.T) {
+			M, a, s := hd.DivModUnsignedConstMagic(d)
 			if M != tc.M || s != tc.s || tc.a != a {
-				t.Errorf("MulUnsignedMagic(%d) = got(%d, %d, %d); want (%d, %d, %d)", tc.d, M, a, s, tc.M, tc.a, tc.s)
+				t.Errorf("MulUnsignedMagic(%d) = got(%d, %d, %d); want (%d, %d, %d)", d, M, a, s, tc.M, tc.a, tc.s)
 			}
 		})
 	}

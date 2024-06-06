@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"strconv"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -100,35 +99,33 @@ func int32FromHex(x uint32) int32 { return int32(x) }
 
 func TestMagicSigned(t *testing.T) {
 	type tc struct {
-		d int32
 		M int32
 		s int32
 	}
-	tests := []tc{
-		{d: -5, M: int32FromHex(0x9999_9999), s: 1},
-		{d: -3, M: 0x5555_5555, s: 1},
-		//{d: 1, } // intentionally skipped,
-		{d: 3, M: 0x5555_5556, s: 0},
-		{d: 5, M: 0x6666_6667, s: 1},
-		{d: 6, M: 0x2AAA_AAAB, s: 0},
-		{d: 7, M: int32FromHex(0x9249_2493), s: 2},
-		{d: 9, M: 0x38E3_8E39, s: 1},
-		{d: 10, M: 0x6666_6667, s: 2},
-		{d: 11, M: 0x2E8B_A2E9, s: 1},
-		{d: 12, M: 0x2AAA_AAAB, s: 1},
-		{d: 25, M: 0x51EB_851F, s: 3},
-		{d: 125, M: 0x1062_4DD3, s: 3},
-		{d: 625, M: 0x68DB_8BAD, s: 8},
+	tests := map[int32]tc{
+		-5:  {M: int32FromHex(0x9999_9999), s: 1},
+		-3:  {M: 0x5555_5555, s: 1},
+		3:   {M: 0x5555_5556, s: 0},
+		5:   {M: 0x6666_6667, s: 1},
+		6:   {M: 0x2AAA_AAAB, s: 0},
+		7:   {M: int32FromHex(0x9249_2493), s: 2},
+		9:   {M: 0x38E3_8E39, s: 1},
+		10:  {M: 0x6666_6667, s: 2},
+		11:  {M: 0x2E8B_A2E9, s: 1},
+		12:  {M: 0x2AAA_AAAB, s: 1},
+		25:  {M: 0x51EB_851F, s: 3},
+		125: {M: 0x1062_4DD3, s: 3},
+		625: {M: 0x68DB_8BAD, s: 8},
 	}
 	for _, k := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10} {
-		tests = append(tests, tc{d: -1 << k, M: 0x7FFF_FFFF, s: int32(k - 1)})
-		tests = append(tests, tc{d: 1 << k, M: int32FromHex(0x8000_0001), s: int32(k - 1)})
+		tests[-1<<k] = tc{M: 0x7FFF_FFFF, s: int32(k - 1)}
+		tests[+1<<k] = tc{M: int32FromHex(0x8000_0001), s: int32(k - 1)}
 	}
-	for i, tc := range tests {
-		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			M, s := hd.DivModSignedConstMagic(tc.d)
+	for d, tc := range tests {
+		t.Run(fmt.Sprintf("%v", d), func(t *testing.T) {
+			M, s := hd.DivModSignedConstMagic(d)
 			if M != tc.M || s != tc.s {
-				t.Errorf("MagicSigned(%d) = (%x, %d); want (%x, %d)", tc.d, M, s, tc.M, tc.s)
+				t.Errorf("MagicSigned(%d) = (%x, %d); want (%x, %d)", d, M, s, tc.M, tc.s)
 			}
 		})
 	}
