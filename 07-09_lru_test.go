@@ -32,18 +32,17 @@ func FuzzLRUCache(f *testing.F) {
 	var cache hd.LRUCache
 	cacheBasic := NewLRUCacheBasic()
 
-	count := 0
+	// fill out the cache
+	for i := uint8(0); i < 8; i++ {
+		cache.Hit(i)
+		cacheBasic.Hit(i)
+	}
+
 	f.Fuzz(func(t *testing.T, x uint8) {
 		x = x % 8
-		count++
 
 		cache.Hit(x)
 		cacheBasic.Hit(x)
-
-		// fill out the cache
-		if count < 8 {
-			return
-		}
 
 		if cache.LeastRecentlyUsed() != cacheBasic.LeastRecentlyUsed() {
 			t.Errorf("x=%v expected %d, got %d: cache=%016x cache_basic=%v", x, cacheBasic.LeastRecentlyUsed(), cache.LeastRecentlyUsed(), cache, cacheBasic)
