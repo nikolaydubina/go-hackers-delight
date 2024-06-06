@@ -24,10 +24,10 @@ func Compress(x, m uint32) uint32 {
 
 // Compress2 is direct version of Compress. This is 260 RISC instructions in loop brach-free.
 func Compress2(x, m uint32) uint32 {
-	var r, s, b uint32
+	var r, s uint32
 	for m != 0 {
-		b = m & 1
-		r = r | ((x & b) << s)
+		b := m & 1
+		r |= (x & b) << s
 		s += b
 		x >>= 1
 		m >>= 1
