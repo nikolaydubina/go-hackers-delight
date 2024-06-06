@@ -9,7 +9,7 @@ import (
 )
 
 func ExampleDivPow2_fixed5() {
-	fmt.Println(hd.DivPow2_fixed5(96))
+	fmt.Println(hd.DivSignedPowTwo_fixed5(96))
 	// Output: 3
 
 }
@@ -32,15 +32,15 @@ func FuzzDivPow2(f *testing.F) {
 			expQ = -expQ
 		}
 
-		if got := hd.DivPow2(x, int(k)); expQ != got {
+		if got := hd.DivSignedPowTwo(x, int(k)); expQ != got {
 			t.Errorf("DivPow2(%d, %d) = %d; want %d", x, k, got, expQ)
 		}
 
-		if got := hd.DivPow2Two(x, int(k)); expQ != got {
+		if got := hd.DivSignedPowTwo2(x, int(k)); expQ != got {
 			t.Errorf("DivPow2Two(%d, %d) = %d; want %d", x, k, got, expQ)
 		}
 
-		if gotQ, gotR := hd.DivModPow2(x, int(k)); expQ != gotQ || expR != gotR {
+		if gotQ, gotR := hd.DivModSignedPowTwo(x, int(k)); expQ != gotQ || expR != gotR {
 			t.Errorf("DivModPow2(%d, %d) = (%d, %d); want (%d, %d)", x, k, gotQ, gotR, expQ, expR)
 		}
 	})
@@ -53,7 +53,7 @@ func FuzzDivMod3(f *testing.F) {
 	f.Fuzz(func(t *testing.T, x int32) {
 		q, r := x/3, x%3
 
-		if gotQ, gotR := hd.DivMod3(x); q != gotQ || r != gotR {
+		if gotQ, gotR := hd.DivModSignedThree(x); q != gotQ || r != gotR {
 			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 
@@ -70,7 +70,7 @@ func FuzzDivMod5(f *testing.F) {
 	f.Fuzz(func(t *testing.T, x int32) {
 		q, r := x/5, x%5
 
-		if gotQ, gotR := hd.DivMod5(x); q != gotQ || r != gotR {
+		if gotQ, gotR := hd.DivModSignedFive(x); q != gotQ || r != gotR {
 			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 
@@ -87,7 +87,7 @@ func FuzzDivMod7(f *testing.F) {
 	f.Fuzz(func(t *testing.T, x int32) {
 		q, r := x/7, x%7
 
-		if gotQ, gotR := hd.DivMod7(x); q != gotQ || r != gotR {
+		if gotQ, gotR := hd.DivModSignedSeven(x); q != gotQ || r != gotR {
 			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
 		}
 
@@ -141,8 +141,14 @@ func FuzzDivModSignedConst(f *testing.F) {
 			f.Add(x, y)
 		}
 	}
+
+	s := hd.NewMulSignedMagicCache()
+
 	f.Fuzz(func(t *testing.T, x, y int32) {
 		if y > -2 && y < 2 {
+			t.Skip()
+		}
+		if y == 0 {
 			t.Skip()
 		}
 		// TODO: why integer signed division by negative constants is not working?
@@ -154,7 +160,7 @@ func FuzzDivModSignedConst(f *testing.F) {
 		expR := x % y
 
 		if q, r := hd.DivModSignedConst(x, y); expQ != q || expR != r {
-			M, s := hd.MulSignedMagicCached(y)
+			M, s := s.MulSignedMagic(y)
 			t.Errorf("DivModConst(%d, %d) = (%d, %d); want (%d, %d), M(%v) s(%v)", x, y, q, r, expQ, expR, M, s)
 		}
 	})
