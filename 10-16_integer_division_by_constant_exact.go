@@ -34,7 +34,7 @@ func MultiplicativeInverseNewtonInt(d int32) int32 {
 }
 
 // MultiplicativeInverseNewton uses Newton method of multiplicative inverse.
-// It follows from the wellknown fact that sequence of xn_1 = xn * (2 - d * xn) converges to 1/d (mod d) given good starting xn.
+// It follows from the well-known fact that sequence of xn_1 = xn * (2 - d * xn) converges to 1/d (mod d) given good starting xn.
 // This also works with any inverse module of power of 2.
 // Each iteration doubles number of correct bits.
 func MultiplicativeInverseNewton(d uint32) uint32 {
