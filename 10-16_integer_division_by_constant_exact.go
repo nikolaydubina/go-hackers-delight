@@ -3,6 +3,7 @@ package hd
 func DivExactSeven(n int32) int32 { return -0x49249249 * n }
 
 // DivExact uses multiplicative inverse that can be computed at compile time.
+// It relies on theorem "if a and m are relatively prime integers, then there exists an integer ā such that a*ā = 1 (mod m)".
 func DivExact(n, d int32) int32 {
 	var M int32 = MultiplicativeInverseNewtonInt(d)
 	return M * n

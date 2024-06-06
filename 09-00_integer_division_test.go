@@ -18,10 +18,10 @@ func FuzzDivideMultiWord(f *testing.F) {
 	f.Add(uint64(0x7FFF_8000_0000_0000), uint64(0x8000_0000_0001)) // special case, trigger add-back logic that happens 0.003% of cases
 
 	f.Fuzz(func(t *testing.T, u, v uint64) {
-		if v == 0 {
-			t.Skip()
-		}
 		if u < v {
+			u, v = v, u
+		}
+		if v == 0 {
 			t.Skip()
 		}
 

@@ -18,7 +18,7 @@ func TransposeMatrix8bx8b(A, B []byte, m, n int) {
 
 	for i := 7; i >= 0; i-- {
 		B[n*i] = byte(x & 0xFF)
-		x = x >> 8
+		x >>= 8
 	}
 }
 
