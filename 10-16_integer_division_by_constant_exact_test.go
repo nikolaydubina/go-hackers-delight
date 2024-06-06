@@ -67,11 +67,8 @@ func FuzzDivExact(f *testing.F) {
 		}
 	}
 	f.Fuzz(func(t *testing.T, x, d int32) {
-		if d == 0 {
-			t.Skip()
-		}
-		if d%2 == 0 {
-			t.Skip()
+		if (d % 2) == 0 {
+			d++
 		}
 		q, r := x/d, x%d
 		if r != 0 {
