@@ -16,12 +16,12 @@ var nlz_goryavsky = [...]uint{
 // NLZ has direct relationship of log2 as well, and can be used to compute it directly.
 // Some instruction sets, such as ARM M1 chips, include single assembly instruction for this operation.
 func NLZ(x uint32) uint {
-	x = x | (x >> 1) // Propagate leftmost
-	x = x | (x >> 2) // 1-bit to the right
-	x = x | (x >> 4)
-	x = x | (x >> 8)
-	x = x & ^(x >> 16) // Goryavsky
-	x = x * 0xFD7049FF // Multiplier is 7 * 255 ** 3, Gorvsky
+	x |= x >> 1 // Propagate leftmost
+	x |= x >> 2 // 1-bit to the right
+	x |= x >> 4
+	x |= x >> 8
+	x &= ^(x >> 16) // Goryavsky
+	x *= 0xFD7049FF // Multiplier is 7 * 255 ** 3, Gorvsky
 	return nlz_goryavsky[(x >> 26)]
 }
 
@@ -44,22 +44,22 @@ func NLZ2(x uint32) uint {
 
 	y = x >> 16
 	if y != 0 {
-		n = n - 16
+		n -= 16
 		x = y
 	}
 	y = x >> 8
 	if y != 0 {
-		n = n - 8
+		n -= 8
 		x = y
 	}
 	y = x >> 4
 	if y != 0 {
-		n = n - 4
+		n -= 4
 		x = y
 	}
 	y = x >> 2
 	if y != 0 {
-		n = n - 2
+		n -= 2
 		x = y
 	}
 	y = x >> 1
@@ -108,9 +108,7 @@ func LoopDetectionGosper(f func(int) int, x0 int) (μLower, μUpper, λ int) {
 				m := ((((n >> k) - 1) | 1) << k) - 1
 				λ = n - m
 				lgl := 31 - NLZ(uint32(λ-1)) // Ceil(log2 lambda) - 1
-				μUpper = m
-				μLower = m - max(1, 1<<lgl) + 1
-				return μLower, μUpper, λ
+				return m - max(1, 1<<lgl) + 1, m, λ
 			}
 		}
 		T[NTZ(uint32(n)+1)] = Xn // No match

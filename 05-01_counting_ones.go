@@ -14,11 +14,11 @@ func CountOnes(x uint32) uint32 {
 
 // CountOnes1 is optimized version of divide and conquer that executes in 21 instructions and is branch-free.
 func CountOnes1(x uint32) uint32 {
-	x = x - ((x >> 1) & 0x5555_5555)
+	x -= (x >> 1) & 0x5555_5555
 	x = (x & 0x3333_3333) + ((x >> 2) & 0x3333_3333)
 	x = (x + (x >> 4)) & 0x0F0F_0F0F
-	x = x + (x >> 8)
-	x = x + (x >> 16)
+	x += x >> 8
+	x += x >> 16
 	return x & 0x0000_003F
 }
 
@@ -40,13 +40,13 @@ func CountOnes2(x uint32) uint32 {
 func CountOnes3(x uint32) uint32 {
 	n := x
 	n = (x >> 1) & 0x7777_7777       // Count bits in
-	x = x - n                        // each 4-bit
+	x -= n                           // each 4-bit
 	n = (n >> 1) & 0x7777_7777       // field.
-	x = x - n                        //
+	x -= n                           //
 	n = (n >> 1) & 0x7777_7777       //
-	x = x - n                        //
+	x -= n                           //
 	x = (x + (x >> 4)) & 0x0F0F_0F0F // Get byte sums.
-	x = x * 0x0101_0101              // Add the bytes.
+	x *= 0x0101_0101                 // Add the bytes.
 	return x >> 24
 }
 
@@ -63,10 +63,10 @@ func CountOnes4(x uint32) uint32 {
 // CountOnes5 uses uint64 registers. It works only with uint15.
 func CountOnes5(x uint32) uint32 {
 	y := uint64(x)
-	y = y * 0x0002_0004_0008_0010
-	y = y & 0x1111_1111_1111_1111
-	y = y * 0x1111_1111_1111_1111
-	y = y >> 60
+	y *= 0x0002_0004_0008_0010
+	y &= 0x1111_1111_1111_1111
+	y *= 0x1111_1111_1111_1111
+	y >>= 60
 	return uint32(y)
 }
 

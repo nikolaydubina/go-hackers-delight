@@ -6,4 +6,4 @@ package hd
 // Note, there is three instruction formula using comparison operators, but in Go strong typing booleans not converted to ints, which would require branches and more instructions.
 func Sign(x int32) int32 { return (x >> 31) | int32((uint32(-x) >> 31)) }
 
-func IsMostSignificantSet[T int32 | uint32](x T) bool { return !(x>>31 == 0) }
+func IsMostSignificantSet[T int32 | uint32](x T) bool { return x>>31 != 0 }

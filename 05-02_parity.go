@@ -5,19 +5,19 @@ package hd
 // This is example of "parallel prefix" operation, that very efficient for parallel computing.
 func Parity(x uint32) int {
 	y := x ^ (x >> 1)
-	y = y ^ (y >> 2)
-	y = y ^ (y >> 4)
-	y = y ^ (y >> 8)
-	y = y ^ (y >> 16)
+	y ^= y >> 2
+	y ^= y >> 4
+	y ^= y >> 8
+	y ^= y >> 16
 	return int(y & 1)
 }
 
 // Parity2 executes in 9 instructions.
 // It avoids computing higher-order parity bits that will not be used.
 func Parity2(x uint32) int {
-	x = x ^ (x >> 1)
+	x ^= x >> 1
 	x = (x ^ (x >> 2)) & 0x1111_1111
-	x = x * 0x1111_1111
+	x *= 0x1111_1111
 	return int((x >> 28) & 1)
 }
 

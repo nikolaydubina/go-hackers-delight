@@ -118,10 +118,10 @@ func DivLongUnsigned64b32b(x uint64, y uint32) (q, r uint32) {
 	for i := 1; i <= 32; i++ {
 		t := int32(xh) >> 31 // All 1's if (x31) = 1
 		xh = (xh << 1) | (xl >> 31)
-		xl = xl << 1
+		xl <<= 1
 		if (xh | uint32(t)) >= y {
-			xh = xh - y
-			xl = xl + 1
+			xh -= y
+			xl++
 		}
 	}
 	return xl, xh
@@ -158,7 +158,7 @@ func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 	rhat := un32 - q1*vn1
 
 	for q1 >= b || q1*vn0 > b*rhat+un1 {
-		q1 -= 1
+		q1--
 		rhat += vn1
 		if rhat >= b {
 			break
@@ -173,7 +173,7 @@ func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 	rhat = un21 - q0*vn1
 
 	for q0 >= b || q0*vn0 > b*rhat+un0 {
-		q0 -= 1
+		q0--
 		rhat += vn1
 		if rhat >= b {
 			break

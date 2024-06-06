@@ -64,19 +64,15 @@ func MulMultiWord(w, u, v []uint16) {
 // This executes in 16 RISC instructions.
 // Go has math.bits.Mul32(x,y uint32) (hi, lo uint32), but it does not have signed version.
 func MultiplyHighOrderSigned(u, v int32) int32 {
-	var u0, v0, w0 uint32
-	var u1, v1, w1, w2, t int32
-
-	u0 = uint32(u & 0xFFFF)
-	u1 = u >> 16
-	v0 = uint32(v & 0xFFFF)
-	v1 = v >> 16
-	w0 = u0 * v0
-	t = int32((uint32(u1) * v0) + (w0 >> 16))
-	w1 = t & 0xFFFF
-	w2 = t >> 16
+	u0 := uint32(u & 0xFFFF)
+	u1 := u >> 16
+	v0 := uint32(v & 0xFFFF)
+	v1 := v >> 16
+	w0 := u0 * v0
+	t := int32((uint32(u1) * v0) + (w0 >> 16))
+	w1 := t & 0xFFFF
+	w2 := t >> 16
 	w1 = int32((u0 * uint32(v1))) + w1
-
 	return (u1 * v1) + w2 + (w1 >> 16)
 }
 

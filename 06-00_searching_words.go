@@ -48,8 +48,8 @@ func FindFirstStringOnes(x uint32, n int) int {
 	s := 0
 	for n > 1 {
 		s = n >> 1
-		x = x & (x << s)
-		n = n - s
+		x &= x << s
+		n -= s
 	}
 	return int(NLZ(x))
 }
@@ -60,13 +60,13 @@ func FindFirstStringOnes1(x uint32, n int) int {
 	p := 0
 	for x != 0 {
 		k := int(NLZ(x)) // Skip over initial 0's
-		x = x << k       // (if any).
+		x <<= k          // (if any).
 		p += k           //
 		k = int(NLZ(^x)) // Count first/next group of 1's.
 		if k >= n {      // If enough, return.
 			return p
 		}
-		x = x << k // Not enough 1's, skip over them.
+		x <<= k // Not enough 1's, skip over them.
 		p += k
 	}
 	return 32
@@ -78,7 +78,7 @@ func FindFirstStringOnes1(x uint32, n int) int {
 func LenLongestStringOnes(x uint32) int {
 	var k int
 	for k = 0; x != 0; k++ {
-		x = x & (2 * x)
+		x &= 2 * x
 	}
 	return k
 }
@@ -92,7 +92,7 @@ func LenShortestStringOnes(x uint32) (p, n int) {
 	e := x & ^(x << 1)
 	var k int
 	for k = 1; (b & e) == 0; k++ {
-		e = e << 1
+		e <<= 1
 	}
 	return int(NLZ(b & e)), k
 }

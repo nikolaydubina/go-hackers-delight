@@ -4,11 +4,11 @@ package hd
 // Sign of 8-bit number is stored in 8th-bit.
 // Sign extension is treating n-th least significant bit as sign bit and copying it to all more significant bits.
 // This is usually implemented with shift-left-logical followed by shift-right-arithmetic, but alternative may be useful if you don't have shift.
-func ExtendSign7(x uint32) uint32 { return ((x + 0x00000080) & 0x000000FF) - 0x00000080 }
+func ExtendSign7(x uint32) uint32 { return ((x + 0x0000_0080) & 0x0000_00FF) - 0x000_00080 }
 
 // ExtendSign7Two is alternative version.
 // If you know all higher order bits are zero, then `and` can be omitted.
-func ExtendSign7Two(x uint32) uint32 { return ((x & 0x000000ff) ^ 0x00000080) - 0x00000080 }
+func ExtendSign7Two(x uint32) uint32 { return ((x & 0x0000_00ff) ^ 0x0000_0080) - 0x0000_0080 }
 
 // ExtendSign7Three is alternative version
-func ExtendSign7Three(x uint32) uint32 { return (x & 0x0000007f) - (x & 0x00000080) }
+func ExtendSign7Three(x uint32) uint32 { return (x & 0x000_0007f) - (x & 0x0000_0080) }

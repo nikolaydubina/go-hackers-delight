@@ -24,11 +24,11 @@ func FLPTwo3(x uint32) uint32 { return 0x80000000 >> NLZ(x) }
 
 // FLPTwo4 is alternative branch-free version when NLZ is not available.
 func FLPTwo4(x uint32) uint32 {
-	x = x | (x >> 1)
-	x = x | (x >> 2)
-	x = x | (x >> 4)
-	x = x | (x >> 8)
-	x = x | (x >> 16)
+	x |= x >> 1
+	x |= x >> 2
+	x |= x >> 4
+	x |= x >> 8
+	x |= x >> 16
 	return x - (x >> 1)
 }
 
@@ -49,12 +49,12 @@ func CLPTwo2(x uint32) uint32 { return 0x80000000 >> (NLZ(x-1) - 1) }
 
 // CLPTwo3 is alternative branch-free version when NLZ is not available.
 func CLPTwo3(x uint32) uint32 {
-	x = x - 1
-	x = x | (x >> 1)
-	x = x | (x >> 2)
-	x = x | (x >> 4)
-	x = x | (x >> 8)
-	x = x | (x >> 16)
+	x--
+	x |= x >> 1
+	x |= x >> 2
+	x |= x >> 4
+	x |= x >> 8
+	x |= x >> 16
 	return x + 1
 }
 

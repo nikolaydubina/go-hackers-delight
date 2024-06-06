@@ -9,7 +9,7 @@ type LRUCache struct{ m uint64 }
 // This is five or six instructions on 64bit RISC.
 // Values of i should be in [0, 7].
 func (c *LRUCache) Hit(i uint8) {
-	c.m |= (0xFF << (8 * i))
+	c.m |= 0xFF << (8 * i)
 	c.m &= ^(0x0101_0101_0101_0101 << i)
 }
 

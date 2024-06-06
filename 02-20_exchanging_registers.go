@@ -3,9 +3,9 @@ package hd
 // ExchangeRegisters illustrates very old trick on how to exchange two registers without using third one.
 // This is swap operation. Also known as multiple assignment in Go.
 func ExchangeRegisters[T Int](x, y T) (T, T) {
-	x = x ^ y
-	y = y ^ x
-	x = x ^ y
+	x ^= y
+	y ^= x
+	x ^= y
 	return x, y
 }
 
@@ -19,9 +19,9 @@ func ExchangeRegistersMasked[T Int](x, y, m T) (T, T) {
 }
 
 func ExchangeRegistersMasked2[T Int](x, y, m T) (T, T) {
-	x = x ^ y
-	y = y ^ (x & m)
-	x = x ^ y
+	x ^= y
+	y ^= x & m
+	x ^= y
 	return x, y
 }
 
@@ -36,8 +36,8 @@ func ExchangeRegistersMasked3[T Int](x, y, m T) (T, T) {
 // ExchangeRegistersMasked4 also executes in three cycles, given sufficient instruction parallelism in the CPU.
 func ExchangeRegistersMasked4[T Int](x, y, m T) (T, T) {
 	t := (x ^ y) & m
-	x = x ^ t
-	y = y ^ t
+	x ^= t
+	y ^= t
 	return x, y
 }
 
