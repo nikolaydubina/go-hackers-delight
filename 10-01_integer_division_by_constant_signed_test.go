@@ -8,10 +8,9 @@ import (
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
-func ExampleDivPow2_fixed5() {
+func ExampleDivSignedPowTwo_fixed5() {
 	fmt.Println(hd.DivSignedPowTwo_fixed5(96))
 	// Output: 3
-
 }
 
 func FuzzDivPow2(f *testing.F) {
