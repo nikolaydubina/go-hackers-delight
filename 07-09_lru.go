@@ -5,7 +5,7 @@ package hd
 // Internally, least significant byte of uint64 holds row 0 of reference matrix.
 type LRUCache struct{ m uint64 }
 
-// Hit value i ast most recently used.
+// Hit value i as most recently used.
 // This is five or six instructions on 64bit RISC.
 // Values of i should be in [0, 7].
 func (c *LRUCache) Hit(i uint8) {
