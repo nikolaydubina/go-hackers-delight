@@ -57,11 +57,11 @@ func NotEqualZero3[T Int](x T) T { return x | -x }
 
 func NotEqualZero4(x int32) int32 { return ShiftRightUnsigned32(x, 1) - x }
 
-func LessZero(x int32) int32 { return x }
+func LessZero[T Signed](x T) T { return x }
 
-func LessOrEqualZero(x int32) int32 { return x | (x - 1) }
+func LessOrEqualZero[T Signed](x T) T { return x | (x - 1) }
 
-func LessOrEqualZero2(x int32) int32 { return x | ^-x }
+func LessOrEqualZero2[T Signed](x T) T { return x | ^-x }
 
 func HigherZero(x int32) int32 { return x ^ NAbs(x) }
 
@@ -69,7 +69,7 @@ func HigherZero2(x int32) int32 { return (x >> 1) - x }
 
 func HigherZero3(x int32) int32 { return -x & ^x }
 
-func HigherEqualZero(x int32) int32 { return ^x }
+func HigherEqualZero[T Signed](x T) T { return ^x }
 
 // TODO: comparison to/from unsigned comparison
 // TODO: comparison from carry bits
