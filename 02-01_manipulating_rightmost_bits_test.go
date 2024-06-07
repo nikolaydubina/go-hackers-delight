@@ -38,18 +38,18 @@ func ExampleSetZeroBitLastOne() {
 }
 */
 
-func ExampleSetTrailingZeroes() {
-	fmt.Printf("%08b", hd.SetTrailingZeroes(0b01011000))
+func ExampleSetTrailingZeros() {
+	fmt.Printf("%08b", hd.SetTrailingZeros(0b01011000))
 	// Output: 00000111
 }
 
-func ExampleSetTrailingZeroes2() {
-	fmt.Printf("%08b", hd.SetTrailingZeroes2(0b01011000))
+func ExampleSetTrailingZeros2() {
+	fmt.Printf("%08b", hd.SetTrailingZeros2(0b01011000))
 	// Output: 00000111
 }
 
-func ExampleSetTrailingZeroes3() {
-	fmt.Printf("%08b", hd.SetTrailingZeroes3(0b01011000))
+func ExampleSetTrailingZeros3() {
+	fmt.Printf("%08b", hd.SetTrailingZeros3(0b01011000))
 	// Output: 00000111
 }
 
@@ -65,8 +65,8 @@ func ExampleIsolateRightmostOneBit() {
 	// Output: 00001000
 }
 
-func ExampleSetTrailingZeroesWithRightMostOne() {
-	fmt.Printf("%08b", hd.SetTrailingZeroesWithRightMostOne(0b01011000))
+func ExampleSetTrailingZerosWithRightMostOne() {
+	fmt.Printf("%08b", hd.SetTrailingZerosWithRightMostOne(0b01011000))
 	// Output: 00001111
 }
 

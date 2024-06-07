@@ -5,15 +5,15 @@ func Equal(x, y int32) int32 { return Abs(x-y) - 1 }
 
 func Equal2(x, y int32) int32 { return Abs(int32(uint32(x-y) + 0x80000000)) }
 
-func Equal3(x, y int32) int32 { return int32(NLZ(uint32(x-y))) << 26 }
+func Equal3(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y))) << 26 }
 
-func Equal4(x, y int32) int32 { return -int32(NLZ(uint32(x-y)) >> 5) }
+func Equal4(x, y int32) int32 { return -int32(LeadingZerosUint32(uint32(x-y)) >> 5) }
 
 func Equal5(x, y int32) int32 { return ^((x - y) | (y - x)) }
 
 func NotEqual(x, y int32) int32 { return NAbs(x - y) }
 
-func NotEqual2(x, y int32) int32 { return int32(NLZ(uint32(x-y))) - 32 }
+func NotEqual2(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y))) - 32 }
 
 func NotEqual3(x, y int32) int32 { return (x - y) | (y - x) }
 
@@ -43,7 +43,7 @@ func EqualZero(x int32) int32 { return Abs(x) - 1 }
 
 func EqualZero2(x int32) int32 { return Abs(int32(uint32(x) + 0x80000000)) }
 
-func EqualZero3(x int32) int32 { return int32(NLZ(uint32(x))) << 26 }
+func EqualZero3(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) << 26 }
 
 func EqualZero4(x int32) int32 { return ^(x | -x) }
 
@@ -51,7 +51,7 @@ func EqualZero5(x int32) int32 { return ^x & (x - 1) }
 
 func NotEqualZero(x int32) int32 { return NAbs(x) }
 
-func NotEqualZero2(x int32) int32 { return int32(NLZ(uint32(x))) - 32 }
+func NotEqualZero2(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) - 32 }
 
 func NotEqualZero3(x int32) int32 { return x | -x }
 

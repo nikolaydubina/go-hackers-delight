@@ -8,7 +8,7 @@ import "math/bits"
 func ZByteL(x uint32) int {
 	y := (x & 0x7F7F_7F7F) + 0x7F7F_7F7F
 	y = ^(y | x | 0x7F7F_7F7F)
-	return int(NLZ(y) >> 3)
+	return int(LeadingZerosUint32(y) >> 3)
 }
 
 // ZByteL1 is direct algorithm.
@@ -51,7 +51,7 @@ func FindFirstStringOnes(x uint32, n int) int {
 		x &= x << s
 		n -= s
 	}
-	return int(NLZ(x))
+	return int(LeadingZerosUint32(x))
 }
 
 // FindFirstStringOnes1 is is direct algorithm.
@@ -59,11 +59,11 @@ func FindFirstStringOnes(x uint32, n int) int {
 func FindFirstStringOnes1(x uint32, n int) int {
 	p := 0
 	for x != 0 {
-		k := int(NLZ(x)) // Skip over initial 0's
-		x <<= k          // (if any).
-		p += k           //
-		k = int(NLZ(^x)) // Count first/next group of 1's.
-		if k >= n {      // If enough, return.
+		k := int(LeadingZerosUint32(x)) // Skip over initial 0's
+		x <<= k                         // (if any).
+		p += k                          //
+		k = int(LeadingZerosUint32(^x)) // Count first/next group of 1's.
+		if k >= n {                     // If enough, return.
 			return p
 		}
 		x <<= k // Not enough 1's, skip over them.
@@ -94,5 +94,5 @@ func LenShortestStringOnes(x uint32) (p, n int) {
 	for k = 1; (b & e) == 0; k++ {
 		e <<= 1
 	}
-	return int(NLZ(b & e)), k
+	return int(LeadingZerosUint32(b & e)), k
 }

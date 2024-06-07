@@ -9,13 +9,12 @@ var nlz_goryavsky = [...]uint{
 	22, u, 12, u, u, 3, 28, u, 23, u, 4, 29, u, u, 30, 31,
 }
 
-// NLZ is Number of Leading Zeros.
-// This is algorithm from Robert Harley.
+// LeadingZerosUint32 (aka nlz) is algorithm from Robert Harley.
 // It consists of 14 instructions branch-free.
 // It uses Julius Goryavsky variation for smaller lookup table size.
-// NLZ has direct relationship of log2 as well, and can be used to compute it directly.
+// LeadingZerosUint32 has direct relationship of log2 as well, and can be used to compute it directly.
 // Some instruction sets, such as ARM M1 chips, include single assembly instruction for this operation.
-func NLZ(x uint32) uint {
+func LeadingZerosUint32(x uint32) uint {
 	x |= x >> 1 // Propagate leftmost
 	x |= x >> 2 // 1-bit to the right
 	x |= x >> 4
@@ -25,20 +24,7 @@ func NLZ(x uint32) uint {
 	return nlz_goryavsky[(x >> 26)]
 }
 
-// NLZBasic is basic algorithm.
-func NLZBasic(x uint32) int {
-	n := 0
-	for i := range 32 {
-		if (x & (1 << (31 - i))) != 0 {
-			n = i
-			break
-		}
-	}
-	return n
-}
-
-// NLZ2 uses binary search.
-func NLZ2(x uint32) uint {
+func LeadingZerosUint32BinarySearch(x uint32) uint {
 	var y uint32 = 0
 	n := 32
 
@@ -69,15 +55,14 @@ func NLZ2(x uint32) uint {
 	return uint(n - int(x))
 }
 
-func NLZEq(x, y uint32) bool { return (x ^ y) <= (x & y) }
+func LeadingZerosEqual(x, y uint32) bool { return (x ^ y) <= (x & y) }
 
-func NLZLess(x, y uint32) bool { return (x & ^y) > y }
+func LeadingZerosLess(x, y uint32) bool { return (x & ^y) > y }
 
-func NLZLessEq(x, y uint32) bool { return (y & ^x) <= x }
+func LeadingZerosLessOrEqual(x, y uint32) bool { return (y & ^x) <= x }
 
 // BitSize returns minimum number of bits requires to represent number in two's complement signed number.
-// This function uses NLZ.
-func BitSize(x int32) int { return int(32 - NLZ(uint32(x)^(uint32(x)<<1))) }
+func BitSize(x int32) int { return int(32 - LeadingZerosUint32(uint32(x)^(uint32(x)<<1))) }
 
 var ntz_reiser = [...]int{
 	32, 0, 1, 26, 2, 23, 27,
@@ -86,31 +71,29 @@ var ntz_reiser = [...]int{
 	6, u, 21, 14, 9, 5, 20, 8, 19, 18,
 }
 
-// NTZ is Number of Trailing Zeroes.
-// This implementation uses John Reiser variant of David Seal method.
-// Among applications of NTZ is R.W.Gosper Loop Detection Algorithm.
-func NTZ(x uint32) int { return ntz_reiser[((x & -x) % 37)] }
+// TrailingZerosUint32 (aka ntz) uses John Reiser variant of David Seal method.
+// Among applications of TrailingZerosUint32 is R.W.Gosper Loop Detection Algorithm.
+func TrailingZerosUint32(x uint32) int { return ntz_reiser[((x & -x) % 37)] }
 
 // LoopDetectionGosper uses R.W.Gosper algorithm to detect start index of a loop and it's period.
 // loop is defined on sequence: X_n+1 = f(X_n); X_0, X_1, ..., X_μ-1, X_μ, ... X_μ+λ
 // This is [HAK #132].
 func LoopDetectionGosper(f func(int) int, x0 int) (μLower, μUpper, λ int) {
-	T := [33]int{}
-
+	var T [33]int
 	T[0] = x0
 	Xn := x0
 	for n := 1; ; n++ {
 		Xn = f(Xn)
-		kmax := 31 - NLZ(uint32(n)) // Floor (log2 n)
+		kmax := 31 - LeadingZerosUint32(uint32(n)) // Floor (log2 n)
 		for k := 0; k <= int(kmax); k++ {
 			if Xn == T[k] {
 				// Compute m = max({i | i < n and ntz(i+1) = k})
 				m := ((((n >> k) - 1) | 1) << k) - 1
 				λ = n - m
-				lgl := 31 - NLZ(uint32(λ-1)) // Ceil(log2 lambda) - 1
+				lgl := 31 - LeadingZerosUint32(uint32(λ-1)) // Ceil(log2 lambda) - 1
 				return m - max(1, 1<<lgl) + 1, m, λ
 			}
 		}
-		T[NTZ(uint32(n)+1)] = Xn // No match
+		T[TrailingZerosUint32(uint32(n)+1)] = Xn // No match
 	}
 }

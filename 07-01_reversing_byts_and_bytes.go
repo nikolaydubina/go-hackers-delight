@@ -72,6 +72,6 @@ func Reverse8Bit(x uint32) uint32 {
 // Thus storing previous reversed value and incrementing reversed is useful.
 // This executes in 5 RISC instructions.
 func IncrReversed(x uint32) uint32 {
-	s := NLZ(^x)
+	s := LeadingZerosUint32(^x)
 	return ((x << s) + 0x8000_0000) >> s
 }

@@ -90,7 +90,7 @@ func FuzzOverflowUint32(f *testing.F) {
 		}
 	}
 
-	f.Add(uint32(0x0000FFFF), uint32(0x0001FFFF)) // 4 * 4 + 3 * 4 + 3 = 31 bits leading zeroes n + m
+	f.Add(uint32(0x0000FFFF), uint32(0x0001FFFF)) // 4 * 4 + 3 * 4 + 3 = 31 bits leading zeros n + m
 
 	f.Fuzz(func(t *testing.T, x, y uint32) {
 		a, b := uint64(x), uint64(y)

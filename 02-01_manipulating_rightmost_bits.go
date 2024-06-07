@@ -14,17 +14,17 @@ func SetBitLastZero(x int64) int64 { return ^x & (x + 1) }
 
 //func SetZeroBitLastOne(x int64) int64 { return ^x | (x - 1) }
 
-func SetTrailingZeroes(x int64) int64 { return ^x & (x - 1) }
+func SetTrailingZeros(x int64) int64 { return ^x & (x - 1) }
 
-func SetTrailingZeroes2(x int64) int64 { return ^(x | -x) }
+func SetTrailingZeros2(x int64) int64 { return ^(x | -x) }
 
-func SetTrailingZeroes3(x int64) int64 { return (x & -x) - 1 }
+func SetTrailingZeros3(x int64) int64 { return (x & -x) - 1 }
 
 //func SetTrailingOnes(x int64) int64 { return ^x | (x + 1) }
 
 func IsolateRightmostOneBit(x int64) int64 { return x & -x }
 
-func SetTrailingZeroesWithRightMostOne(x int64) int64 { return x ^ (x - 1) }
+func SetTrailingZerosWithRightMostOne(x int64) int64 { return x ^ (x - 1) }
 
 func SetTrailingOnesWithRightMostOne(x int64) int64 { return x ^ (x + 1) }
 

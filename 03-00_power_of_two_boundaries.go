@@ -16,11 +16,11 @@ func RoundUpBlockPowerOfTwo2[T Unsigned](x T, k int) T {
 
 // FLPTwo is Floor to nearest Power of Two.
 // Values >= 2^31 will be zero.
-func FLPTwo(x uint32) uint32 { return 1 << (31 - NLZ(x)) }
+func FLPTwo(x uint32) uint32 { return 1 << (31 - LeadingZerosUint32(x)) }
 
-func FLPTwo2(x uint32) uint32 { return 1 << (NLZ(x) ^ 31) }
+func FLPTwo2(x uint32) uint32 { return 1 << (LeadingZerosUint32(x) ^ 31) }
 
-func FLPTwo3(x uint32) uint32 { return 0x80000000 >> NLZ(x) }
+func FLPTwo3(x uint32) uint32 { return 0x80000000 >> LeadingZerosUint32(x) }
 
 // FLPTwo4 is alternative branch-free version when NLZ is not available.
 func FLPTwo4(x uint32) uint32 {
@@ -43,9 +43,9 @@ func FLPTwo5(x uint32) uint32 {
 
 // CLPTwo is Ceil to nearest Power of Two.
 // Values >= 2^31 will be zero.
-func CLPTwo(x uint32) uint32 { return 1 << (32 - NLZ(x-1)) }
+func CLPTwo(x uint32) uint32 { return 1 << (32 - LeadingZerosUint32(x-1)) }
 
-func CLPTwo2(x uint32) uint32 { return 0x80000000 >> (NLZ(x-1) - 1) }
+func CLPTwo2(x uint32) uint32 { return 0x80000000 >> (LeadingZerosUint32(x-1) - 1) }
 
 // CLPTwo3 is alternative branch-free version when NLZ is not available.
 func CLPTwo3(x uint32) uint32 {

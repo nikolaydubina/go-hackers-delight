@@ -79,3 +79,24 @@ func FuzzDivExact(f *testing.F) {
 		}
 	})
 }
+
+func FuzzIsDivExact(f *testing.F) {
+	for _, x := range fuzzUint32 {
+		for _, d := range fuzzUint32 {
+			f.Add(x, d)
+		}
+	}
+	f.Fuzz(func(t *testing.T, x, d uint32) {
+		if d == 0 {
+			d++
+		}
+		if (d % 2) == 1 {
+			if hd.IsDivExactOdd(x, d) != ((x % d) == 0) {
+				t.Errorf("IsDivExact(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
+			}
+		}
+		if hd.IsDivExact(x, d) != ((x % d) == 0) {
+			t.Errorf("IsDivExactEven(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
+		}
+	})
+}

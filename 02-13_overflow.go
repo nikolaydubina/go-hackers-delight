@@ -56,7 +56,7 @@ func IsMulOverflowUnsigned(x, y uint32) bool {
 
 // IsMulOverflowUnsignedNLZ counts number of leading zeros to detect overflow.
 func IsMulOverflowUnsignedNLZ(x, y uint32) bool {
-	m, n := NLZ(x), NLZ(y)
+	m, n := LeadingZerosUint32(x), LeadingZerosUint32(y)
 	if m+n <= 30 {
 		return true
 	}

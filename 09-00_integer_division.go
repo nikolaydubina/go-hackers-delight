@@ -140,8 +140,8 @@ func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 		return 0xFFFF_FFFF, 0xFFFF_FFFF
 	}
 
-	s := int32(NLZ(y)) // Shift amount. 0 <= s <= 31
-	y <<= s            // Normalize divisor.
+	s := int32(LeadingZerosUint32(y)) // Shift amount. 0 <= s <= 31
+	y <<= s                           // Normalize divisor.
 
 	// Break divisor up into two 16-bit digits. Norm. divisor digits.
 	vn1, vn0 := (y >> 16), (y & 0xFFFF)

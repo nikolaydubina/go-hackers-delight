@@ -9,6 +9,24 @@ func DivExact(n, d int32) int32 {
 	return M * n
 }
 
+// IsDivExactOdd tests if n is multiple of d, for odd d.
+func IsDivExactOdd(n, d uint32) bool {
+	M := MultiplicativeInverseNewton(d)
+	q := M * n
+	c := 0xFFFF_FFFF / d
+	return q <= c
+}
+
+// IsDivExact is similar to odd version but transforms divisor d0 * 2^k and performs rotate right trick.
+func IsDivExact(n, d uint32) bool {
+	k := TrailingZerosUint32(d)
+	M := MultiplicativeInverseNewton(d >> k)
+	q := M * n
+	q = RotateRight(q, k)
+	c := 0xFFFF_FFFF / d
+	return q <= c
+}
+
 func MultiplicativeInverseEuclidInt(d int32) int32 {
 	// main algorithm works with by interpreting bits of inputs and outputs as uint32
 	return int32(MultiplicativeInverseEuclid(uint32(d)))

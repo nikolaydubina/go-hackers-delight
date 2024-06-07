@@ -2,18 +2,19 @@ package hd_test
 
 import (
 	"fmt"
+	"math/bits"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
-func ExampleNLZ() {
-	fmt.Println(hd.NLZ(255))
+func ExampleLeadingZerosUint32() {
+	fmt.Println(hd.LeadingZerosUint32(255))
 	// Output: 24
 }
 
 func ExampleNLZ_long() {
-	fmt.Println(hd.NLZ(0b00111111111111111111111111101010))
+	fmt.Println(hd.LeadingZerosUint32(0b00111111111111111111111111101010))
 	// Output: 2
 }
 
@@ -26,12 +27,11 @@ func FuzzNLZCompute(f *testing.F) {
 			t.Skip()
 		}
 
-		// definition
-		n := hd.NLZBasic(x)
+		n := bits.LeadingZeros32(x)
 
 		vs := []uint{
-			hd.NLZ(x),
-			hd.NLZ2(x),
+			hd.LeadingZerosUint32(x),
+			hd.LeadingZerosUint32BinarySearch(x),
 		}
 		for i, got := range vs {
 			if n != int(got) {
@@ -56,9 +56,9 @@ func FuzzNLZCompare(f *testing.F) {
 			exp bool
 			got bool
 		}{
-			{exp: hd.NLZ(x) == hd.NLZ(y), got: hd.NLZEq(x, y)},
-			{exp: hd.NLZ(x) < hd.NLZ(y), got: hd.NLZLess(x, y)},
-			{exp: hd.NLZ(x) <= hd.NLZ(y), got: hd.NLZLessEq(x, y)},
+			{exp: hd.LeadingZerosUint32(x) == hd.LeadingZerosUint32(y), got: hd.LeadingZerosEqual(x, y)},
+			{exp: hd.LeadingZerosUint32(x) < hd.LeadingZerosUint32(y), got: hd.LeadingZerosLess(x, y)},
+			{exp: hd.LeadingZerosUint32(x) <= hd.LeadingZerosUint32(y), got: hd.LeadingZerosLessOrEqual(x, y)},
 		}
 		for i, tc := range vs {
 			if tc.exp != tc.got {
@@ -88,8 +88,8 @@ func ExampleBitSize_bit32() {
 	// Output: 32
 }
 
-func ExampleNTZ() {
-	fmt.Println(hd.NTZ(0b0000_1101_0000))
+func ExampleTrailingZerosUint32() {
+	fmt.Println(hd.TrailingZerosUint32(0b0000_1101_0000))
 	// Output: 4
 }
 
@@ -112,7 +112,7 @@ func FuzzNTZCompute(f *testing.F) {
 		}
 
 		vs := []int{
-			hd.NTZ(x),
+			hd.TrailingZerosUint32(x),
 		}
 		for i, got := range vs {
 			if n != uint32(got) {
