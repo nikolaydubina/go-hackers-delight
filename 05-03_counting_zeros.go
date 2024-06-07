@@ -19,8 +19,8 @@ func LeadingZerosUint32(x uint32) uint8 {
 	x |= x >> 2 // 1-bit to the right
 	x |= x >> 4
 	x |= x >> 8
-	x &= ^(x >> 16) // Goryavsky
-	x *= 0xFD7049FF // Multiplier is 7 * 255 ** 3, Gorvsky
+	x &= ^(x >> 16)  // Goryavsky
+	x *= 0xFD70_49FF // Multiplier is 7 * 255 ** 3, Gorvsky
 	return nlz_goryavsky[(x >> 26)]
 }
 
@@ -91,7 +91,7 @@ func LoopDetectionGosper(f func(int) int, x0 int) (μLower, μUpper, λ int) {
 	for n := 1; ; n++ {
 		Xn = f(Xn)
 		kmax := 31 - LeadingZerosUint32(uint32(n)) // Floor (log2 n)
-		for k := 0; k <= int(kmax); k++ {
+		for k := uint8(0); k <= kmax; k++ {
 			if Xn == T[k] {
 				// Compute m = max({i | i < n and ntz(i+1) = k})
 				m := ((((n >> k) - 1) | 1) << k) - 1
