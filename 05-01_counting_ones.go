@@ -22,19 +22,7 @@ func CountOnes1(x uint32) uint32 {
 	return x & 0x0000_003F
 }
 
-// CountOnes2 is algorithm from HAKMEM (HAK #169) that executes in 13 RISC instructions.
-// TODO: why this does not work? unsigned % 63 does not work? uint64 conversions?
-/*
-func CountOnes2(x uint32) uint32 {
-	n, u := uint64(x), uint64(x)
-	n = (n >> 1) & 0x333_3333_3333          // Count bits in
-	u = u - n                               // each 3-bit
-	n = (n >> 1) & 0x333_3333_3333          // field.
-	u = u - n                               // each 3-bit
-	u = ((u + (u >> 3)) & 0x0307_0707_0707) // 6-bit sums.
-	return uint32(u % 63)                   // Add 6-bit sums.
-}
-*/
+// TODO: CountOnes2 HAKMEM (HAK #169) does not work
 
 // CountOnes3 it executes in 19 RISC instructions, but works well on machines with two addresses.
 func CountOnes3(x uint32) uint32 {
