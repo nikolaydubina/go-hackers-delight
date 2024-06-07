@@ -54,13 +54,33 @@ func TestMultiplicativeInverse(t *testing.T) {
 	}
 }
 
-func FuzzDivExact(f *testing.F) {
+func FuzzDivExactInt32(f *testing.F) {
 	for _, x := range fuzzInt32 {
 		for _, d := range fuzzInt32 {
 			f.Add(x, d)
 		}
 	}
 	f.Fuzz(func(t *testing.T, x, d int32) {
+		if (d % 2) == 0 {
+			d++
+		}
+		Q, R := x/d, x%d
+		if R != 0 {
+			t.Skip()
+		}
+		if q := hd.DivExact(x, d); q != Q {
+			t.Errorf("DivExact(%d) = %d; want %d", x, q, Q)
+		}
+	})
+}
+
+func FuzzDivExactInt64(f *testing.F) {
+	for _, x := range fuzzInt64 {
+		for _, d := range fuzzInt64 {
+			f.Add(x, d)
+		}
+	}
+	f.Fuzz(func(t *testing.T, x, d int64) {
 		if (d % 2) == 0 {
 			d++
 		}

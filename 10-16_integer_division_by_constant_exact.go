@@ -4,7 +4,7 @@ func DivExactSeven(n int32) int32 { return n * -0x49249249 }
 
 // DivExact uses multiplicative inverse that can be computed at compile time.
 // It relies on theorem "if a and m are relatively prime integers, then there exists an integer ā such that a*ā = 1 (mod m)".
-func DivExact[T int32 | uint32](n, d T) T { return n * MultiplicativeInverseNewton(d) }
+func DivExact[T Int](n, d T) T { return n * MultiplicativeInverseNewton(d) }
 
 // IsDivExactUnsignedOdd tests if n is multiple of d, for odd d. It has single branch.
 func IsDivExactUnsignedOdd(n, d uint32) bool {
