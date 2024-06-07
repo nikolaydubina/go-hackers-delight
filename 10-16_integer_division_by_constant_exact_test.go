@@ -16,7 +16,7 @@ func FuzzDivModExactSeven(f *testing.F) {
 			t.Skip()
 		}
 		if q := hd.DivExactSeven(x); q != Q {
-			t.Errorf("DivExactSeven(%d) = %d; want %d", x, q, Q)
+			t.Errorf("(%d) = %d; want %d", x, q, Q)
 		}
 	})
 }
@@ -85,12 +85,12 @@ func FuzzIsDivExactUnsigned(f *testing.F) {
 			d++
 		}
 		if (d % 2) == 1 {
-			if hd.IsDivExactUnsignedOdd(x, d) != ((x % d) == 0) {
-				t.Errorf("IsDivExact(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactUnsignedOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
+			if got := hd.IsDivExactUnsignedOdd(x, d); got != ((x % d) == 0) {
+				t.Errorf("(%d, %d) = %v; want %v", x, d, got, (x%d) == 0)
 			}
 		}
-		if hd.IsDivExactUnsigned(x, d) != ((x % d) == 0) {
-			t.Errorf("IsDivExactEven(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactUnsignedOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
+		if got := hd.IsDivExactUnsigned(x, d); got != ((x % d) == 0) {
+			t.Errorf("(%d, %d) = %v; want %v", x, d, got, (x%d) == 0)
 		}
 	})
 }
@@ -105,8 +105,8 @@ func FuzzIsDivExactSigned(f *testing.F) {
 		if d == 0 {
 			d++
 		}
-		if hd.IsDivExactSigned(x, d) != ((x % d) == 0) {
-			t.Errorf("IsDivExactSigned(%d, %d) = %v; want %v, k=(%d)", x, d, hd.IsDivExactSigned(x, d), (x%d) == 0, hd.TrailingZerosUint32(uint32(d)))
+		if got := hd.IsDivExactSigned(x, d); got != ((x % d) == 0) {
+			t.Errorf("(%d, %d) = %v; want %v", x, d, got, (x%d) == 0)
 		}
 	})
 }
