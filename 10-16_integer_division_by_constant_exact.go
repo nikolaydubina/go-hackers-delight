@@ -48,7 +48,7 @@ func MultiplicativeInverseEuclid(d uint32) uint32 {
 // It follows from the well-known fact that sequence of xn_1 = xn * (2 - d * xn) converges to 1/d (mod d) given good starting xn.
 // This also works with any inverse module of power of 2.
 // Each iteration doubles number of correct bits.
-func MultiplicativeInverseNewton[T int32 | uint32](d T) T {
+func MultiplicativeInverseNewton[T Int](d T) T {
 	if (d % 2) == 0 {
 		panic("even number")
 	}
