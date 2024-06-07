@@ -36,6 +36,7 @@ func DivMultiWordUnsigned(q, r, u, v []uint16) {
 	// same amount. We may have to append a high-order
 	// digit on the dividend; we do that unconditionally.
 
+	// TODO: avoid math/bits
 	s := bits.LeadingZeros16(v[n-1]) // originally it was NLZ() - 16, but algorithm also expects s be in [0,16] thus only NLZ is taken
 
 	// Normalized form of v

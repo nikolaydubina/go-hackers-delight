@@ -1,9 +1,5 @@
 package hd
 
-import (
-	"fmt"
-)
-
 // DivSignedPowTwo returns n / 2 ** k for 1 <= k < 31.
 // This is illustration, for performance k should be fixed at compile time.
 // This is four branch-free instructions.
@@ -75,7 +71,7 @@ func DivModSignedSeven(n int32) (q, r int32) {
 // The basic trick is to multiply by magic number 2**32/d and then extract leftmost 32 bits of the product.
 func DivModSignedConst(n, d int32) (q, r int32) {
 	if d < 0 {
-		panic(fmt.Errorf("TODO: why integer signed division by negative constants is not working?"))
+		panic("TODO: why integer signed division by negative constants is not working?")
 	}
 
 	M, s := DivModSignedConstMagic(d) // compile time
@@ -103,7 +99,7 @@ func DivModSignedConst(n, d int32) (q, r int32) {
 // Code using big numbers can be simplified, such as in the case of Python or math.Big, it is no listed here.
 func DivModSignedConstMagic(d int32) (M, s int32) {
 	if d > -2 && d < 2 {
-		panic(fmt.Errorf("d(%v) is out of range", d))
+		panic("d is out of range")
 	}
 
 	const two31 uint32 = 0x8000_0000 // 2 ** 31

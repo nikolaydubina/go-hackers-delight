@@ -14,5 +14,7 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 > In the ten years since the first edition came out, it's been absolutely invaluable to my work at Sun and Google.  
 > — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun, Chief Java Architect at Google 2004~2012]
 
+* TODO: not using any standard Go packages
+
 [^1]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
 [^2]: showcase in `Rust` — https://github.com/victoryang00/Delight

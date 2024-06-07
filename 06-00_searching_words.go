@@ -30,6 +30,7 @@ func ZByteL1(x uint32) int {
 func ZByteL64(x uint64) int {
 	y := (x & 0x7F7F_7F7F_7F7F_7F7F) + 0x7F7F_7F7F_7F7F_7F7F
 	y = ^(y | x | 0x7F7F_7F7F_7F7F_7F7F)
+	// TODO: avoid math/bits
 	return bits.LeadingZeros64(y) >> 3
 }
 

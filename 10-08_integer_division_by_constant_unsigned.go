@@ -9,6 +9,7 @@ func DivModUnsignedPowTwo(n uint32, k int) (q, r uint32) { return n >> k, n - (n
 func DivModUnsignedThree(n uint32) (q, r uint32) {
 	const M uint32 = 0xAAAA_AAAB // Magic (2 ** 33 + 3) / 3
 	q, _ = bits.Mul32(M, n)      // mulhu
+	// TODO: avoid math/bits
 	q >>= 1
 	return q, n - (q * 3)
 }
@@ -16,6 +17,7 @@ func DivModUnsignedThree(n uint32) (q, r uint32) {
 func DivModUnsignedSeven(n uint32) (q, r uint32) {
 	const M uint32 = 0x2492_4925 // Magic (2 ** 35 + 3) / 7  - 2 ** 32
 	q, _ = bits.Mul32(M, n)      // mulhu
+	// TODO: avoid math/bits
 	t := n - q
 	t >>= 1
 	t += q
@@ -29,8 +31,8 @@ func DivModUnsignedConst(n, d uint32) (q, r uint32) {
 	}
 
 	M, a, s := DivModUnsignedConstMagic(d) // compile time
-
-	q, _ = bits.Mul32(M, n) // mulhu
+	q, _ = bits.Mul32(M, n)                // mulhu
+	// TODO: avoid math/bits
 
 	// following branches are computed at compile time based on compile time constants d, M, a, s
 	switch a {
