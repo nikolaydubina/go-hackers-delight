@@ -16,8 +16,10 @@ func RoundUpBlockPowerOfTwo2[T Unsigned](x T, k int) T {
 
 // FLPTwo is Floor to nearest Power of Two.
 // Values >= 2^31 will be zero.
+// This formula works for x > 0.
 func FLPTwo(x uint32) uint32 { return 1 << (31 - LeadingZerosUint32(x)) }
 
+// FLPTwo2 is alternative version that works for x == 0 as well.
 func FLPTwo2(x uint32) uint32 { return 1 << (LeadingZerosUint32(x) ^ 31) }
 
 func FLPTwo3(x uint32) uint32 { return 0x80000000 >> LeadingZerosUint32(x) }

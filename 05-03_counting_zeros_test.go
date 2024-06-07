@@ -28,7 +28,7 @@ func FuzzNLZCompute(f *testing.F) {
 
 		n := hd.LeadingZerosUint32(x)
 
-		vs := []uint{
+		vs := []uint8{
 			hd.LeadingZerosUint32(x),
 			hd.LeadingZerosUint32BinarySearch(x),
 		}
@@ -110,7 +110,7 @@ func FuzzNTZCompute(f *testing.F) {
 			}
 		}
 
-		vs := []int{
+		vs := []uint8{
 			hd.TrailingZerosUint32(x),
 		}
 		for i, got := range vs {

@@ -2,7 +2,7 @@ package hd
 
 const u = 99
 
-var nlz_goryavsky = [...]uint{
+var nlz_goryavsky = [...]uint8{
 	32, 20, 19, u, u, 18, u, 7, 10, 17, u, u, 14, u, 6, u,
 	u, 9, u, 16, u, u, 1, 26, u, 13, u, u, 24, 5, u, u,
 	u, 21, u, 8, 11, u, 15, u, u, u, u, 2, 27, 0, 25, u,
@@ -14,7 +14,7 @@ var nlz_goryavsky = [...]uint{
 // It uses Julius Goryavsky variation for smaller lookup table size.
 // LeadingZerosUint32 has direct relationship of log2 as well, and can be used to compute it directly.
 // Some instruction sets, such as ARM M1 chips, include single assembly instruction for this operation.
-func LeadingZerosUint32(x uint32) uint {
+func LeadingZerosUint32(x uint32) uint8 {
 	x |= x >> 1 // Propagate leftmost
 	x |= x >> 2 // 1-bit to the right
 	x |= x >> 4
@@ -24,7 +24,7 @@ func LeadingZerosUint32(x uint32) uint {
 	return nlz_goryavsky[(x >> 26)]
 }
 
-func LeadingZerosUint64(x uint64) uint {
+func LeadingZerosUint64(x uint64) uint8 {
 	n := LeadingZerosUint32(uint32(x >> 32))
 	if (x >> 32) == 0 {
 		return n + LeadingZerosUint32(uint32(x))
@@ -32,7 +32,7 @@ func LeadingZerosUint64(x uint64) uint {
 	return n
 }
 
-func LeadingZerosUint32BinarySearch(x uint32) uint {
+func LeadingZerosUint32BinarySearch(x uint32) uint8 {
 	var y uint32 = 0
 	n := 32
 	y = x >> 16
@@ -57,9 +57,9 @@ func LeadingZerosUint32BinarySearch(x uint32) uint {
 	}
 	y = x >> 1
 	if y != 0 {
-		return uint(n - 2)
+		return uint8(n - 2)
 	}
-	return uint(n - int(x))
+	return uint8(n - int(x))
 }
 
 func LeadingZerosEqual(x, y uint32) bool { return (x ^ y) <= (x & y) }
@@ -71,7 +71,7 @@ func LeadingZerosLessOrEqual(x, y uint32) bool { return (y & ^x) <= x }
 // BitSize returns minimum number of bits requires to represent number in two's complement signed number.
 func BitSize(x int32) int { return int(32 - LeadingZerosUint32(uint32(x)^(uint32(x)<<1))) }
 
-var ntz_reiser = [...]int{
+var ntz_reiser = [...]uint8{
 	32, 0, 1, 26, 2, 23, 27,
 	u, 3, 16, 24, 30, 28, 11, u, 13, 4,
 	7, 17, u, 25, 22, 31, 15, 29, 10, 12,
@@ -80,7 +80,7 @@ var ntz_reiser = [...]int{
 
 // TrailingZerosUint32 (aka ntz) uses John Reiser variant of David Seal method.
 // Among applications of TrailingZerosUint32 is R.W.Gosper Loop Detection Algorithm.
-func TrailingZerosUint32(x uint32) int { return ntz_reiser[((x & -x) % 37)] }
+func TrailingZerosUint32(x uint32) uint8 { return ntz_reiser[((x & -x) % 37)] }
 
 // LoopDetectionGosper uses R.W.Gosper algorithm to detect start index of a loop and it's period.
 // loop is defined on sequence: X_n+1 = f(X_n); X_0, X_1, ..., X_μ-1, X_μ, ... X_μ+λ. [HAK #132].

@@ -19,7 +19,7 @@ func IsDivExactUnsigned(n, d uint32) bool {
 	k := TrailingZerosUint32(d)
 	M := MultiplicativeInverseNewton(d >> k)
 	q := M * n
-	q = RotateRight(q, k)
+	q = RotateRight(q, int(k))
 	c := 0xFFFF_FFFF / d
 	return q <= c
 }
