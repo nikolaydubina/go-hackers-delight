@@ -40,22 +40,7 @@ func ReverseBits64Knuth(x uint64) uint64 {
 	return x
 }
 
-// ReverseBits64Knuth2 .. does not work. TODO: why?
-/*
-func ReverseBits64Knuth2(x uint64) uint64 {
-	var t uint64
-	x = (x << 32) | (x >> 32)                                                     // Swap register halves.
-	x = ((x & 0x0001_FFFF_0001_FFFF) << 15) | ((x & 0xFFFE_0000_FFFE_0000) >> 17) // Rotate Left 15.
-	t = (x ^ (x >> 10)) & 0x003F_801F_003F_801F
-	x = (t | (t << 10)) ^ x
-	t = (x ^ (x >> 4)) & 0x0E03_8421_0E03_8421
-	x = (t | (t << 4)) ^ x
-	t = (t ^ (x >> 2)) & 0x2248_8842_2248_8842
-	x = (t | (t << 2)) ^ x
-	return x
-}
-*/
-
+// TODO: ReverseBits64Knuth2
 // TODO: Generalized bit reversal from [GLS1].
 
 func Reverse8Bit(x uint32) uint32 {
