@@ -55,7 +55,7 @@ func NotEqualZero2(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) 
 
 func NotEqualZero3(x int32) int32 { return x | -x }
 
-func NotEqualZero4(x int32) int32 { return int32(uint32(x)>>1) - x }
+func NotEqualZero4(x int32) int32 { return ShiftRightUnsigned32(x, 1) - x }
 
 func LessZero(x int32) int32 { return x }
 
