@@ -3,7 +3,7 @@ package hd
 // Abs can be computed in three or four branch-free instructions.
 func Abs(x int32) int32 {
 	y := x >> 31
-	return ((x ^ y) - y)
+	return (x ^ y) - y
 }
 
 func Abs2(x int32) int32 {
