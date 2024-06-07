@@ -1,7 +1,6 @@
 package hd_test
 
 import (
-	"fmt"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -20,11 +19,6 @@ func FuzzDivModExactSeven(f *testing.F) {
 			t.Errorf("DivExactSeven(%d) = %d; want %d", x, gotQ, q)
 		}
 	})
-}
-
-func ExampleMultiplicativeInverseEuclidInt() {
-	fmt.Printf("%X", hd.MultiplicativeInverseEuclidInt(7))
-	// Output: -49249249
 }
 
 func uint32FromHex(x int32) uint32 { return uint32(x) }
@@ -80,7 +74,7 @@ func FuzzDivExact(f *testing.F) {
 	})
 }
 
-func FuzzIsDivExact(f *testing.F) {
+func FuzzIsDivExactUnsigned(f *testing.F) {
 	for _, x := range fuzzUint32 {
 		for _, d := range fuzzUint32 {
 			f.Add(x, d)
@@ -91,12 +85,28 @@ func FuzzIsDivExact(f *testing.F) {
 			d++
 		}
 		if (d % 2) == 1 {
-			if hd.IsDivExactOdd(x, d) != ((x % d) == 0) {
-				t.Errorf("IsDivExact(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
+			if hd.IsDivExactUnsignedOdd(x, d) != ((x % d) == 0) {
+				t.Errorf("IsDivExact(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactUnsignedOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
 			}
 		}
-		if hd.IsDivExact(x, d) != ((x % d) == 0) {
-			t.Errorf("IsDivExactEven(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
+		if hd.IsDivExactUnsigned(x, d) != ((x % d) == 0) {
+			t.Errorf("IsDivExactEven(%d, %d) = %v; want %v, M(%d)", x, d, hd.IsDivExactUnsignedOdd(x, d), (x%d) == 0, hd.MultiplicativeInverseNewton(d))
+		}
+	})
+}
+
+func FuzzIsDivExactSigned(f *testing.F) {
+	for _, x := range fuzzInt32 {
+		for _, d := range fuzzInt32 {
+			f.Add(x, d)
+		}
+	}
+	f.Fuzz(func(t *testing.T, x, d int32) {
+		if d == 0 {
+			d++
+		}
+		if hd.IsDivExactSigned(x, d) != ((x % d) == 0) {
+			t.Errorf("IsDivExactSigned(%d, %d) = %v; want %v, k=(%d)", x, d, hd.IsDivExactSigned(x, d), (x%d) == 0, hd.TrailingZerosUint32(uint32(d)))
 		}
 	})
 }
