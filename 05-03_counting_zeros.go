@@ -69,7 +69,7 @@ func LeadingZerosLess(x, y uint32) bool { return (x & ^y) > y }
 func LeadingZerosLessOrEqual(x, y uint32) bool { return (y & ^x) <= x }
 
 // BitSize returns minimum number of bits requires to represent number in two's complement signed number.
-func BitSize(x int32) int { return int(32 - LeadingZerosUint32(uint32(x)^(uint32(x)<<1))) }
+func BitSize(x int32) uint8 { return 32 - LeadingZerosUint32((uint32(x) ^ (uint32(x) << 1))) }
 
 var ntz_reiser = [...]uint8{
 	32, 0, 1, 26, 2, 23, 27,
