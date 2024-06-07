@@ -23,6 +23,10 @@ func FuzzCompareUint32(f *testing.F) {
 			got uint32
 			exp bool
 		}{
+			{hd.Equal5(x, y), x == y},
+			{hd.NotEqual3(x, y), x != y},
+			{hd.EqualZero4(x), x == 0},
+			{hd.NotEqualZero3(x), x != 0},
 			{hd.Less4(x, y), x < y},
 			{hd.LessUnsigned(x, y), x < y},
 			{hd.LessUnsigned2(x, y), x < y},

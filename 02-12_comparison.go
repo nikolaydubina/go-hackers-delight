@@ -9,13 +9,13 @@ func Equal3(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y))) <<
 
 func Equal4(x, y int32) int32 { return -int32(LeadingZerosUint32(uint32(x-y)) >> 5) }
 
-func Equal5(x, y int32) int32 { return ^((x - y) | (y - x)) }
+func Equal5[T Int](x, y T) T { return ^((x - y) | (y - x)) }
 
 func NotEqual(x, y int32) int32 { return NAbs(x - y) }
 
 func NotEqual2(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y))) - 32 }
 
-func NotEqual3(x, y int32) int32 { return (x - y) | (y - x) }
+func NotEqual3[T Int](x, y T) T { return (x - y) | (y - x) }
 
 func Less(x, y int32) int32 { return (x - y) ^ ((x ^ y) & ((x - y) ^ x)) }
 
@@ -45,7 +45,7 @@ func EqualZero2(x int32) int32 { return Abs(int32(uint32(x) + 0x80000000)) }
 
 func EqualZero3(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) << 26 }
 
-func EqualZero4(x int32) int32 { return ^(x | -x) }
+func EqualZero4[T Int](x T) T { return ^(x | -x) }
 
 func EqualZero5(x int32) int32 { return ^x & (x - 1) }
 
@@ -53,7 +53,7 @@ func NotEqualZero(x int32) int32 { return NAbs(x) }
 
 func NotEqualZero2(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) - 32 }
 
-func NotEqualZero3(x int32) int32 { return x | -x }
+func NotEqualZero3[T Int](x T) T { return x | -x }
 
 func NotEqualZero4(x int32) int32 { return ShiftRightUnsigned32(x, 1) - x }
 
