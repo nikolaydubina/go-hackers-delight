@@ -17,19 +17,22 @@ func ExampleParity_even() {
 	// Output: 0
 }
 
+func parity(x uint32) uint8 {
+	var n uint8
+	for i := range 32 {
+		if (x & (1 << i)) != 0 {
+			n++
+		}
+	}
+	return n % 2
+}
+
 func FuzzParity(f *testing.F) {
 	for _, x := range fuzzUint32 {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
-		// definition
-		var n uint32 = 0
-		for i := range 32 {
-			if (x & (1 << i)) != 0 {
-				n++
-			}
-		}
-		n = n % 2
+		n := parity(x)
 
 		vs := []uint8{
 			hd.Parity(x),
@@ -40,7 +43,7 @@ func FuzzParity(f *testing.F) {
 			vs = append(vs, hd.Parity4(x))
 		}
 		for i, got := range vs {
-			if uint8(n) != got {
+			if n != got {
 				t.Error(i, "x", fmt.Sprintf("%032b", x), "exp", n, "got", got)
 			}
 		}
