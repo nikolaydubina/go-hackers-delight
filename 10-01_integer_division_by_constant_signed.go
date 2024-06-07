@@ -5,7 +5,7 @@ package hd
 // This is four branch-free instructions.
 func DivSignedPowTwo(n int32, k int) int32 {
 	t := n >> (k - 1)
-	t = int32(uint32(t) >> (32 - k))
+	t = ShiftRightUnsigned32(t, (32 - k))
 	t += n
 	return t >> k
 }
@@ -13,7 +13,7 @@ func DivSignedPowTwo(n int32, k int) int32 {
 func DivSignedPowTwo_fixed5(n int32) int32 {
 	const k = 5
 	t := n >> (k - 1)
-	t = int32(uint32(t) >> (32 - k))
+	t = ShiftRightUnsigned32(t, (32 - k))
 	t += n
 	return t >> k
 }
@@ -39,7 +39,7 @@ func DivModSignedPowTwo(n int32, k int) (q, r int32) {
 func DivModSignedThree(n int32) (q, r int32) {
 	const M int32 = 0x5555_5556
 	q = MultiplyHighOrderSigned(M, n)
-	t := int32(uint32(n) >> 31)
+	t := ShiftRightUnsigned32(n, 31)
 	q += t
 	return q, n - (q * 3)
 }
@@ -49,7 +49,7 @@ func DivModSignedFive(n int32) (q, r int32) {
 	const M int32 = 0x6666_6667
 	q = MultiplyHighOrderSigned(M, n)
 	q >>= 1
-	t := int32(uint32(n) >> 31)
+	t := ShiftRightUnsigned32(n, 31)
 	q += t
 	return q, n - (q * 5)
 }
@@ -61,7 +61,7 @@ func DivModSignedSeven(n int32) (q, r int32) {
 	q = MultiplyHighOrderSigned(M, n)
 	q += n
 	q >>= 2
-	t := int32(uint32(n) >> 31)
+	t := ShiftRightUnsigned32(n, 31)
 	q += t
 	return q, n - (q * 7)
 }
@@ -89,8 +89,8 @@ func DivModSignedConst(n, d int32) (q, r int32) {
 		q >>= s
 	}
 
-	t := int32(uint32(n) >> 31) // shift right unsigned is not available in Go, so simulating with conversion to uint32, Add 1 to q if negative
-	q += t                      // n is negative.
+	t := ShiftRightUnsigned32(n, 31)
+	q += t
 	return q, n - (q * d)
 }
 
