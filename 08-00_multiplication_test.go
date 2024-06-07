@@ -56,3 +56,20 @@ func FuzzMultiplyHighOrderSigned(f *testing.F) {
 		}
 	})
 }
+
+func FuzzMultiplyHighOrderUnsigned(f *testing.F) {
+	for _, u := range fuzzUint32 {
+		for _, v := range fuzzUint32 {
+			f.Add(u, v)
+		}
+	}
+	f.Fuzz(func(t *testing.T, u, v uint32) {
+		iu := uint64(u)
+		iv := uint64(v)
+		exp := uint32(uint64(iu*iv) >> 32)
+
+		if got := hd.MultiplyHighOrderUnsigned(u, v); got != exp {
+			t.Errorf("u=%d v=%d exp=%d got=%d", u, v, exp, got)
+		}
+	})
+}

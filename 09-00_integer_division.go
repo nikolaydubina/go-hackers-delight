@@ -6,8 +6,6 @@
 */
 package hd
 
-import "math/bits"
-
 // DivMultiWordUnsigned is Knuth algorithm for integer division.
 // It stores quotient in q and remainder in r.
 func DivMultiWordUnsigned(q, r, u, v []uint16) {
@@ -36,8 +34,7 @@ func DivMultiWordUnsigned(q, r, u, v []uint16) {
 	// same amount. We may have to append a high-order
 	// digit on the dividend; we do that unconditionally.
 
-	// TODO: avoid math/bits
-	s := bits.LeadingZeros16(v[n-1]) // originally it was NLZ() - 16, but algorithm also expects s be in [0,16] thus only NLZ is taken
+	s := LeadingZerosUint32(uint32(v[n-1])) - 16 // number of leading zeroes for uint16
 
 	// Normalized form of v
 	vn := make([]uint16, 2*n)

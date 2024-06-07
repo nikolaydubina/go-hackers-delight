@@ -24,6 +24,14 @@ func LeadingZerosUint32(x uint32) uint {
 	return nlz_goryavsky[(x >> 26)]
 }
 
+func LeadingZerosUint64(x uint64) uint {
+	n := LeadingZerosUint32(uint32(x >> 32))
+	if (x >> 32) == 0 {
+		return n + LeadingZerosUint32(uint32(x))
+	}
+	return n
+}
+
 func LeadingZerosUint32BinarySearch(x uint32) uint {
 	var y uint32 = 0
 	n := 32

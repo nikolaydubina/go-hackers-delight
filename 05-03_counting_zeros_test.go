@@ -2,7 +2,6 @@ package hd_test
 
 import (
 	"fmt"
-	"math/bits"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -27,14 +26,14 @@ func FuzzNLZCompute(f *testing.F) {
 			t.Skip()
 		}
 
-		n := bits.LeadingZeros32(x)
+		n := hd.LeadingZerosUint32(x)
 
 		vs := []uint{
 			hd.LeadingZerosUint32(x),
 			hd.LeadingZerosUint32BinarySearch(x),
 		}
 		for i, got := range vs {
-			if n != int(got) {
+			if n != got {
 				t.Error(i, "x", fmt.Sprintf("%032b", x), "exp", n, "got", got)
 			}
 		}

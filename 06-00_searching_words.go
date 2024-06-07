@@ -1,7 +1,5 @@
 package hd
 
-import "math/bits"
-
 // ZByteL finds index of left most zero byte.
 // This is branch-free code in 11 RISC instructions.
 // This is useful for `strlen` in C strings, which use 0 byte for string termination.
@@ -30,8 +28,7 @@ func ZByteL1(x uint32) int {
 func ZByteL64(x uint64) int {
 	y := (x & 0x7F7F_7F7F_7F7F_7F7F) + 0x7F7F_7F7F_7F7F_7F7F
 	y = ^(y | x | 0x7F7F_7F7F_7F7F_7F7F)
-	// TODO: avoid math/bits
-	return bits.LeadingZeros64(y) >> 3
+	return int(LeadingZerosUint64(y)) >> 3
 }
 
 // FindInByte m in x illustrates that to find specific byte you need to XOR with repeated value.

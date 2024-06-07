@@ -76,5 +76,17 @@ func MultiplyHighOrderSigned(u, v int32) int32 {
 	return (u1 * v1) + w2 + (w1 >> 16)
 }
 
-// TODO: MultiplyHighOrderUnsigned
+func MultiplyHighOrderUnsigned(u, v uint32) uint32 {
+	u0 := u & 0xFFFF
+	u1 := u >> 16
+	v0 := v & 0xFFFF
+	v1 := v >> 16
+	w0 := u0 * v0
+	t := (u1 * v0) + (w0 >> 16)
+	w1 := t & 0xFFFF
+	w2 := t >> 16
+	w1 = (u0 * v1) + w1
+	return (u1 * v1) + w2 + (w1 >> 16)
+}
+
 // TODO: MultiplyHighOrderUnsigned from MultiplyHighOrderSigned and other way around
