@@ -8,31 +8,31 @@ package hd
 
 // IsAddOverflow sets most significant bit if overflow occurs.
 // This version does not use carry bit and is efficient.
-func IsAddOverflow(x, y int32) int32 { return ^(x ^ y) & ((x + y) ^ x) }
+func IsAddOverflow[T Signed](x, y T) T { return ^(x ^ y) & ((x + y) ^ x) }
 
-func IsAddOverflow2(x, y int32) int32 { return ((x + y) ^ x) & ((x + y) ^ y) }
+func IsAddOverflow2[T Signed](x, y T) T { return ((x + y) ^ x) & ((x + y) ^ y) }
 
 // IsSubOverflow sets most significant bit if overflow occurs.
 // This version does not use carry bit and is efficient.
-func IsSubOverflow(x, y int32) int32 { return (x ^ y) & ((x - y) ^ x) }
+func IsSubOverflow[T Signed](x, y T) T { return (x ^ y) & ((x - y) ^ x) }
 
-func IsSubOverflow2(x, y int32) int32 { return ((x - y) ^ x) & (^((x - y) ^ y)) }
+func IsSubOverflow2[T Signed](x, y T) T { return ((x - y) ^ x) & (^((x - y) ^ y)) }
 
-func IsAddOverflowUnsigned(x, y uint32) uint32 { return (x & y) | ((x | y) & ^(x + y)) }
+func IsAddOverflowUnsigned[T Unsigned](x, y T) T { return (x & y) | ((x | y) & ^(x + y)) }
 
-func IsAddOverflowUnsigned2(x, y uint32) uint32 { return (x >> 1) + (y >> 1) + ((x & y) & 1) }
+func IsAddOverflowUnsigned2[T Unsigned](x, y T) T { return (x >> 1) + (y >> 1) + ((x & y) & 1) }
 
-func IsAddOverflowUnsigned3(x, y uint32) bool { return ^x < y }
+func IsAddOverflowUnsigned3[T Unsigned](x, y T) bool { return ^x < y }
 
-func IsAddOverflowUnsigned4(x, y, sum uint32) bool { return sum < x }
+func IsAddOverflowUnsigned4[T Unsigned](x, y, sum T) bool { return sum < x }
 
-func IsSubOverflowUnsigned(x, y uint32) uint32 { return (^x & y) | (^(x &^ y) & (x - y)) }
+func IsSubOverflowUnsigned[T Unsigned](x, y T) T { return (^x & y) | (^(x &^ y) & (x - y)) }
 
-func IsSubOverflowUnsigned2(x, y uint32) uint32 { return (x >> 1) - (y >> 1) - ((^x & y) & 1) }
+func IsSubOverflowUnsigned2[T Unsigned](x, y T) T { return (x >> 1) - (y >> 1) - ((^x & y) & 1) }
 
-func IsSubOverflowUnsigned3(x, y uint32) bool { return x < y }
+func IsSubOverflowUnsigned3[T Unsigned](x, y T) bool { return x < y }
 
-func IsSubOverflowUnsigned4(x, y, sub uint32) bool { return sub > x }
+func IsSubOverflowUnsigned4[T Unsigned](x, y, sub T) bool { return sub > x }
 
 func IsMulOverflow(x, y int32) bool {
 	// changed to boolean version, since ternary nor "conditional-and" are not supported in Go.
@@ -51,7 +51,7 @@ func IsMulOverflowUnsigned(x, y uint32) bool {
 	if y == 0 {
 		return false
 	}
-	return x > (0xFFFFFFFF / y)
+	return x > (0xFFFF_FFFF / y)
 }
 
 // IsMulOverflowUnsignedNLZ counts number of leading zeros to detect overflow.
@@ -73,7 +73,7 @@ func IsMulOverflowUnsignedNLZ(x, y uint32) bool {
 	return false
 }
 
-func IsDivOverflowUnsigned(x, y uint32) bool { return y == 0 }
+func IsDivOverflowUnsigned[T Unsigned](x, y T) bool { return y == 0 }
 
 // TODO: division overflow with long-division instructions
 // TODO: with overflow interrupts

@@ -9,22 +9,22 @@ import (
 )
 
 func ExampleIsAddOverflow() {
-	fmt.Println(hd.IsAddOverflow(math.MaxInt32, 1)>>31, hd.IsAddOverflow(10, 1)>>31)
+	fmt.Println(hd.IsAddOverflow(int32(math.MaxInt32), 1)>>31, hd.IsAddOverflow(int32(10), 1)>>31)
 	// Output: -1 0
 }
 
 func ExampleIsSubOverflow() {
-	fmt.Println(hd.IsSubOverflow2(math.MinInt32, 1)>>31, hd.IsSubOverflow2(-10, 1)>>31)
+	fmt.Println(hd.IsSubOverflow2(int32(math.MinInt32), 1)>>31, hd.IsSubOverflow2(int32(-10), 1)>>31)
 	// Output: -1 0
 }
 
 func ExampleIsAddOverflowUnsigned() {
-	fmt.Println(hd.IsAddOverflowUnsigned(math.MaxUint32, 1)>>31, hd.IsAddOverflowUnsigned(10, 1)>>31)
+	fmt.Println(hd.IsAddOverflowUnsigned(uint32(math.MaxUint32), 1)>>31, hd.IsAddOverflowUnsigned(uint32(10), 1)>>31)
 	// Output: 1 0
 }
 
 func ExampleIsSubOverflowUnsigned() {
-	fmt.Println(hd.IsSubOverflowUnsigned(0, 1)>>31, hd.IsSubOverflowUnsigned(10, 1)>>31)
+	fmt.Println(hd.IsSubOverflowUnsigned(uint32(0), 1)>>31, hd.IsSubOverflowUnsigned(uint32(10), 1)>>31)
 	// Output: 1 0
 }
 
