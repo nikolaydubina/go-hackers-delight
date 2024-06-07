@@ -25,8 +25,8 @@ func FuzzDivideMultiWord(f *testing.F) {
 			t.Skip()
 		}
 
-		expQ := u / v
-		expR := u % v
+		Q := u / v
+		R := u % v
 
 		u16 := hd.IntToNx16b(u)
 		v16 := hd.IntToNx16b(v)
@@ -35,12 +35,12 @@ func FuzzDivideMultiWord(f *testing.F) {
 
 		hd.DivMultiWordUnsigned(q16, r16, u16, v16)
 
-		if got := hd.Uint64FromNx16b(q16); got != expQ {
-			t.Errorf("u=%d %v v=%d %v: Q: exp=%d got=%d %v", u, u16, v, v16, expQ, got, q16)
+		if q := hd.Uint64FromNx16b(q16); q != Q {
+			t.Errorf("u=%d %v v=%d %v: Q: exp=%d got=%d %v", u, u16, v, v16, Q, q, q16)
 		}
 
-		if got := hd.Uint64FromNx16b(r16); got != expR {
-			t.Errorf("u=%d %v v=%d %v: R: exp=%d got=%d %v", u, u16, v, v16, expR, got, r16)
+		if r := hd.Uint64FromNx16b(r16); r != R {
+			t.Errorf("u=%d %v v=%d %v: R: exp=%d got=%d %v", u, u16, v, v16, R, r, r16)
 		}
 	})
 }
@@ -57,41 +57,28 @@ func FuzzDivLongUnsigned64b(f *testing.F) {
 			t.Skip()
 		}
 
-		expQ := uint32(x / uint64(y))
-		expR := uint32(x % uint64(y))
+		Q := uint32(x / uint64(y))
+		R := uint32(x % uint64(y))
 
 		t.Run("DivLongUnsigned64b32b", func(t *testing.T) {
 			// Overflow. This code does not work. Skip.
 			if (x / uint64(y)) > math.MaxUint32 {
 				t.Skip()
 			}
-
-			q, r := hd.DivLongUnsigned64b32b(x, y)
-
-			if q != expQ {
-				t.Errorf("x=%d y=%d: Q: exp=%d got=%d", x, y, expQ, q)
-			}
-			if r != expR {
-				t.Errorf("x=%d y=%d: R: exp=%d got=%d", x, y, expR, r)
+			if q, r := hd.DivLongUnsigned64b32b(x, y); q != Q || r != R {
+				t.Errorf("x=%d y=%d: Q(exp=%d got=%d) R(exp=%d, got=%d)", x, y, Q, q, R, r)
 			}
 		})
 
 		t.Run("DivLongUnsigned64b32b2", func(t *testing.T) {
-			q, r := hd.DivLongUnsigned64b32b2(x, y)
-
 			// Overflow. Special values returned.
 			if (x / uint64(y)) > math.MaxUint32 {
-				expQ = math.MaxUint32
-				expR = math.MaxUint32
+				Q = math.MaxUint32
+				R = math.MaxUint32
 			}
-
-			if q != expQ {
-				t.Errorf("x=%d y=%d: Q: exp=%d got=%d", x, y, expQ, q)
-			}
-			if r != expR {
-				t.Errorf("x=%d y=%d: R: exp=%d got=%d", x, y, expR, r)
+			if q, r := hd.DivLongUnsigned64b32b2(x, y); q != Q || r != R {
+				t.Errorf("x=%d y=%d: Q(exp=%d got=%d) R(exp=%d, got=%d)", x, y, Q, q, R, r)
 			}
 		})
-
 	})
 }

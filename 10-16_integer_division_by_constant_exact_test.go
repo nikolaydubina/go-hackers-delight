@@ -11,12 +11,12 @@ func FuzzDivModExactSeven(f *testing.F) {
 		f.Add(u)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
-		q, r := x/7, x%7
-		if r != 0 {
+		Q, R := x/7, x%7
+		if R != 0 {
 			t.Skip()
 		}
-		if gotQ := hd.DivExactSeven(x); q != gotQ {
-			t.Errorf("DivExactSeven(%d) = %d; want %d", x, gotQ, q)
+		if q := hd.DivExactSeven(x); q != Q {
+			t.Errorf("DivExactSeven(%d) = %d; want %d", x, q, Q)
 		}
 	})
 }
@@ -64,12 +64,12 @@ func FuzzDivExact(f *testing.F) {
 		if (d % 2) == 0 {
 			d++
 		}
-		q, r := x/d, x%d
-		if r != 0 {
+		Q, R := x/d, x%d
+		if R != 0 {
 			t.Skip()
 		}
-		if gotQ := hd.DivExact(x, d); q != gotQ {
-			t.Errorf("DivExact(%d) = %d; want %d", x, gotQ, q)
+		if q := hd.DivExact(x, d); q != Q {
+			t.Errorf("DivExact(%d) = %d; want %d", x, q, Q)
 		}
 	})
 }

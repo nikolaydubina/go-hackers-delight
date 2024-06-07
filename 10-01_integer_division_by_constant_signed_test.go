@@ -22,24 +22,26 @@ func FuzzDivPow2(f *testing.F) {
 			k++
 		}
 
-		expQ := x / (1 << k)
-		expR := x % (1 << k)
+		Q := x / (1 << k)
+		R := x % (1 << k)
 
 		// preventing Go sign conversion bit.
 		if k == 31 {
-			expQ = -expQ
+			Q = -Q
 		}
 
-		if got := hd.DivSignedPowTwo(x, int(k)); expQ != got {
-			t.Errorf("DivPow2(%d, %d) = %d; want %d", x, k, got, expQ)
+		vs := []int32{
+			hd.DivSignedPowTwo(x, int(k)),
+			hd.DivSignedPowTwo2(x, int(k)),
+		}
+		for i, v := range vs {
+			if v != Q {
+				t.Errorf("%d: (%d, %d) = %d; want %d", i, x, k, v, Q)
+			}
 		}
 
-		if got := hd.DivSignedPowTwo2(x, int(k)); expQ != got {
-			t.Errorf("DivPow2Two(%d, %d) = %d; want %d", x, k, got, expQ)
-		}
-
-		if gotQ, gotR := hd.DivModSignedPowTwo(x, int(k)); expQ != gotQ || expR != gotR {
-			t.Errorf("DivModPow2(%d, %d) = (%d, %d); want (%d, %d)", x, k, gotQ, gotR, expQ, expR)
+		if q, r := hd.DivModSignedPowTwo(x, int(k)); Q != q || R != r {
+			t.Errorf("DivModPowTwo(%d, %d) = (%d, %d); want (%d, %d)", x, k, q, r, Q, R)
 		}
 	})
 }
@@ -49,14 +51,14 @@ func FuzzDivMod3(f *testing.F) {
 		f.Add(u)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
-		q, r := x/3, x%3
+		Q, R := x/3, x%3
 
-		if gotQ, gotR := hd.DivModSignedThree(x); q != gotQ || r != gotR {
-			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
+		if q, r := hd.DivModSignedThree(x); q != Q || r != R {
+			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
 		}
 
-		if gotQ, gotR := hd.DivModSignedConst(x, 3); q != gotQ || r != gotR {
-			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
+		if q, r := hd.DivModSignedConst(x, 3); q != Q || r != R {
+			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
 		}
 	})
 }
@@ -68,12 +70,12 @@ func FuzzDivMod5(f *testing.F) {
 	f.Fuzz(func(t *testing.T, x int32) {
 		q, r := x/5, x%5
 
-		if gotQ, gotR := hd.DivModSignedFive(x); q != gotQ || r != gotR {
-			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
+		if Q, R := hd.DivModSignedFive(x); q != Q || r != R {
+			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, Q, R, q, r)
 		}
 
-		if gotQ, gotR := hd.DivModSignedConst(x, 5); q != gotQ || r != gotR {
-			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
+		if Q, R := hd.DivModSignedConst(x, 5); q != Q || r != R {
+			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, Q, R, q, r)
 		}
 	})
 }
@@ -83,14 +85,14 @@ func FuzzDivMod7(f *testing.F) {
 		f.Add(u)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
-		q, r := x/7, x%7
+		Q, R := x/7, x%7
 
-		if gotQ, gotR := hd.DivModSignedSeven(x); q != gotQ || r != gotR {
-			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
+		if q, r := hd.DivModSignedSeven(x); q != Q || r != R {
+			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
 		}
 
-		if gotQ, gotR := hd.DivModSignedConst(x, 7); q != gotQ || r != gotR {
-			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, gotQ, gotR, q, r)
+		if q, r := hd.DivModSignedConst(x, 7); q != Q || r != R {
+			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
 		}
 	})
 }
@@ -137,7 +139,6 @@ func FuzzDivModSignedConst(f *testing.F) {
 			f.Add(x, y)
 		}
 	}
-
 	f.Fuzz(func(t *testing.T, x, y int32) {
 		if y > -2 && y < 2 {
 			t.Skip()
@@ -150,12 +151,9 @@ func FuzzDivModSignedConst(f *testing.F) {
 			t.Skip()
 		}
 
-		expQ := x / y
-		expR := x % y
-
-		if q, r := hd.DivModSignedConst(x, y); expQ != q || expR != r {
-			M, s := hd.DivModSignedConstMagic(y)
-			t.Errorf("DivModConst(%d, %d) = (%d, %d); want (%d, %d), M(%v) s(%v)", x, y, q, r, expQ, expR, M, s)
+		Q, R := x/y, x%y
+		if q, r := hd.DivModSignedConst(x, y); Q != q || R != r {
+			t.Errorf("DivModConst(%d, %d) = (%d, %d); want (%d, %d)", x, y, q, r, Q, R)
 		}
 	})
 }

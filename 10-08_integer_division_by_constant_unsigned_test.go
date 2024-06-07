@@ -17,16 +17,16 @@ func FuzzDivModUnsignedPowTwo(f *testing.F) {
 			k++
 		}
 
-		expQ := x / (1 << k)
-		expR := x % (1 << k)
+		Q := x / (1 << k)
+		R := x % (1 << k)
 
 		if k == 31 {
 			// TODO: why?
 			t.Skip()
 		}
 
-		if q, r := hd.DivModUnsignedPowTwo(x, int(k)); expQ != q || expR != r {
-			t.Errorf("DivModUnsignedPowTwo(%d, %d) = (%d, %d); want (%d, %d)", x, k, q, r, expQ, expR)
+		if q, r := hd.DivModUnsignedPowTwo(x, int(k)); Q != q || R != r {
+			t.Errorf("DivModUnsignedPowTwo(%d, %d) = (%d, %d); want (%d, %d)", x, k, q, r, Q, R)
 		}
 	})
 }
@@ -36,10 +36,9 @@ func FuzzDivModUnsignedThree(f *testing.F) {
 		f.Add(u)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
-		expQ := x / 3
-		expR := x % 3
-		if q, r := hd.DivModUnsignedThree(x); expQ != q || expR != r {
-			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, expQ, expR)
+		Q, R := x/3, x%3
+		if q, r := hd.DivModUnsignedThree(x); Q != q || R != r {
+			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
 		}
 	})
 }
@@ -49,10 +48,9 @@ func FuzzDivModUnsignedSeven(f *testing.F) {
 		f.Add(u)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
-		expQ := x / 7
-		expR := x % 7
-		if q, r := hd.DivModUnsignedSeven(x); expQ != q || expR != r {
-			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, expQ, expR)
+		Q, R := x/7, x%7
+		if q, r := hd.DivModUnsignedSeven(x); Q != q || R != r {
+			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
 		}
 	})
 }
@@ -100,13 +98,9 @@ func FuzzDivModUnsignedConst(f *testing.F) {
 		if y == 0 {
 			t.Skip()
 		}
-
-		expQ := x / y
-		expR := x % y
-
-		if q, r := hd.DivModUnsignedConst(x, y); expQ != q || expR != r {
-			M, a, s := hd.DivModUnsignedConstMagic(y)
-			t.Errorf("DivModConst(%d, %d) = got(%d, %d); want (%d, %d) M=%d, a=%d, s=%d", x, y, q, r, expQ, expR, M, a, s)
+		Q, R := x/y, x%y
+		if q, r := hd.DivModUnsignedConst(x, y); Q != q || R != r {
+			t.Errorf("DivModConst(%d, %d) = got(%d, %d); want (%d, %d)", x, y, q, r, Q, R)
 		}
 	})
 }
