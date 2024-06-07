@@ -31,7 +31,7 @@ func FuzzParity(f *testing.F) {
 		}
 		n = n % 2
 
-		vs := []int{
+		vs := []uint8{
 			hd.Parity(x),
 			hd.Parity2(x),
 		}
@@ -40,7 +40,7 @@ func FuzzParity(f *testing.F) {
 			vs = append(vs, hd.Parity4(x))
 		}
 		for i, got := range vs {
-			if n != uint32(got) {
+			if uint8(n) != got {
 				t.Error(i, "x", fmt.Sprintf("%032b", x), "exp", n, "got", got)
 			}
 		}

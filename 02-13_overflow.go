@@ -39,25 +39,24 @@ func IsMulOverflow(x, y int32) bool {
 	if y == 0 {
 		return false
 	}
-	c := uint32(^(x^y)>>31) + 1<<31
+	c := uint32((^(x ^ y) >> 31)) + (1 << 31)
 	return uint32(Abs(x)) > (c / uint32((Abs(y))))
 }
 
 // IsDivOverflow uses around seven instructions with branches, and it is not easy to improve this.
-func IsDivOverflow(x, y int32) bool { return y == 0 || (x == -1<<31 && y == -1) }
+func IsDivOverflow(x, y int32) bool { return y == 0 || ((x == (-1 << 31)) && y == -1) }
 
 func IsMulOverflowUnsigned(x, y uint32) bool {
 	// changed to boolean version, since ternary nor "conditional-and" are not supported in Go.
 	if y == 0 {
 		return false
 	}
-	return uint32(x) > (0xFFFFFFFF / uint32(y))
+	return x > (0xFFFFFFFF / y)
 }
 
 // IsMulOverflowUnsignedNLZ counts number of leading zeros to detect overflow.
 func IsMulOverflowUnsignedNLZ(x, y uint32) bool {
-	m, n := LeadingZerosUint32(x), LeadingZerosUint32(y)
-	if m+n <= 30 {
+	if m, n := LeadingZerosUint32(x), LeadingZerosUint32(y); (m + n) <= 30 {
 		return true
 	}
 	t := x * (y >> 1)
