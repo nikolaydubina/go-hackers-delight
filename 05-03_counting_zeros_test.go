@@ -13,7 +13,7 @@ func ExampleLeadingZerosUint32() {
 	// Output: 24
 }
 
-func ExampleNLZ_long() {
+func ExampleLeadingZerosUint32_long() {
 	fmt.Println(hd.LeadingZerosUint32(0b00111111111111111111111111101010))
 	// Output: 2
 }
