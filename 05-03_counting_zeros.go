@@ -27,7 +27,6 @@ func LeadingZerosUint32(x uint32) uint {
 func LeadingZerosUint32BinarySearch(x uint32) uint {
 	var y uint32 = 0
 	n := 32
-
 	y = x >> 16
 	if y != 0 {
 		n -= 16
