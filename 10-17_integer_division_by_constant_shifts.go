@@ -1,5 +1,5 @@
 /*
-Certain divisors have repetitive patterns in binary representation which allows to use few shift, add, subtract instructions
+Certain divisors have repetitive patterns in binary representation which allows to use few (~20) shift, add, subtract instructions
 to approximate residual and get quotient. It is not trivial how to generate such optimal code.
 */
 package hd
