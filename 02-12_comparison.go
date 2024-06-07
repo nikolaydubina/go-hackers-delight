@@ -27,7 +27,7 @@ func Less3(x, y int32) int32 { return NAbs(DOZ(y, x)) }
 // Stores result in most significant bit.
 // Exactly same formula works for uint32. This is because Go uses signed shift right for int32 and unsigned shift right for uint32.
 // This takes 6 or seven instructions.
-func Less4[T int32 | uint32](x, y T) T { return (x >> 1) - (y >> 1) - (^x & y & 1) }
+func Less4[T Int](x, y T) T { return (x >> 1) - (y >> 1) - (^x & y & 1) }
 
 func LessOrEqual(x, y int32) int32 { return (x | ^y) & ((x ^ y) | ^(y - x)) }
 
