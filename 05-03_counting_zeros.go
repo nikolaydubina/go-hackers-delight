@@ -75,8 +75,7 @@ var ntz_reiser = [...]int{
 func TrailingZerosUint32(x uint32) int { return ntz_reiser[((x & -x) % 37)] }
 
 // LoopDetectionGosper uses R.W.Gosper algorithm to detect start index of a loop and it's period.
-// loop is defined on sequence: X_n+1 = f(X_n); X_0, X_1, ..., X_μ-1, X_μ, ... X_μ+λ
-// This is [HAK #132].
+// loop is defined on sequence: X_n+1 = f(X_n); X_0, X_1, ..., X_μ-1, X_μ, ... X_μ+λ. [HAK #132].
 func LoopDetectionGosper(f func(int) int, x0 int) (μLower, μUpper, λ int) {
 	var T [33]int
 	T[0] = x0
