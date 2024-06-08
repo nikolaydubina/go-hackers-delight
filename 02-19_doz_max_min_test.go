@@ -8,12 +8,12 @@ import (
 )
 
 func ExampleDOZ() {
-	fmt.Println(hd.DOZ(10, 5), hd.DOZ(5, 10), hd.DOZ(-5, -10), hd.DOZ(-10, -5))
+	fmt.Println(hd.DifferenceOrZero(10, 5), hd.DifferenceOrZero(5, 10), hd.DifferenceOrZero(-5, -10), hd.DifferenceOrZero(-10, -5))
 	// Output: 5 0 5 0
 }
 
 func ExampleDOZU() {
-	fmt.Println(hd.DOZU(10, 5), hd.DOZ(5, 10))
+	fmt.Println(hd.DifferenceOrZeroUnsigned(10, 5), hd.DifferenceOrZero(5, 10))
 	// Output: 5 0
 }
 
@@ -33,7 +33,7 @@ func FuzzDOZ(f *testing.F) {
 			exp int32
 			got int32
 		}{
-			{doz, hd.DOZ(x, y)},
+			{doz, hd.DifferenceOrZero(x, y)},
 			{min(x, y), hd.Min(x, y)},
 			{max(x, y), hd.Max(x, y)},
 		}
@@ -43,7 +43,7 @@ func FuzzDOZ(f *testing.F) {
 				exp int32
 				got int32
 			}{
-				{doz, hd.DOZRanges(x, y)},
+				{doz, hd.DifferenceOrZeroRanges(x, y)},
 				{min(x, y), hd.MinRanges(x, y)},
 				{max(x, y), hd.MaxRanges(x, y)},
 			}...)

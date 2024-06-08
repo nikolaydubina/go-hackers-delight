@@ -9,25 +9,25 @@ func Equal3(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y))) <<
 
 func Equal4(x, y int32) int32 { return -int32(LeadingZerosUint32(uint32(x-y)) >> 5) }
 
-func Equal5[T Int](x, y T) T { return ^((x - y) | (y - x)) }
+func Equal5[T Integer](x, y T) T { return ^((x - y) | (y - x)) }
 
 func NotEqual(x, y int32) int32 { return NAbs(x - y) }
 
 func NotEqual2(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y))) - 32 }
 
-func NotEqual3[T Int](x, y T) T { return (x - y) | (y - x) }
+func NotEqual3[T Integer](x, y T) T { return (x - y) | (y - x) }
 
 func Less(x, y int32) int32 { return (x - y) ^ ((x ^ y) & ((x - y) ^ x)) }
 
 func Less2(x, y int32) int32 { return (x & ^y) | (^(x ^ y) & (x - y)) }
 
-func Less3(x, y int32) int32 { return NAbs(DOZ(y, x)) }
+func Less3(x, y int32) int32 { return NAbs(DifferenceOrZero(y, x)) }
 
 // Less4 utilizes the fact that x/2 - y/2 never overflows.
 // Stores result in most significant bit.
 // Exactly same formula works for uint32. This is because Go uses signed shift right for int32 and unsigned shift right for uint32.
 // This takes 6 or seven instructions.
-func Less4[T Int](x, y T) T { return (x >> 1) - (y >> 1) - (^x & y & 1) }
+func Less4[T Integer](x, y T) T { return (x >> 1) - (y >> 1) - (^x & y & 1) }
 
 func LessOrEqual[T Signed](x, y T) T { return (x | ^y) & ((x ^ y) | ^(y - x)) }
 
@@ -45,15 +45,15 @@ func EqualZero2(x int32) int32 { return Abs(int32(uint32(x) + 0x80000000)) }
 
 func EqualZero3(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) << 26 }
 
-func EqualZero4[T Int](x T) T { return ^(x | -x) }
+func EqualZero4[T Integer](x T) T { return ^(x | -x) }
 
-func EqualZero5[T Int](x T) T { return ^x & (x - 1) }
+func EqualZero5[T Integer](x T) T { return ^x & (x - 1) }
 
 func NotEqualZero(x int32) int32 { return NAbs(x) }
 
 func NotEqualZero2(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) - 32 }
 
-func NotEqualZero3[T Int](x T) T { return x | -x }
+func NotEqualZero3[T Integer](x T) T { return x | -x }
 
 func NotEqualZero4[T int32 | uint32](x T) T { return ShiftRightUnsigned32(x, 1) - x }
 

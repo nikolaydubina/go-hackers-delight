@@ -16,7 +16,7 @@ func Abs3(x int32) int32 {
 	return x - ((2 * x) & y)
 }
 
-func Abs4(x int32) int32 { return DOZ(x, 0) + DOZ(0, x) }
+func Abs4(x int32) int32 { return DifferenceOrZero(x, 0) + DifferenceOrZero(0, x) }
 
 func NAbs(x int32) int32 {
 	y := x >> 31
@@ -37,8 +37,10 @@ func NAbs3(x int32) int32 {
 func AbsFastMul(x int32) int32 { return ((x >> 30) | 1) * x }
 
 // AbsDiff is absolute difference that does not overflow.
-func AbsDiff[T Int](x, y T) T { return max(x, y) - min(x, y) }
+func AbsDiff[T Integer](x, y T) T { return max(x, y) - min(x, y) }
 
-func AbsDiff2(x, y int32) int32 { return DOZ(x, y) + DOZ(y, x) }
+func AbsDiff2(x, y int32) int32 { return DifferenceOrZero(x, y) + DifferenceOrZero(y, x) }
 
-func AbsDiffUnsigned(x, y uint32) uint32 { return DOZU(x, y) + DOZU(y, x) }
+func AbsDiffUnsigned(x, y uint32) uint32 {
+	return DifferenceOrZeroUnsigned(x, y) + DifferenceOrZeroUnsigned(y, x)
+}

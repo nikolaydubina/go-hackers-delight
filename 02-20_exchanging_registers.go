@@ -2,7 +2,7 @@ package hd
 
 // ExchangeRegisters illustrates very old trick on how to exchange two registers without using third one.
 // This is swap operation. Also known as multiple assignment in Go.
-func ExchangeRegisters[T Int](x, y T) (T, T) {
+func ExchangeRegisters[T Integer](x, y T) (T, T) {
 	x ^= y
 	y ^= x
 	x ^= y
@@ -11,14 +11,14 @@ func ExchangeRegisters[T Int](x, y T) (T, T) {
 
 // ExchangeRegistersMasked illustrates how to exchange only masked bits between two registers.
 // This can be done in 3 cycles, given parallelism and and-not instructions.
-func ExchangeRegistersMasked[T Int](x, y, m T) (T, T) {
+func ExchangeRegistersMasked[T Integer](x, y, m T) (T, T) {
 	t := (x & ^m) | (y & m)
 	y = (y & ^m) | (x & m)
 	x = t
 	return x, y
 }
 
-func ExchangeRegistersMasked2[T Int](x, y, m T) (T, T) {
+func ExchangeRegistersMasked2[T Integer](x, y, m T) (T, T) {
 	x ^= y
 	y ^= x & m
 	x ^= y
@@ -26,7 +26,7 @@ func ExchangeRegistersMasked2[T Int](x, y, m T) (T, T) {
 }
 
 // ExchangeRegistersMasked3 is heavily using  bitwise equality, but in Go there is no such operator, so expanding that notation.
-func ExchangeRegistersMasked3[T Int](x, y, m T) (T, T) {
+func ExchangeRegistersMasked3[T Integer](x, y, m T) (T, T) {
 	x = ^(x ^ y)
 	y = ^(y ^ (x | ^m))
 	x = ^(x ^ y)
@@ -34,7 +34,7 @@ func ExchangeRegistersMasked3[T Int](x, y, m T) (T, T) {
 }
 
 // ExchangeRegistersMasked4 also executes in three cycles, given sufficient instruction parallelism in the CPU.
-func ExchangeRegistersMasked4[T Int](x, y, m T) (T, T) {
+func ExchangeRegistersMasked4[T Integer](x, y, m T) (T, T) {
 	t := (x ^ y) & m
 	x ^= t
 	y ^= t
