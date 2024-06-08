@@ -17,9 +17,9 @@ func NotEqual2(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y)))
 
 func NotEqual3[T Integer](x, y T) T { return (x - y) | (y - x) }
 
-func Less(x, y int32) int32 { return (x - y) ^ ((x ^ y) & ((x - y) ^ x)) }
+func Less[T Signed](x, y T) T { return (x - y) ^ ((x ^ y) & ((x - y) ^ x)) }
 
-func Less2(x, y int32) int32 { return (x & ^y) | (^(x ^ y) & (x - y)) }
+func Less2[T Signed](x, y T) T { return (x & ^y) | (^(x ^ y) & (x - y)) }
 
 func Less3(x, y int32) int32 { return NAbs(DifferenceOrZero(y, x)) }
 

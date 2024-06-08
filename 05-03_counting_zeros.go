@@ -25,41 +25,25 @@ func LeadingZerosUint32(x uint32) uint8 {
 }
 
 func LeadingZerosUint64(x uint64) uint8 {
-	n := LeadingZerosUint32(uint32(x >> 32))
-	if (x >> 32) == 0 {
-		return n + LeadingZerosUint32(uint32(x))
+	var n uint8 = 32
+	if x > 0xFFFF_FFFF {
+		x >>= 32
+		n -= 32
 	}
-	return n
+	return n + LeadingZerosUint32(uint32(x))
 }
 
 func LeadingZerosUint32BinarySearch(x uint32) uint8 {
 	var y uint32 = 0
-	n := 32
-	y = x >> 16
-	if y != 0 {
-		n -= 16
-		x = y
+	var n uint8 = 32
+	for _, i := range [...]uint8{16, 8, 4, 2, 1} {
+		y = x >> i
+		if y != 0 {
+			n -= i
+			x = y
+		}
 	}
-	y = x >> 8
-	if y != 0 {
-		n -= 8
-		x = y
-	}
-	y = x >> 4
-	if y != 0 {
-		n -= 4
-		x = y
-	}
-	y = x >> 2
-	if y != 0 {
-		n -= 2
-		x = y
-	}
-	y = x >> 1
-	if y != 0 {
-		return uint8(n - 2)
-	}
-	return uint8(n - int(x))
+	return n - uint8(x)
 }
 
 func LeadingZerosEqual[T Unsigned](x, y T) bool { return (x ^ y) <= (x & y) }
@@ -68,8 +52,8 @@ func LeadingZerosLess[T Unsigned](x, y T) bool { return (x & ^y) > y }
 
 func LeadingZerosLessOrEqual[T Unsigned](x, y T) bool { return (y & ^x) <= x }
 
-// BitSize returns minimum number of bits requires to represent number in two's complement signed number.
-func BitSize(x int32) uint8 { return 32 - LeadingZerosUint32((uint32(x ^ (x << 1)))) }
+// BitSize32 returns minimum number of bits requires to represent number in two's complement signed number.
+func BitSize32(x int32) uint8 { return 32 - LeadingZerosUint32((uint32(x ^ (x << 1)))) }
 
 var ntz_reiser = [...]uint8{
 	32, 0, 1, 26, 2, 23, 27,
