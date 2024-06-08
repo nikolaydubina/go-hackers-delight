@@ -64,12 +64,12 @@ func CLPTwo3(x uint32) uint32 {
 // b size has to be power of two.
 // This and versions bellow are five or six RISC instructions.
 // b has to be power of two and likely to be a constant.
-func IsPowerOfTwoBoundaryCrossed(a, l, b uint32) bool { return -(a | -b) < l }
+func IsPowerOfTwoBoundaryCrossed[T Unsigned](a, l, b T) bool { return -(a | -b) < l }
 
-func IsPowerOfTwoBoundaryCrossed2(a, l, b uint32) bool { return (^(a | -b) + 1) < l }
+func IsPowerOfTwoBoundaryCrossed2[T Unsigned](a, l, b T) bool { return (^(a | -b) + 1) < l }
 
-func IsPowerOfTwoBoundaryCrossed3(a, l, b uint32) bool { return ((^a & (b - 1)) + 1) < l }
+func IsPowerOfTwoBoundaryCrossed3[T Unsigned](a, l, b T) bool { return ((^a & (b - 1)) + 1) < l }
 
-func IsPowerOfTwoBoundaryCrossed4(a, l, b uint32) bool { return (b - (a & (b - 1))) < l }
+func IsPowerOfTwoBoundaryCrossed4[T Unsigned](a, l, b T) bool { return (b - (a & (b - 1))) < l }
 
 // TODO: round power of two signed

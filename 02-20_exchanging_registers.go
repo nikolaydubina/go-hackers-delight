@@ -48,14 +48,14 @@ func ExchangeRegistersMasked4[T Int](x, y, m T) (T, T) {
 // mo is mask for fields A C and E (all fields to not swap)
 // [aaaa bbbb cccc dddd eeee] -> [aaaa dddd cccc bbbb eeee]
 // This is straight forward approach and requires eleven instructions and six cycles.
-func ExchangeBitsInRegister(x, md, mo uint32, k int) uint32 {
+func ExchangeBitsInRegister[T Unsigned](x, md, mo T, k int) T {
 	t1 := (x & md) << k
 	t2 := (x >> k) & md
 	return (x & mo) | t1 | t2
 }
 
 // ExchangeBitsInRegisterFast requires eight instructions and five cycles.
-func ExchangeBitsInRegisterFast(x, md, mo uint32, k int) uint32 {
+func ExchangeBitsInRegisterFast[T Unsigned](x, md, mo T, k int) T {
 	t1 := (x ^ (x >> k)) & md
 	t2 := t1 << k
 	return x ^ t1 ^ t2

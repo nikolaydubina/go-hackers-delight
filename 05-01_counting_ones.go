@@ -39,8 +39,8 @@ func CountOnes3(x uint32) uint32 {
 }
 
 // CountOnes4 is very fast for if number of 1 bits is small.
-func CountOnes4(x uint32) uint32 {
-	var n uint32
+func CountOnes4[T Unsigned](x T) T {
+	var n T
 	for x != 0 {
 		n++
 		x &= x - 1
@@ -74,7 +74,7 @@ func CompareCountOnes(x, y uint32) int {
 }
 
 // CSA is Carry Save Adder
-func CSA(a, b, c uint32) (h, l uint32) {
+func CSA[T Unsigned](a, b, c T) (h, l T) {
 	u := a ^ b
 	v := c
 	h = (a & b) | (u & v)

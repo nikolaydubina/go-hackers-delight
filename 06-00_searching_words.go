@@ -73,8 +73,8 @@ func FindFirstStringOnes1(x uint32, n int) int {
 // LenLongestStringOnes (aka maxstr1) returns longest length of string of ones.
 // Executes in 131 RISC instructions in worst case.
 // TODO: it has optimization to reduce to 39 RISC instructions in worst case.
-func LenLongestStringOnes(x uint32) int {
-	var k int
+func LenLongestStringOnes[T Unsigned](x T) uint8 {
+	var k uint8
 	for k = 0; x != 0; k++ {
 		x &= 2 * x
 	}
@@ -82,15 +82,15 @@ func LenLongestStringOnes(x uint32) int {
 }
 
 // LenShortestStringOnes (aka fminstr1) returns shortest length of string of ones.
-func LenShortestStringOnes(x uint32) (p, n int) {
+func LenShortestStringOnes(x uint32) (p, n uint8) {
 	if x == 0 {
 		return 32, 0
 	}
 	b := ^(x >> 1) & x
 	e := x & ^(x << 1)
-	var k int
+	var k uint8
 	for k = 1; (b & e) == 0; k++ {
 		e <<= 1
 	}
-	return int(LeadingZerosUint32(b & e)), k
+	return LeadingZerosUint32(b & e), k
 }

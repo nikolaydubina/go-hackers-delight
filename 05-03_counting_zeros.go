@@ -62,11 +62,11 @@ func LeadingZerosUint32BinarySearch(x uint32) uint8 {
 	return uint8(n - int(x))
 }
 
-func LeadingZerosEqual(x, y uint32) bool { return (x ^ y) <= (x & y) }
+func LeadingZerosEqual[T Unsigned](x, y T) bool { return (x ^ y) <= (x & y) }
 
-func LeadingZerosLess(x, y uint32) bool { return (x & ^y) > y }
+func LeadingZerosLess[T Unsigned](x, y T) bool { return (x & ^y) > y }
 
-func LeadingZerosLessOrEqual(x, y uint32) bool { return (y & ^x) <= x }
+func LeadingZerosLessOrEqual[T Unsigned](x, y T) bool { return (y & ^x) <= x }
 
 // BitSize returns minimum number of bits requires to represent number in two's complement signed number.
 func BitSize(x int32) uint8 { return 32 - LeadingZerosUint32((uint32(x ^ (x << 1)))) }

@@ -7,6 +7,6 @@ import (
 )
 
 func ExampleNextHigherNumberWithSameNumberOfOnes() {
-	fmt.Printf("%08b", hd.NextHigherNumberWithSameNumberOfOnes(0b0011110000))
+	fmt.Printf("%08b", hd.NextHigherNumberWithSameNumberOfOnes(uint64(0b0011110000)))
 	// Output: 100000111
 }

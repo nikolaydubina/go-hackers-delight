@@ -23,8 +23,8 @@ func Compress(x, m uint32) uint32 {
 }
 
 // Compress2 is direct version of Compress. This is 260 RISC instructions in loop brach-free.
-func Compress2(x, m uint32) uint32 {
-	var r, s uint32
+func Compress2[T Unsigned](x, m T) T {
+	var r, s T
 	for m != 0 {
 		b := m & 1
 		r |= (x & b) << s

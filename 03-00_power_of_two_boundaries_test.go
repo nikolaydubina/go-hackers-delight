@@ -28,12 +28,12 @@ func ExampleCLPTwo() {
 }
 
 func ExampleIsPowerOfTwoBoundaryCrossed_crossed() {
-	fmt.Println(hd.IsPowerOfTwoBoundaryCrossed(100, 300, 256))
+	fmt.Println(hd.IsPowerOfTwoBoundaryCrossed[uint32](100, 300, 256))
 	// Output: true
 }
 
 func ExampleIsPowerOfTwoBoundaryCrossed_not_crossed() {
-	fmt.Println(hd.IsPowerOfTwoBoundaryCrossed(100, 100, 256))
+	fmt.Println(hd.IsPowerOfTwoBoundaryCrossed[uint32](100, 100, 256))
 	// Output: false
 }
 

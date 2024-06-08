@@ -29,15 +29,15 @@ func Less3(x, y int32) int32 { return NAbs(DOZ(y, x)) }
 // This takes 6 or seven instructions.
 func Less4[T Int](x, y T) T { return (x >> 1) - (y >> 1) - (^x & y & 1) }
 
-func LessOrEqual(x, y int32) int32 { return (x | ^y) & ((x ^ y) | ^(y - x)) }
+func LessOrEqual[T Signed](x, y T) T { return (x | ^y) & ((x ^ y) | ^(y - x)) }
 
-func LessOrEqual2(x, y int32) int32 { return (^(x ^ y) >> 1) + (x &^ y) }
+func LessOrEqual2[T Signed](x, y T) T { return (^(x ^ y) >> 1) + (x &^ y) }
 
-func LessUnsigned(x, y uint32) uint32 { return (^x & y) | (^(x ^ y) & (x - y)) }
+func LessUnsigned[T Unsigned](x, y T) T { return (^x & y) | (^(x ^ y) & (x - y)) }
 
-func LessUnsigned2(x, y uint32) uint32 { return (^x & y) | ((^x | y) & (x - y)) }
+func LessUnsigned2[T Unsigned](x, y T) T { return (^x & y) | ((^x | y) & (x - y)) }
 
-func LessOrEqualUnsigned(x, y uint32) uint32 { return (^x | y) & ((x ^ y) | ^(y - x)) }
+func LessOrEqualUnsigned[T Unsigned](x, y T) T { return (^x | y) & ((x ^ y) | ^(y - x)) }
 
 func EqualZero(x int32) int32 { return Abs(x) - 1 }
 
@@ -47,7 +47,7 @@ func EqualZero3(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) << 
 
 func EqualZero4[T Int](x T) T { return ^(x | -x) }
 
-func EqualZero5(x int32) int32 { return ^x & (x - 1) }
+func EqualZero5[T Int](x T) T { return ^x & (x - 1) }
 
 func NotEqualZero(x int32) int32 { return NAbs(x) }
 
@@ -55,7 +55,7 @@ func NotEqualZero2(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) 
 
 func NotEqualZero3[T Int](x T) T { return x | -x }
 
-func NotEqualZero4(x int32) int32 { return ShiftRightUnsigned32(x, 1) - x }
+func NotEqualZero4[T int32 | uint32](x T) T { return ShiftRightUnsigned32(x, 1) - x }
 
 func LessZero[T Signed](x T) T { return x }
 
@@ -65,9 +65,9 @@ func LessOrEqualZero2[T Signed](x T) T { return x | ^-x }
 
 func HigherZero(x int32) int32 { return x ^ NAbs(x) }
 
-func HigherZero2(x int32) int32 { return (x >> 1) - x }
+func HigherZero2[T Signed](x T) T { return (x >> 1) - x }
 
-func HigherZero3(x int32) int32 { return -x & ^x }
+func HigherZero3[T Signed](x T) T { return -x & ^x }
 
 func HigherEqualZero[T Signed](x T) T { return ^x }
 

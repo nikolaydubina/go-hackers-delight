@@ -34,7 +34,7 @@ func NAbs3(x int32) int32 {
 }
 
 // AbsFastMul when you have fast instruction for +1/-1 multiplication.
-func AbsFastMul(x int32) int32 { return (x>>30 | 1) * x }
+func AbsFastMul(x int32) int32 { return ((x >> 30) | 1) * x }
 
 // AbsDiff is absolute difference that does not overflow.
 func AbsDiff[T Int](x, y T) T { return max(x, y) - min(x, y) }
