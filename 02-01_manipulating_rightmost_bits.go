@@ -1,34 +1,30 @@
 package hd
 
 // TurnOffRightMostBit this can be used to test if integer is power of 2
-func TurnOffRightMostBit(x int64) int64 { return x & (x - 1) }
+func TurnOffRightMostBit[T Signed](x T) T { return x & (x - 1) }
 
-func TurnOnRightMostBit(x int64) int64 { return x | (x + 1) }
+func TurnOnRightMostBit[T Signed](x T) T { return x | (x + 1) }
 
 // TurnOffTrailingOnes this can be used to test if integer if of the form 2^n - 1
-func TurnOffTrailingOnes(x int64) int64 { return x & (x + 1) }
+func TurnOffTrailingOnes[T Signed](x T) T { return x & (x + 1) }
 
-func TurnOnTrailingZeros(x int64) int64 { return x | (x - 1) }
+func TurnOnTrailingZeros[T Signed](x T) T { return x | (x - 1) }
 
-func SetBitLastZero(x int64) int64 { return ^x & (x + 1) }
+func SetBitLastZero[T Signed](x T) T { return ^x & (x + 1) }
 
-//func SetZeroBitLastOne(x int64) int64 { return ^x | (x - 1) }
+func SetTrailingZeros[T Signed](x T) T { return ^x & (x - 1) }
 
-func SetTrailingZeros(x int64) int64 { return ^x & (x - 1) }
+func SetTrailingZeros2[T Signed](x T) T { return ^(x | -x) }
 
-func SetTrailingZeros2(x int64) int64 { return ^(x | -x) }
+func SetTrailingZeros3[T Signed](x T) T { return (x & -x) - 1 }
 
-func SetTrailingZeros3(x int64) int64 { return (x & -x) - 1 }
+func IsolateRightmostOneBit[T Signed](x T) T { return x & -x }
 
-//func SetTrailingOnes(x int64) int64 { return ^x | (x + 1) }
+func SetTrailingZerosWithRightMostOne[T Signed](x T) T { return x ^ (x - 1) }
 
-func IsolateRightmostOneBit(x int64) int64 { return x & -x }
-
-func SetTrailingZerosWithRightMostOne(x int64) int64 { return x ^ (x - 1) }
-
-func SetTrailingOnesWithRightMostOne(x int64) int64 { return x ^ (x + 1) }
+func SetTrailingOnesWithRightMostOne[T Signed](x T) T { return x ^ (x + 1) }
 
 // TurnOffRightmostOnes this can be sued to determine if a nonnegative integer is of the for 2^j - 2^k for some j >= k >= 0
-func TurnOffRightmostOnes(x int64) int64 { return (((x | (x - 1)) + 1) & x) }
+func TurnOffRightmostOnes[T Signed](x T) T { return ((x | (x - 1)) + 1) & x }
 
-func TurnOffRightmostOnes2(x int64) int64 { return ((x & -x) + x) & x }
+func TurnOffRightmostOnes2[T Signed](x T) T { return ((x & -x) + x) & x }
