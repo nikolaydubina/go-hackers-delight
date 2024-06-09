@@ -3,15 +3,15 @@ package hd
 func DivModUnsignedPowTwo(n uint32, k int) (q, r uint32) { return n >> k, n - (n >> k << k) }
 
 func DivModUnsignedThree(n uint32) (q, r uint32) {
-	const M uint32 = 0xAAAA_AAAB        // Magic (2 ** 33 + 3) / 3
-	q = MultiplyHighOrderUnsigned(M, n) // mulhu
+	const M uint32 = 0xAAAA_AAAB  // Magic (2 ** 33 + 3) / 3
+	q = MultiplyHighOrder32(M, n) // mulhu
 	q >>= 1
 	return q, n - (q * 3)
 }
 
 func DivModUnsignedSeven(n uint32) (q, r uint32) {
-	const M uint32 = 0x2492_4925        // Magic (2 ** 35 + 3) / 7  - 2 ** 32
-	q = MultiplyHighOrderUnsigned(M, n) // mulhu
+	const M uint32 = 0x2492_4925  // Magic (2 ** 35 + 3) / 7  - 2 ** 32
+	q = MultiplyHighOrder32(M, n) // mulhu
 	t := n - q
 	t >>= 1
 	t += q
@@ -25,7 +25,7 @@ func DivModUnsignedConst(n, d uint32) (q, r uint32) {
 	}
 
 	M, a, s := DivModUnsignedConstMagic(d) // compile time
-	q = MultiplyHighOrderUnsigned(M, n)    // mulhu
+	q = MultiplyHighOrder32(M, n)          // mulhu
 
 	// following branches are computed at compile time based on compile time constants d, M, a, s
 	switch a {

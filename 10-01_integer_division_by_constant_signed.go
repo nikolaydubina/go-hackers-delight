@@ -38,7 +38,7 @@ func DivModSignedPowTwo(n int32, k int) (q, r int32) {
 // This is 9 or 10 cycles. Meanwhile, divide operation can take 20 cycles.
 func DivModSignedThree(n int32) (q, r int32) {
 	const M int32 = 0x5555_5556
-	q = MultiplyHighOrderSigned(M, n)
+	q = MultiplyHighOrder32(M, n)
 	t := ShiftRightUnsigned32(n, 31)
 	q += t
 	return q, n - (q * 3)
@@ -47,7 +47,7 @@ func DivModSignedThree(n int32) (q, r int32) {
 // DivModSignedFive is similar to DivMod3, but error terms is too large, and thus it needs slight variation of magic constant and correction with shift right.
 func DivModSignedFive(n int32) (q, r int32) {
 	const M int32 = 0x6666_6667
-	q = MultiplyHighOrderSigned(M, n)
+	q = MultiplyHighOrder32(M, n)
 	q >>= 1
 	t := ShiftRightUnsigned32(n, 31)
 	q += t
@@ -58,7 +58,7 @@ func DivModSignedFive(n int32) (q, r int32) {
 // The magic is still too large, and thus it needs flipping sign and addition.
 func DivModSignedSeven(n int32) (q, r int32) {
 	const M int32 = -1840700269
-	q = MultiplyHighOrderSigned(M, n)
+	q = MultiplyHighOrder32(M, n)
 	q += n
 	q >>= 2
 	t := ShiftRightUnsigned32(n, 31)
@@ -76,7 +76,7 @@ func DivModSignedConst(n, d int32) (q, r int32) {
 
 	M, s := DivModSignedConstMagic(d) // compile time
 
-	q = MultiplyHighOrderSigned(M, n)
+	q = MultiplyHighOrder32(M, n)
 
 	// branches bellow generated at compile time conditional on compile constants k, M, s.
 	if d > 0 && M < 0 {

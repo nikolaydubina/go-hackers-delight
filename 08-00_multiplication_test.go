@@ -2,6 +2,7 @@ package hd_test
 
 import (
 	"fmt"
+	"math/bits"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -40,35 +41,44 @@ func FuzzMultiplyMultiWord(f *testing.F) {
 	})
 }
 
-func FuzzMultiplyHighOrderSigned(f *testing.F) {
+func FuzzMultiplyHighOrder32_int32(f *testing.F) {
 	for _, u := range fuzzInt32 {
 		for _, v := range fuzzInt32 {
 			f.Add(u, v)
 		}
 	}
 	f.Fuzz(func(t *testing.T, u, v int32) {
-		iu := int64(u)
-		iv := int64(v)
-		exp := int32(uint64(iu*iv) >> 32)
-
-		if got := hd.MultiplyHighOrderSigned(u, v); got != exp {
+		exp := int32((int64(u) * int64(v)) >> 32)
+		got := hd.MultiplyHighOrder32(u, v)
+		if got != exp {
 			t.Errorf("u=%d v=%d exp=%d got=%d", u, v, exp, got)
 		}
 	})
 }
 
-func FuzzMultiplyHighOrderUnsigned(f *testing.F) {
+func FuzzMultiplyHighOrder32_uint32(f *testing.F) {
 	for _, u := range fuzzUint32 {
 		for _, v := range fuzzUint32 {
 			f.Add(u, v)
 		}
 	}
 	f.Fuzz(func(t *testing.T, u, v uint32) {
-		iu := uint64(u)
-		iv := uint64(v)
-		exp := uint32(uint64(iu*iv) >> 32)
+		exp, _ := bits.Mul32(u, v)
+		if got := hd.MultiplyHighOrder32(u, v); got != exp {
+			t.Errorf("u=%d v=%d exp=%d got=%d", u, v, exp, got)
+		}
+	})
+}
 
-		if got := hd.MultiplyHighOrderUnsigned(u, v); got != exp {
+func FuzzMultiplyHighOrder64_uint64(f *testing.F) {
+	for _, u := range fuzzUint64 {
+		for _, v := range fuzzUint64 {
+			f.Add(u, v)
+		}
+	}
+	f.Fuzz(func(t *testing.T, u, v uint64) {
+		exp, _ := bits.Mul64(u, v)
+		if got := hd.MultiplyHighOrder64(u, v); got != exp {
 			t.Errorf("u=%d v=%d exp=%d got=%d", u, v, exp, got)
 		}
 	})

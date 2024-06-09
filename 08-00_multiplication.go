@@ -29,12 +29,10 @@ func MulMultiWord(w, u, v []uint16) {
 		panic("len(w) != len(u) + len(v)")
 	}
 
-	var k, t, b uint32
-
 	for j := range v {
-		k = 0
+		k := uint32(0)
 		for i := range u {
-			t = uint32(u[i])*uint32(v[j]) + uint32(w[i+j]) + k
+			t := uint32(u[i])*uint32(v[j]) + uint32(w[i+j]) + k
 			w[i+j] = uint16(t)
 			k = t >> 16
 		}
@@ -45,48 +43,55 @@ func MulMultiWord(w, u, v []uint16) {
 	// subtracting v*2**16m, if u < 0, and
 	// subtracting u*2**16n, if v < 0.
 	if int16(u[len(u)-1]) < 0 {
+		var b uint32
 		for j := range v {
-			t = uint32(w[j+len(u)]) - uint32(v[j]) - b
+			t := uint32(w[j+len(u)]) - uint32(v[j]) - b
 			w[j+len(u)] = uint16(t)
 			b = t >> 31
 		}
 	}
 	if int16(v[len(v)-1]) < 0 {
+		var b uint32
 		for i := range u {
-			t = uint32(w[i+len(v)]) - uint32(u[i]) - b
+			t := uint32(w[i+len(v)]) - uint32(u[i]) - b
 			w[i+len(v)] = uint16(t)
 			b = t >> 31
 		}
 	}
 }
 
-// MultiplyHighOrderSigned (aka mulhns) multiplies two signed integers and returns the high-order half of the product.
+// MultiplyHighOrder32 (aka mulhs/mulhu) multiplies two integers and returns the high-order half of the product.
 // This executes in 16 RISC instructions.
-// Go has math.bits.Mul32(x,y uint32) (hi, lo uint32), but it does not have signed version.
-func MultiplyHighOrderSigned(u, v int32) int32 {
+// Go has math/bits.Mul32 that returns higher order bits, however it does uint64 cast and works only for uint32.
+// Remarkably, Go math/bits.Mul64 uses same algorithm as this function but uses 32bit words.
+func MultiplyHighOrder32[T uint32 | int32](u, v T) T {
 	u0 := uint32(u & 0xFFFF)
 	u1 := u >> 16
 	v0 := uint32(v & 0xFFFF)
 	v1 := v >> 16
 	w0 := u0 * v0
-	t := int32((uint32(u1) * v0) + (w0 >> 16))
+	t := T((uint32(u1) * v0) + (w0 >> 16))
 	w1 := t & 0xFFFF
 	w2 := t >> 16
-	w1 = int32((u0 * uint32(v1))) + w1
+	w1 = T((u0 * uint32(v1))) + w1
 	return (u1 * v1) + w2 + (w1 >> 16)
 }
 
-func MultiplyHighOrderUnsigned(u, v uint32) uint32 {
-	u0 := u & 0xFFFF
-	u1 := u >> 16
-	v0 := v & 0xFFFF
-	v1 := v >> 16
+// MultiplyHighOrder64 (aka mulhs/mulhu) multiplies two integers and returns the high-order half of the product.
+// This executes in 16 RISC instructions.
+// Go has math/bits.Mul64 that returns higher order bits, however it works only for uint64.
+// Remarkably, Go math/bits.Mul64 uses same algorithm as this function but uses 32bit words.
+func MultiplyHighOrder64[T uint64 | int64](u, v T) T {
+	u0 := uint64(u & 0xFFFF_FFFF)
+	u1 := u >> 32
+	v0 := uint64(v & 0xFFFF_FFFF)
+	v1 := v >> 32
 	w0 := u0 * v0
-	t := (u1 * v0) + (w0 >> 16)
-	w1 := t & 0xFFFF
-	w2 := t >> 16
-	w1 = (u0 * v1) + w1
-	return (u1 * v1) + w2 + (w1 >> 16)
+	t := T((uint64(u1) * v0) + (w0 >> 32))
+	w1 := t & 0xFFFF_FFFF
+	w2 := t >> 32
+	w1 = T((u0 * uint64(v1))) + w1
+	return (u1 * v1) + w2 + (w1 >> 32)
 }
 
 // TODO: MultiplyHighOrderUnsigned from MultiplyHighOrderSigned and other way around
