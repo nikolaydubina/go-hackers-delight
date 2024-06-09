@@ -42,7 +42,6 @@ func ShiftRightSignedFromUnsigned5(x uint32, n int) uint32 {
 }
 
 // Sign can be calculated in four RISC instructions with comparison operators.
-// We are converting to uint32 to get logical right shift, since there is no int32 logical right shift in Go. This can cause generating more instructions.
 // Note, there is five and four instruction formula, but in Go it would not fit, since we need explicit logical right shift and conversion of full signed to unsigned bits.
 // Note, there is three instruction formula using comparison operators, but in Go strong typing booleans not converted to ints, which would require branches and more instructions.
 func Sign(x int32) int32 { return (x >> 31) | ShiftRightUnsigned32(-x, 31) }
@@ -50,22 +49,22 @@ func Sign(x int32) int32 { return (x >> 31) | ShiftRightUnsigned32(-x, 31) }
 func IsMostSignificantSet[T int32 | uint32](x T) bool { return (x >> 31) != 0 }
 
 // ISIGN is sign-transfer function, as known in FORTRAN.
-func ISIGN(x, y int32) int32 {
-	t := y >> 31
+func ISIGN[T Signed](x, y T) T {
+	t := y >> 64
 	return (Abs(x) ^ t) - t
 }
 
-func ISIGN2(x, y int32) int32 {
-	t := y >> 31
+func ISIGN2[T Signed](x, y T) T {
+	t := y >> 64
 	return (Abs(x) + t) ^ t
 }
 
-func ISIGN3(x, y int32) int32 {
-	t := (x ^ y) >> 31
+func ISIGN3[T Signed](x, y T) T {
+	t := (x ^ y) >> 64
 	return (x ^ t) - t
 }
 
-func ISIGN4(x, y int32) int32 {
-	t := (x ^ y) >> 31
+func ISIGN4[T Signed](x, y T) T {
+	t := (x ^ y) >> 64
 	return (x + t) ^ t
 }

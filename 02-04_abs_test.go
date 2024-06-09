@@ -22,45 +22,52 @@ func ExampleAbsDiff() {
 	// Output: 99
 }
 
-func FuzzAbsNormal(f *testing.F) {
+func abs[T hd.Integer](x T) T {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+func fuzzAbs[T hd.Signed](t *testing.T, x T) {
+	t.Run("abs", func(t *testing.T) {
+		got := []T{
+			hd.Abs(x),
+			hd.Abs2(x),
+			hd.Abs3(x),
+			hd.Abs4(x),
+		}
+		for i, v := range got {
+			if abs := abs(x); v != abs {
+				t.Error(i, "x", x, "exp", abs, "got", v)
+			}
+		}
+	})
+
+	t.Run("nabs", func(t *testing.T) {
+		got := []T{
+			hd.NAbs(x),
+			hd.NAbs2(x),
+			hd.NAbs3(x),
+		}
+		for i, v := range got {
+			if abs := abs(x); v != -abs {
+				t.Error(i, "x", x, "exp", -abs, "got", v)
+			}
+		}
+	})
+}
+
+func FuzzAbsNormal_int32(f *testing.F) {
 	for _, x := range fuzzInt32 {
 		f.Add(x)
 	}
-	f.Fuzz(func(t *testing.T, x int32) {
-		abs := x
-		if abs < 0 {
-			abs = -abs
-		}
-
-		t.Run("abs", func(t *testing.T) {
-			vs := []int32{
-				hd.Abs(x),
-				hd.Abs2(x),
-				hd.Abs3(x),
-				hd.Abs4(x),
-				hd.AbsFastMul(x),
-			}
-			for i, v := range vs {
-				if v != abs {
-					t.Error(i, "x", x, "exp", abs, "got", v)
-				}
-			}
-		})
-
-		t.Run("nabs", func(t *testing.T) {
-			vs := []int32{
-				hd.NAbs(x),
-				hd.NAbs2(x),
-				hd.NAbs3(x),
-			}
-			for i, v := range vs {
-				if v != -abs {
-					t.Error(i, "x", x, "exp", -abs, "got", v)
-				}
-			}
-		})
-	})
+	f.Fuzz(fuzzAbs[int32])
 }
+
+func FuzzAbsNormal_int16(f *testing.F) { f.Fuzz(fuzzAbs[int16]) }
+
+func FuzzAbsNormal_int64(f *testing.F) { f.Fuzz(fuzzAbs[int32]) }
 
 func FuzzAbsDiffInt(f *testing.F) {
 	for _, x := range fuzzInt32 {

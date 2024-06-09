@@ -3,14 +3,14 @@ package hd
 // DifferenceOrZero (doz) returns x - y if x > y else 0.
 // It computes in 7-10 branch-free RISC instructions.
 // Note, smaller DifferenceOrZero version with comparison is skipped as Go lacks comparison returning int.
-func DifferenceOrZero(x, y int32) int32 {
+func DifferenceOrZero[T Signed](x, y T) T {
 	d := x - y
-	return d & (^(d ^ ((x ^ y) & (d ^ x))) >> 31)
+	return d & (^(d ^ ((x ^ y) & (d ^ x))) >> 64)
 }
 
-func Max(x, y int32) int32 { return y + DifferenceOrZero(x, y) }
+func Max[T Signed](x, y T) T { return y + DifferenceOrZero(x, y) }
 
-func Min(x, y int32) int32 { return x - DifferenceOrZero(x, y) }
+func Min[T Signed](x, y T) T { return x - DifferenceOrZero(x, y) }
 
 // DifferenceOrZeroUnsigned (dozu) computes in 7-10 branch-free RISC instructions.
 // Note, smaller DOZ version with comparison is skipped as Go lacks comparison returning int.

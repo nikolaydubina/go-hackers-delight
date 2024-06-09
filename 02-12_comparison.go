@@ -1,7 +1,7 @@
 // Comparison functions are a couple branch-free instructions that store result in the most significant bit.
 package hd
 
-func Equal(x, y int32) int32 { return Abs(x-y) - 1 }
+func Equal[T Signed](x, y T) T { return Abs(x-y) - 1 }
 
 func Equal2(x, y int32) int32 { return Abs(int32(uint32(x-y) + 0x80000000)) }
 
@@ -11,7 +11,7 @@ func Equal4(x, y int32) int32 { return -int32(LeadingZerosUint32(uint32(x-y)) >>
 
 func Equal5[T Integer](x, y T) T { return ^((x - y) | (y - x)) }
 
-func NotEqual(x, y int32) int32 { return NAbs(x - y) }
+func NotEqual[T Signed](x, y T) T { return NAbs(x - y) }
 
 func NotEqual2(x, y int32) int32 { return int32(LeadingZerosUint32(uint32(x-y))) - 32 }
 
@@ -21,7 +21,7 @@ func Less[T Signed](x, y T) T { return (x - y) ^ ((x ^ y) & ((x - y) ^ x)) }
 
 func Less2[T Signed](x, y T) T { return (x & ^y) | (^(x ^ y) & (x - y)) }
 
-func Less3(x, y int32) int32 { return NAbs(DifferenceOrZero(y, x)) }
+func Less3[T Signed](x, y T) T { return NAbs(DifferenceOrZero(y, x)) }
 
 // Less4 utilizes the fact that x/2 - y/2 never overflows.
 // Stores result in most significant bit.
@@ -39,7 +39,7 @@ func LessUnsigned2[T Unsigned](x, y T) T { return (^x & y) | ((^x | y) & (x - y)
 
 func LessOrEqualUnsigned[T Unsigned](x, y T) T { return (^x | y) & ((x ^ y) | ^(y - x)) }
 
-func EqualZero(x int32) int32 { return Abs(x) - 1 }
+func EqualZero[T Signed](x T) T { return Abs(x) - 1 }
 
 func EqualZero2(x int32) int32 { return Abs(int32(uint32(x) + 0x80000000)) }
 
@@ -49,7 +49,7 @@ func EqualZero4[T Integer](x T) T { return ^(x | -x) }
 
 func EqualZero5[T Integer](x T) T { return ^x & (x - 1) }
 
-func NotEqualZero(x int32) int32 { return NAbs(x) }
+func NotEqualZero[T Signed](x T) T { return NAbs(x) }
 
 func NotEqualZero2(x int32) int32 { return int32(LeadingZerosUint32(uint32(x))) - 32 }
 
@@ -63,7 +63,7 @@ func LessOrEqualZero[T Signed](x T) T { return x | (x - 1) }
 
 func LessOrEqualZero2[T Signed](x T) T { return x | ^-x }
 
-func HigherZero(x int32) int32 { return x ^ NAbs(x) }
+func HigherZero[T Signed](x T) T { return x ^ NAbs(x) }
 
 func HigherZero2[T Signed](x T) T { return (x >> 1) - x }
 

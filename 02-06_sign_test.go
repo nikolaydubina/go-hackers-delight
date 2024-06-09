@@ -78,25 +78,26 @@ func ExampleIsMostSignificantSet_uint32() {
 	// Output: true false
 }
 
+func sign[T hd.Signed](x T) T {
+	switch {
+	case x > 0:
+		return 1
+	case x < 0:
+		return -1
+	default:
+		return 0
+	}
+}
+
 func FuzzSign(f *testing.F) {
 	for _, x := range fuzzInt32 {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
-		q := hd.Sign(x)
-
-		var v int32
-		switch {
-		case x > 0:
-			v = 1
-		case x < 0:
-			v = -1
-		default:
-			v = 0
-		}
-
-		if q != v {
-			t.Error("x", x, "got", q, "exp", v)
+		exp := sign(x)
+		got := hd.Sign(x)
+		if got != exp {
+			t.Error("x", x, "got", got, "exp", exp)
 		}
 	})
 }
@@ -106,31 +107,41 @@ func ExampleISIGN() {
 	// Output: -10 10
 }
 
-func FuzzISIGN(f *testing.F) {
+func isign[T hd.Signed](x, y T) T {
+	v := x
+	if v < 0 {
+		v = -v
+	}
+	if y < 0 {
+		v = -v
+	}
+	return v
+}
+
+func fuzzISIGN[T hd.Signed](t *testing.T, x, y T) {
+	exp := isign(x, y)
+	got := [...]T{
+		hd.ISIGN(x, y),
+		hd.ISIGN2(x, y),
+		hd.ISIGN3(x, y),
+		hd.ISIGN4(x, y),
+	}
+	for i, q := range got {
+		if q != exp {
+			t.Error(i, x, y, "got", q, "exp", exp)
+		}
+	}
+}
+
+func FuzzISIGN_int32(f *testing.F) {
 	for _, x := range fuzzInt32 {
 		for _, y := range fuzzInt32 {
 			f.Add(x, y)
 		}
 	}
-	f.Fuzz(func(t *testing.T, x, y int32) {
-		vs := []int32{
-			hd.ISIGN(x, y),
-			hd.ISIGN2(x, y),
-			hd.ISIGN3(x, y),
-			hd.ISIGN4(x, y),
-		}
-		for i, q := range vs {
-			v := x
-			if v < 0 {
-				v = -v
-			}
-			if y < 0 {
-				v = -v
-			}
-
-			if q != v {
-				t.Error(i, x, y, "got", q, "exp", v)
-			}
-		}
-	})
+	f.Fuzz(fuzzISIGN[int32])
 }
+
+func FuzzISIGN_int16(f *testing.F) { f.Fuzz(fuzzISIGN[int16]) }
+
+func FuzzISIGN_int64(f *testing.F) { f.Fuzz(fuzzISIGN[int64]) }
