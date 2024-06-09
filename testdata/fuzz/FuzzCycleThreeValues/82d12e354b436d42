@@ -1,0 +1,5 @@
+go test fuzz v1
+rune('\x03')
+rune('V')
+int32(-40)
+byte('B')

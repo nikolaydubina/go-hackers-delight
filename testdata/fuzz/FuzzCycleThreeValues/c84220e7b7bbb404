@@ -1,0 +1,5 @@
+go test fuzz v1
+rune('B')
+int32(-67)
+int32(-117)
+byte('\a')

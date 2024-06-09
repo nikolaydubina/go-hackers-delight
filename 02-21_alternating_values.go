@@ -1,51 +1,47 @@
 package hd
 
-// CycleThreeValues is an ingenious and very efficient branch-free way of cycling in three constants.
-// This requires heavy pre-compute that can be done at compile time.
-// This executes in eight instructions.
-// This relies on fact that among three different constants there are always two bit positions where they differ and each time one-odd-out.
-// Precomputing these values required.
-// Note, naive if/ternary code would take four to six instructions with branches for small values.
+// CycleThreeValues is an ingenious and very efficient (8 branch-free instructions) way of cycling in three different constants.
+// It requires pre-computing constants that can be done at compile time.
+// It relies on the fact that among three different constants there are always two bit positions where they differ and each time one-odd-out.
 func CycleThreeValues(a, b, c, x int32) int32 {
-	c1, c2, c3, n1, n2 := SetupCycleThreeValues(a, b, c) // WARNING: compute this at compile time
+	c1, c2, c3, n1, n2 := SetupCycleThreeValues(a, b, c)
 	return (((x << (31 - n1)) >> 31) & c1) + (((x << (31 - n2)) >> 31) & c2) + c3
 }
 
 // CycleThreeIdentifier constructs identifier byte from bits stored at positions n1 and n2.
-// If all these are constants, this can be computed at compile time.
-// This can be computed at compile time.
-func CycleThreeIdentifier(a, b, c int32, n1, n2 int) [2][3]int32 {
-	bn1 := [3]int32{(a >> n1) & 1, (b >> n1) & 1, (c >> n1) & 1}
-	bn2 := [3]int32{(a >> n2) & 1, (b >> n2) & 1, (c >> n2) & 1}
-	return [2][3]int32{bn1, bn2}
-
+func CycleThreeIdentifier(vs [3]int32, n1, n2 uint8) [2][3]int32 {
+	return [2][3]int32{iBitAmong(vs, n1), iBitAmong(vs, n2)}
 }
 
-// FirstOneOffDifferentBits computes 1-based position of first least significant bit that is one-off among three values for corresponding value.
-// This can be computed at compile time.
-func FirstOneOffDifferentBits(a, b, c int32) (na, nb, nc int) {
-	na, nb, nc = -1, -1, -1
+func iBitAmong[T Integer](x [3]T, i uint8) [3]T {
+	return [3]T{
+		(x[0] >> i) & 1,
+		(x[1] >> i) & 1,
+		(x[2] >> i) & 1,
+	}
+}
+
+// FirstOneOffDifferentBits computes 1-based position of first least significant bit
+// that is one-off among three values for corresponding value or -1 if there is no such bit.
+func FirstOneOffDifferentBits[T int32 | uint32](vs [3]T) [3]int8 {
+	n := [3]int8{-1, -1, -1}
 	for i := range 31 {
-		// TODO: negative values? right binary shift? uint32?
-		ba := (a >> i) & 1
-		bb := (b >> i) & 1
-		bc := (c >> i) & 1
-		if na == -1 && ba != bb && ba != bc {
-			na = i
+		b := iBitAmong(vs, uint8(i))
+		if n[0] == -1 && b[0] != b[1] && b[0] != b[2] {
+			n[0] = int8(i)
 		}
-		if nb == -1 && bb != ba && bb != bc {
-			nb = i
+		if n[1] == -1 && b[1] != b[0] && b[1] != b[2] {
+			n[1] = int8(i)
 		}
-		if nc == -1 && bc != ba && bc != bb {
-			nc = i
+		if n[2] == -1 && b[2] != b[0] && b[2] != b[1] {
+			n[2] = int8(i)
 		}
 	}
-	return na, nb, nc
+	return n
 }
 
 // SetupCycleThreeValuesN1N2 rearranges a,b,c in order required for cycling and defines n1 and n2 positions.
-// This can be computed at compile time.
-func SetupCycleThreeValuesN1N2(a, b, c int32) (na, nb, nc int32, n1, n2 int) {
+func SetupCycleThreeValuesN1N2(a, b, c int32) (na, nb, nc int32, n1, n2 uint8) {
 	defer func() {
 		if n1 < n2 {
 			n1, n2 = n2, n1
@@ -53,22 +49,36 @@ func SetupCycleThreeValuesN1N2(a, b, c int32) (na, nb, nc int32, n1, n2 int) {
 		}
 	}()
 
-	n1, n2, n3 := FirstOneOffDifferentBits(a, b, c)
-	if n1 == -1 {
-		return b, c, a, n2, n3
+	switch n := FirstOneOffDifferentBits([3]int32{a, b, c}); {
+	case n[0] == -1 && n[1] >= 0 && n[2] >= 0:
+		return b, c, a, uint8(n[1]), uint8(n[2])
+	case n[1] == -1 && n[0] >= 0 && n[2] >= 0:
+		return a, c, b, uint8(n[0]), uint8(n[2])
+	case n[2] == -1 && n[0] >= 0 && n[1] >= 0:
+		return a, b, c, uint8(n[0]), uint8(n[1])
+	default:
+		return a, b, c, uint8(n[0]), uint8(n[1])
 	}
-	if n2 == -1 {
-		return a, c, b, n1, n3
+}
+
+func cardinality[T comparable](vs []T) int {
+	m := make(map[T]bool)
+	for _, v := range vs {
+		m[v] = true
 	}
-	return a, b, c, n1, n2
+	return len(m)
 }
 
 // SetupCycleThreeValues is final routine that prepares constants for cycling.
 // This can be computed at compile time.
-func SetupCycleThreeValues(a, b, c int32) (c1, c2, c3 int32, n1, n2 int) {
+func SetupCycleThreeValues(a, b, c int32) (c1, c2, c3 int32, n1, n2 uint8) {
+	if cardinality([]int32{a, b, c}) != 3 {
+		panic("three values must be different")
+	}
+
 	a, b, c, n1, n2 = SetupCycleThreeValuesN1N2(a, b, c)
 
-	switch CycleThreeIdentifier(a, b, c, n1, n2) {
+	switch CycleThreeIdentifier([3]int32{a, b, c}, n1, n2) {
 	case [2][3]int32{{0, 1, 1}, {0, 1, 0}}:
 		return a - b, c - a, b, n1, n2
 	case [2][3]int32{{0, 1, 1}, {1, 0, 1}}:

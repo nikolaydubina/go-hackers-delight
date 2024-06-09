@@ -1,0 +1,5 @@
+go test fuzz v1
+int32(-9)
+int32(-62)
+int32(-3)
+byte('=')

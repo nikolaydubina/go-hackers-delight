@@ -1,0 +1,5 @@
+go test fuzz v1
+rune('h')
+rune('\u0091')
+rune('9')
+byte('@')

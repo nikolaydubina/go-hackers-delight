@@ -8,16 +8,31 @@ import (
 )
 
 func FuzzCycleThreeValues(f *testing.F) {
-	for _, x := range fuzzInt32 {
-		for _, y := range fuzzInt32 {
-			f.Add(x, y)
+	f.Fuzz(func(t *testing.T, a, b, c int32, n uint8) {
+		count := map[int32]int{a: 0, b: 0, c: 0}
+
+		// three different values
+		if len(count) != 3 {
+			t.Skip()
 		}
-	}
-	f.Fuzz(func(t *testing.T, x, y int32) {
-		ex, ey := y, x
-		gx, gy := hd.ExchangeRegisters(x, y)
-		if ex != gx || ey != gy {
-			t.Error(x, y, gx, gy)
+
+		if n < 3 {
+			n = 3
+		}
+
+		x := a
+		for i := range int(n) {
+			x = hd.CycleThreeValues(a, b, c, x)
+
+			if _, ok := count[x]; !ok {
+				t.Errorf("unexpected value %d", x)
+			}
+
+			if i >= len(count) && i-count[x] != len(count) {
+				t.Errorf("unexpected cycle length %d", i-count[x])
+			}
+
+			count[x] = i
 		}
 	})
 }
@@ -46,11 +61,10 @@ func TestSetupCycleThreeValuesN1N2(t *testing.T) {
 		t.Errorf("%05b %05b %05b %d %d", na, nb, nc, n1, n2)
 	}
 }
-
 func ExampleFirstOneOffDifferentBits() {
 	var a int32 = 0b11111
 	var b int32 = 0b10100
 	var c int32 = 0b10101
-	fmt.Println(hd.FirstOneOffDifferentBits(a, b, c))
-	// Output: 1 0 -1
+	fmt.Println(hd.FirstOneOffDifferentBits([3]int32{a, b, c}))
+	// Output: [1 0 -1]
 }

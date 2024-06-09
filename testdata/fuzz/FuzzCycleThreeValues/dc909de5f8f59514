@@ -1,0 +1,5 @@
+go test fuzz v1
+rune('\x00')
+int32(-1)
+rune('\'')
+byte('\u008e')

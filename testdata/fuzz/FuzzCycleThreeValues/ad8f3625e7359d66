@@ -1,0 +1,5 @@
+go test fuzz v1
+int32(-9)
+rune('\x17')
+rune('\x00')
+byte('\n')
