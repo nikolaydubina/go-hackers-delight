@@ -37,40 +37,67 @@ func ExampleIsPowerOfTwoBoundaryCrossed_not_crossed() {
 	// Output: false
 }
 
-func FuzzRoundBlockPowerOfTwo(f *testing.F) {
-	for p := range 32 {
-		for _, x := range fuzzUint32 {
-			f.Add(x, p)
+func powTwoBoundaries[T hd.Unsigned](x T, p uint8) (l, h T) {
+	// simple algo to get boundaries
+	// it is actually naive version of code that we are testing, but is easier to follow
+	l = x - (x % (1 << p))
+	h = l + (1 << p)
+	if (x % (1 << p)) == 0 {
+		h = x
+	}
+	return l, h
+}
+
+func fuzzRoundBlockPowerOfTwo[T hd.Unsigned](t *testing.T, x T, p uint8) {
+	l, h := powTwoBoundaries(x, p)
+
+	got := [...]struct {
+		exp T
+		got T
+	}{
+		{l, hd.RoundDownBlockPowerOfTwo(x, p)},
+		{l, hd.RoundDownBlockPowerOfTwo2(x, p)},
+		{h, hd.RoundUpBlockPowerOfTwo(x, p)},
+		{h, hd.RoundUpBlockPowerOfTwo2(x, p)},
+	}
+	for i, v := range got {
+		if v.got != v.exp {
+			t.Error(i, x, p, "exp", v.exp, "got", v.got)
 		}
 	}
-	f.Fuzz(func(t *testing.T, x uint32, p int) {
-		if p <= 0 || p >= 32 {
-			t.Skip()
-		}
+}
 
-		// simple algo to get boundaries
-		// it is actually naive version of code that we are testing, but is easier to follow
-		l := x - (x % (1 << p))
-		h := l + (1 << p)
-		if (x % (1 << p)) == 0 {
-			h = x
+func FuzzRoundBlockPowerOfTwo_uint32(f *testing.F) {
+	for p := range 32 {
+		for _, x := range fuzzUint32 {
+			f.Add(x, uint8(p))
 		}
+	}
+	f.Fuzz(func(t *testing.T, x uint32, p uint8) { fuzzRoundBlockPowerOfTwo(t, x, (p % 32)) })
+}
 
-		vs := []struct {
-			exp uint32
-			got uint32
-		}{
-			{l, hd.RoundDownBlockPowerOfTwo(x, p)},
-			{l, hd.RoundDownBlockPowerOfTwo2(x, p)},
-			{h, hd.RoundUpBlockPowerOfTwo(x, p)},
-			{h, hd.RoundUpBlockPowerOfTwo2(x, p)},
+func FuzzRoundBlockPowerOfTwo_uint16(f *testing.F) {
+	f.Fuzz(func(t *testing.T, x uint32, p uint8) { fuzzRoundBlockPowerOfTwo(t, x, (p % 16)) })
+}
+
+func FuzzRoundBlockPowerOfTwo_uint64(f *testing.F) {
+	f.Fuzz(func(t *testing.T, x uint32, p uint8) { fuzzRoundBlockPowerOfTwo(t, x, (p % 64)) })
+}
+
+func roundPowerTwo32(x uint32) (l, h uint32) {
+	if x == 0 {
+		return 0, 0
+	}
+	for _, p := range hd.PowerOfTwo[:32] {
+		p := uint32(p)
+		if p <= x {
+			l = p
 		}
-		for i, v := range vs {
-			if v.got != v.exp {
-				t.Error(i, x, p, "exp", v.exp, "got", v.got)
-			}
+		if h == 0 && x <= p {
+			h = p
 		}
-	})
+	}
+	return l, h
 }
 
 func FuzzRoundToPowerOfTwo(f *testing.F) {
@@ -78,21 +105,9 @@ func FuzzRoundToPowerOfTwo(f *testing.F) {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
-		// definition
-		var l, h uint32
-		if x > 0 {
-			for _, p := range hd.PowerOfTwo[:32] {
-				p := uint32(p)
-				if p <= x {
-					l = p
-				}
-				if h == 0 && x <= p {
-					h = p
-				}
-			}
-		}
+		l, h := roundPowerTwo32(x)
 
-		vs := []struct {
+		got := []struct {
 			exp uint32
 			got uint32
 		}{
@@ -104,13 +119,12 @@ func FuzzRoundToPowerOfTwo(f *testing.F) {
 			{h, hd.CLPTwo3(x)},
 		}
 		if x > 0 {
-			vs = append(vs, struct {
+			got = append(got, struct {
 				exp uint32
 				got uint32
-			}{l, hd.FLPTwo(x)},
-			)
+			}{l, hd.FLPTwo(x)})
 		}
-		for i, v := range vs {
+		for i, v := range got {
 			if v.got != v.exp {
 				t.Error(i, "x", x, "exp", v.exp, "got", v.got)
 			}
@@ -118,7 +132,29 @@ func FuzzRoundToPowerOfTwo(f *testing.F) {
 	})
 }
 
-func FuzzIsPowerOfTwoBoundaryCrossed(f *testing.F) {
+func isPowTwoBoundaryCrossed[T hd.Unsigned](a, l, b T) bool {
+	return (uint64(a) / uint64(b)) != ((uint64(a) + uint64(l) - 1) / uint64(b))
+}
+
+func fuzzIsPowerOfTwoBoundaryCrossed[T hd.Unsigned](t *testing.T, a, l, b T) {
+	if l < 3 {
+		t.Skip()
+	}
+	exp := isPowTwoBoundaryCrossed(a, l, b)
+	got := [...]bool{
+		hd.IsPowerOfTwoBoundaryCrossed(a, l, b),
+		hd.IsPowerOfTwoBoundaryCrossed2(a, l, b),
+		hd.IsPowerOfTwoBoundaryCrossed3(a, l, b),
+		hd.IsPowerOfTwoBoundaryCrossed4(a, l, b),
+	}
+	for i, q := range got {
+		if q != exp {
+			t.Error(i, a, l, b, "exp", exp, "got", q)
+		}
+	}
+}
+
+func FuzzIsPowerOfTwoBoundaryCrossed_uint32(f *testing.F) {
 	for _, a := range fuzzUint32 {
 		for _, l := range fuzzUint32 {
 			for i := range hd.PowerOfTwo[:32] {
@@ -126,32 +162,15 @@ func FuzzIsPowerOfTwoBoundaryCrossed(f *testing.F) {
 			}
 		}
 	}
-
 	f.Fuzz(func(t *testing.T, a, l uint32, ib uint8) {
-		if int(ib) >= 31 {
-			t.Skip()
-		}
-		if l < 3 {
-			t.Skip()
-		}
-		b := uint32(hd.PowerOfTwo[ib])
+		b := uint32(hd.PowerOfTwo[(ib % 32)])
+		fuzzIsPowerOfTwoBoundaryCrossed(t, a, l, b)
+	})
+}
 
-		// naive approach, relying on uint64 to protect overflows
-		isCrossed := (uint64(a) / uint64(b)) != ((uint64(a) + uint64(l) - 1) / uint64(b))
-
-		vs := []struct {
-			exp bool
-			got bool
-		}{
-			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed(a, l, b)},
-			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed2(a, l, b)},
-			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed3(a, l, b)},
-			{isCrossed, hd.IsPowerOfTwoBoundaryCrossed4(a, l, b)},
-		}
-		for i, v := range vs {
-			if v.got != v.exp {
-				t.Error(i, a, l, b, "exp", v.exp, "got", v.got)
-			}
-		}
+func FuzzIsPowerOfTwoBoundaryCrossed_uint16(f *testing.F) {
+	f.Fuzz(func(t *testing.T, a, l uint16, ib uint8) {
+		b := uint16(hd.PowerOfTwo[(ib % 16)])
+		fuzzIsPowerOfTwoBoundaryCrossed(t, a, l, b)
 	})
 }
