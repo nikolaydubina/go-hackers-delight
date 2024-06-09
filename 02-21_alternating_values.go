@@ -13,6 +13,7 @@ func CycleThreeIdentifier(vs [3]int32, n1, n2 uint8) [2][3]int32 {
 	return [2][3]int32{iBitAmong(vs, n1), iBitAmong(vs, n2)}
 }
 
+// iBitAmong returns i-th bit among three values moved to the least significant bit.
 func iBitAmong[T Integer](x [3]T, i uint8) [3]T {
 	return [3]T{
 		(x[0] >> i) & 1,
