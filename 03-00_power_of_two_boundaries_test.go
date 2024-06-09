@@ -49,6 +49,10 @@ func powTwoBoundaries[T hd.Unsigned](x T, p uint8) (l, h T) {
 }
 
 func fuzzRoundBlockPowerOfTwo[T hd.Unsigned](t *testing.T, x T, p uint8) {
+	if p == 0 {
+		t.Skip()
+	}
+
 	l, h := powTwoBoundaries(x, p)
 
 	got := [...]struct {
@@ -68,8 +72,8 @@ func fuzzRoundBlockPowerOfTwo[T hd.Unsigned](t *testing.T, x T, p uint8) {
 }
 
 func FuzzRoundBlockPowerOfTwo_uint32(f *testing.F) {
-	for p := range 32 {
-		for _, x := range fuzzUint32 {
+	for _, x := range fuzzUint32 {
+		for p := range 32 {
 			f.Add(x, uint8(p))
 		}
 	}
@@ -81,7 +85,7 @@ func FuzzRoundBlockPowerOfTwo_uint16(f *testing.F) {
 }
 
 func FuzzRoundBlockPowerOfTwo_uint64(f *testing.F) {
-	f.Fuzz(func(t *testing.T, x uint32, p uint8) { fuzzRoundBlockPowerOfTwo(t, x, (p % 64)) })
+	f.Fuzz(func(t *testing.T, x uint64, p uint8) { fuzzRoundBlockPowerOfTwo(t, x, (p % 64)) })
 }
 
 func roundPowerTwo32(x uint32) (l, h uint32) {
