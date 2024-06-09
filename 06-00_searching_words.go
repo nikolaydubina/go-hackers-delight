@@ -88,9 +88,8 @@ func LenShortestStringOnes(x uint32) (p, n uint8) {
 	}
 	b := ^(x >> 1) & x
 	e := x & ^(x << 1)
-	var k uint8
-	for k = 1; (b & e) == 0; k++ {
+	for n = 1; (b & e) == 0; n++ {
 		e <<= 1
 	}
-	return LeadingZerosUint32(b & e), k
+	return LeadingZerosUint32(b & e), n
 }
