@@ -6,9 +6,9 @@
 */
 package hd
 
-// DivMultiWordUnsigned is Knuth algorithm for integer division.
+// DivModMultiWordUnsigned is Knuth algorithm for integer division.
 // It stores quotient in q and remainder in r.
-func DivMultiWordUnsigned(q, r, u, v []uint16) {
+func DivModMultiWordUnsigned(q, r, u, v []uint16) {
 	m, n := len(u), len(v)
 	const b = 65536 // Number base (16 bits).
 
@@ -104,12 +104,12 @@ func DivMultiWordUnsigned(q, r, u, v []uint16) {
 
 // TODO: unsigned short division from signed short division
 
-// DivLongUnsigned64b32b (aka divlu) performs long division of 64-bit unsigned integer by 32-bit unsigned integer.
+// DivModLongUnsigned64b32b (aka divlu) performs long division of 64-bit unsigned integer by 32-bit unsigned integer.
 // This algorithm is slightly modified to store both lower and higher 32 bits of dividend into 64-bit number.
 // This algorithm uses shift-and-subtract operations. It illustrates how hardware is doing such division.
 // It does not work for overflow cases.
 // This executes in 321 to 385 RISC instructions.
-func DivLongUnsigned64b32b(x uint64, y uint32) (q, r uint32) {
+func DivModLongUnsigned64b32b(x uint64, y uint32) (q, r uint32) {
 	xh := uint32(x >> 32)
 	xl := uint32(x)
 
@@ -125,9 +125,9 @@ func DivLongUnsigned64b32b(x uint64, y uint32) (q, r uint32) {
 	return xl, xh
 }
 
-// DivLongUnsigned64b32b2 is alternative version based on multiword division.
+// DivModLongUnsigned64b32b2 is alternative version based on multiword division.
 // If overflow, it returns maximum quotient and reminder.
-func DivLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
+func DivModLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 	u1 := uint32(x >> 32)
 	u0 := uint32(x)
 

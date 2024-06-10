@@ -19,12 +19,12 @@ func DivModUnsignedSeven(n uint32) (q, r uint32) {
 	return q, n - (q * 7)
 }
 
-func DivModUnsignedConst(n, d uint32) (q, r uint32) {
+func DivModConstUnsigned(n, d uint32) (q, r uint32) {
 	if d == 1 {
 		return n, 0
 	}
 
-	M, a, s := DivModUnsignedConstMagic(d) // compile time
+	M, a, s := DivModConstUnsignedMagic(d) // compile time
 	q = MultiplyHighOrder32(M, n)          // mulhu
 
 	// following branches are computed at compile time based on compile time constants d, M, a, s
@@ -45,10 +45,10 @@ func DivModUnsignedConst(n, d uint32) (q, r uint32) {
 	return q, n - (q * d)
 }
 
-// DivModUnsignedConstMagic computes magic for unsigned constant multiplication.
+// DivModConstUnsignedMagic computes magic for unsigned constant multiplication.
 // This values can be computed at compile time.
 // Code using big numbers can be simplified, such as in the case of Python or math.Big, it is no listed here.
-func DivModUnsignedConstMagic(d uint32) (M uint32, a, s int32) {
+func DivModConstUnsignedMagic(d uint32) (M uint32, a, s int32) {
 	var nc uint32 = 0xFFFF_FFFF - ((-d) % d) // Unsigned arithmetic here. -1 changed to 0xFFFF_FFFF for unsigned arithmetic.
 	var p int32 = 31
 

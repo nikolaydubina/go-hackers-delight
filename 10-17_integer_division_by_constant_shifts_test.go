@@ -12,17 +12,17 @@ func FuzzDivShiftUnsigned(f *testing.F) {
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
 		tests := map[uint32]uint32{
-			3:    hd.DivShiftUnsigned3(x),
-			5:    hd.DivShiftUnsigned5(x),
-			6:    hd.DivShiftUnsigned6(x),
-			7:    hd.DivShiftUnsigned7(x),
-			9:    hd.DivShiftUnsigned9(x),
-			10:   hd.DivShiftUnsigned10(x),
-			11:   hd.DivShiftUnsigned11(x),
-			12:   hd.DivShiftUnsigned12(x),
-			13:   hd.DivShiftUnsigned13(x),
-			100:  hd.DivShiftUnsigned100(x),
-			1000: hd.DivShiftUnsigned1000(x),
+			3:    hd.Div3ShiftUnsigned(x),
+			5:    hd.Div5ShiftUnsigned(x),
+			6:    hd.Div6ShiftUnsigned(x),
+			7:    hd.Div7ShiftUnsigned(x),
+			9:    hd.Div9ShiftUnsigned(x),
+			10:   hd.Div10ShiftUnsigned(x),
+			11:   hd.Div11ShiftUnsigned(x),
+			12:   hd.Div12ShiftUnsigned(x),
+			13:   hd.Div13ShiftUnsigned(x),
+			100:  hd.Div100ShiftUnsigned(x),
+			1000: hd.Div1000ShiftUnsigned(x),
 		}
 		for i, got := range tests {
 			if exp := x / i; got != exp {
@@ -38,17 +38,17 @@ func FuzzDivShiftSigned(f *testing.F) {
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
 		tests := map[int32]int32{
-			3:    hd.DivShiftSigned3(x),
-			5:    hd.DivShiftSigned5(x),
-			6:    hd.DivShiftSigned6(x),
-			7:    hd.DivShiftSigned7(x),
-			9:    hd.DivShiftSigned9(x),
-			10:   hd.DivShiftSigned10(x),
-			11:   hd.DivShiftSigned11(x),
-			12:   hd.DivShiftSigned12(x),
-			13:   hd.DivShiftSigned13(x),
-			100:  hd.DivShiftSigned100(x),
-			1000: hd.DivShiftSigned1000(x),
+			3:    hd.Div3ShiftSigned(x),
+			5:    hd.Div5ShiftSigned(x),
+			6:    hd.Div6ShiftSigned(x),
+			7:    hd.Div7ShiftSigned(x),
+			9:    hd.Div9ShiftSigned(x),
+			10:   hd.Div10ShiftSigned(x),
+			11:   hd.Div11ShiftSigned(x),
+			12:   hd.Div12ShiftSigned(x),
+			13:   hd.Div13ShiftSigned(x),
+			100:  hd.Div100ShiftSigned(x),
+			1000: hd.Div1000ShiftSigned(x),
 		}
 		for i, got := range tests {
 			if exp := x / i; got != exp {

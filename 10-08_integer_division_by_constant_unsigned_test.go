@@ -79,7 +79,7 @@ func TestMulUnsignedMagic(t *testing.T) {
 	}
 	for d, tc := range tests {
 		t.Run(fmt.Sprintf("%v", d), func(t *testing.T) {
-			M, a, s := hd.DivModUnsignedConstMagic(d)
+			M, a, s := hd.DivModConstUnsignedMagic(d)
 			if M != tc.M || s != tc.s || tc.a != a {
 				t.Errorf("MulUnsignedMagic(%d) = got(%d, %d, %d); want (%d, %d, %d)", d, M, a, s, tc.M, tc.a, tc.s)
 			}
@@ -99,7 +99,7 @@ func FuzzDivModUnsignedConst(f *testing.F) {
 			t.Skip()
 		}
 		Q, R := x/y, x%y
-		if q, r := hd.DivModUnsignedConst(x, y); Q != q || R != r {
+		if q, r := hd.DivModConstUnsigned(x, y); Q != q || R != r {
 			t.Errorf("DivModConst(%d, %d) = got(%d, %d); want (%d, %d)", x, y, q, r, Q, R)
 		}
 	})

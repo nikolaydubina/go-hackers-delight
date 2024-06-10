@@ -1,6 +1,6 @@
 package hd
 
-func DivExactSeven(n int32) int32 { return n * -0x49249249 }
+func DivExact7(n int32) int32 { return n * -0x49249249 }
 
 // DivExact uses multiplicative inverse that can be computed at compile time.
 // It relies on theorem "if a and m are relatively prime integers, then there exists an integer ā such that a*ā = 1 (mod m)".

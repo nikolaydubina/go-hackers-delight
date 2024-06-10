@@ -15,7 +15,7 @@ func FuzzDivModExactSeven(f *testing.F) {
 		if R != 0 {
 			t.Skip()
 		}
-		if q := hd.DivExactSeven(x); q != Q {
+		if q := hd.DivExact7(x); q != Q {
 			t.Errorf("(%d) = %d; want %d", x, q, Q)
 		}
 	})

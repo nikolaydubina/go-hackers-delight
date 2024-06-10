@@ -33,7 +33,7 @@ func FuzzDivideMultiWord(f *testing.F) {
 		q16 := make([]uint16, len(u16))
 		r16 := make([]uint16, len(u16))
 
-		hd.DivMultiWordUnsigned(q16, r16, u16, v16)
+		hd.DivModMultiWordUnsigned(q16, r16, u16, v16)
 
 		if q := hd.Uint64FromNx16b(q16); q != Q {
 			t.Errorf("u=%d %v v=%d %v: Q: exp=%d got=%d %v", u, u16, v, v16, Q, q, q16)
@@ -65,7 +65,7 @@ func FuzzDivLongUnsigned64b(f *testing.F) {
 			if (x / uint64(y)) > math.MaxUint32 {
 				t.Skip()
 			}
-			if q, r := hd.DivLongUnsigned64b32b(x, y); q != Q || r != R {
+			if q, r := hd.DivModLongUnsigned64b32b(x, y); q != Q || r != R {
 				t.Errorf("x=%d y=%d: Q(exp=%d got=%d) R(exp=%d, got=%d)", x, y, Q, q, R, r)
 			}
 		})
@@ -76,7 +76,7 @@ func FuzzDivLongUnsigned64b(f *testing.F) {
 				Q = math.MaxUint32
 				R = math.MaxUint32
 			}
-			if q, r := hd.DivLongUnsigned64b32b2(x, y); q != Q || r != R {
+			if q, r := hd.DivModLongUnsigned64b32b2(x, y); q != Q || r != R {
 				t.Errorf("x=%d y=%d: Q(exp=%d got=%d) R(exp=%d, got=%d)", x, y, Q, q, R, r)
 			}
 		})

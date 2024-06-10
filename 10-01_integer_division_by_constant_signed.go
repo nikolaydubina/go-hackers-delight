@@ -34,18 +34,22 @@ func DivModSignedPowTwo(n int32, k int) (q, r int32) {
 
 // TODO: dedicated 5 instruction version of just a reminder.
 
-// DivModSignedThree this computes in 6 instructions.
+// Div3Signed this computes in 6 instructions.
 // This is 9 or 10 cycles. Meanwhile, divide operation can take 20 cycles.
-func DivModSignedThree(n int32) (q, r int32) {
+func Div3Signed(n int32) int32 {
 	const M int32 = 0x5555_5556
-	q = MultiplyHighOrder32(M, n)
-	t := ShiftRightUnsigned32(n, 31)
-	q += t
+	q := MultiplyHighOrder32(M, n)
+	q += ShiftRightUnsigned32(n, 31)
+	return q
+}
+
+func DivMod3Signed(n int32) (q, r int32) {
+	q = Div3Signed(n)
 	return q, n - (q * 3)
 }
 
-// DivModSignedThree2 calculates reminder first.
-func DivModSignedThree2(n int32) (q, r int32) {
+// DivMod3Signed2 calculates reminder first.
+func DivMod3Signed2(n int32) (q, r int32) {
 	t := uint32(n)
 	t = ((0x5555_5555 * t) + (t >> 1) - (t >> 3)) >> 30
 	t -= ((uint32(n) >> 31) << (t & 2))
@@ -53,37 +57,45 @@ func DivModSignedThree2(n int32) (q, r int32) {
 	return q, int32(t)
 }
 
-// DivModSignedFive is similar to DivMod3, but error terms is too large, and thus it needs slight variation of magic constant and correction with shift right.
-func DivModSignedFive(n int32) (q, r int32) {
+// Div5Signed is similar to Div3Signed, but error terms is too large, and thus it needs slight variation of magic constant and correction with shift right.
+func Div5Signed(n int32) int32 {
 	const M int32 = 0x6666_6667
-	q = MultiplyHighOrder32(M, n)
+	q := MultiplyHighOrder32(M, n)
 	q >>= 1
-	t := ShiftRightUnsigned32(n, 31)
-	q += t
+	q += ShiftRightUnsigned32(n, 31)
+	return q
+}
+
+func DivMod5Signed(n int32) (q, r int32) {
+	q = Div5Signed(n)
 	return q, n - (q * 5)
 }
 
-// DivModSignedSeven is similar to DivMod3, but error terms is too large, and thus it needs slight variation of magic constant and correction with shift right.
+// Div7Signed is similar to Div3Signed, but error terms is too large, and thus it needs slight variation of magic constant and correction with shift right.
 // The magic is still too large, and thus it needs flipping sign and addition.
-func DivModSignedSeven(n int32) (q, r int32) {
+func Div7Signed(n int32) int32 {
 	const M int32 = -1840700269
-	q = MultiplyHighOrder32(M, n)
+	q := MultiplyHighOrder32(M, n)
 	q += n
 	q >>= 2
-	t := ShiftRightUnsigned32(n, 31)
-	q += t
+	q += ShiftRightUnsigned32(n, 31)
+	return q
+}
+
+func DivMod7Signed(n int32) (q, r int32) {
+	q = Div7Signed(n)
 	return q, n - (q * 7)
 }
 
-// DivModSignedConst performs division by constant.
+// DivModConstSigned illustrates division by constant.
 // This code should be generated at compile time depending on the value of compile time constant k and result of MagicSigned execution.
 // The basic trick is to multiply by magic number 2**32/d and then extract leftmost 32 bits of the product.
-func DivModSignedConst(n, d int32) (q, r int32) {
+func DivModConstSigned(n, d int32) (q, r int32) {
 	if d < 0 {
 		panic("TODO: why integer signed division by negative constants is not working?")
 	}
 
-	M, s := DivModSignedConstMagic(d) // compile time
+	M, s := DivModConstSignedMagic(d) // compile time
 
 	q = MultiplyHighOrder32(M, n)
 
@@ -103,10 +115,10 @@ func DivModSignedConst(n, d int32) (q, r int32) {
 	return q, n - (q * d)
 }
 
-// DivModSignedConstMagic computes magic number and shift amount for signed integer division.
+// DivModConstSignedMagic computes magic number and shift amount for signed integer division.
 // This values can be computed at compile time.
 // Code using big numbers can be simplified, such as in the case of Python or math.Big, it is no listed here.
-func DivModSignedConstMagic(d int32) (M, s int32) {
+func DivModConstSignedMagic(d int32) (M, s int32) {
 	if d > -2 && d < 2 {
 		panic("d is out of range")
 	}
