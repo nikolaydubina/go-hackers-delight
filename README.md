@@ -15,11 +15,13 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 > — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun, Chief Java Architect at Google 2004~2012]
 
 <details><summary>Methodology</summary>
+
 * implementing all code close to original, leaving same comments as originals
 * extensively fuzzing
 * not using any Go packages, not even standard library
 * using generics whenever possible
-* verifying compiled code via https://godbolt.org/ (e.g. inlining, generics)
+* verifying compiled code via https://godbolt.org
+
 </details>
 
 <details><summary>Appendix: Benchmarks</summary>
