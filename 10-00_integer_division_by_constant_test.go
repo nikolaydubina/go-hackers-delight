@@ -60,6 +60,31 @@ func BenchmarkDivMod(b *testing.B) {
 		}
 	})
 
+	b.Run("Mod", func(b *testing.B) {
+		vs := []struct {
+			name string
+			f    func(int32) int32
+		}{
+			{"3/basic", func(x int32) int32 { return x % 3 }},
+			{"3/Mod3Signed", hd.Mod3Signed},
+			{"3/Mod3Signed2", hd.Mod3Signed2},
+			{"7/basic", func(x int32) int32 { return x % 7 }},
+			{"7/Mod7Signed", hd.Mod7Signed},
+			{"7/Mod7Signed2", hd.Mod7Signed2},
+			{"10/basic", func(x int32) int32 { return x % 10 }},
+			{"10/Mod10Signed", hd.Mod10Signed},
+		}
+		for _, v := range vs {
+			b.Run(v.name, func(b *testing.B) {
+				for i := 0; i < b.N; i += len(vals) {
+					for j := 0; j < len(vals); j++ {
+						out = v.f(vals[j])
+					}
+				}
+			})
+		}
+	})
+
 	b.Run("DivExact", func(b *testing.B) {
 		var vals []int32
 		for v := int32(0); len(vals) < 1000; v = rand.Int32() {
