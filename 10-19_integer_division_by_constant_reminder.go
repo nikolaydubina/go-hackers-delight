@@ -88,3 +88,74 @@ func Mod9Unsigned(n uint32) uint32 {
 	r = (r & 0x003F) + (r >> 6)          // 0 to 4A
 	return uint32(mod9_unsigned[r])
 }
+
+// Mod3Signed (rems3) is similar to unsigned version, but remaps output of it differently.
+func Mod3Signed(n int32) int32 {
+	r := uint32(n)
+	r = (r >> 16) + (r & 0xFFFF) // Max 0x1FFFE
+	r = (r >> 8) + (r & 0x00FF)  // Max 0x2FD
+	r = (r >> 4) + (r & 0x000F)  // Max 0x3D
+	r = uint32(mod3_unsigned_4[r])
+	return int32(r) - (int32((uint32(n) >> 31)) << (r & 2))
+}
+
+var mod5_signed = [...]uint8{
+	2, 3, 4,
+	0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4,
+	0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4,
+	0, 1, 2, 3, 4,
+	0, 1, 2, 3,
+}
+
+// Mod5Signed (rems5) is similar to unsigned version, but remaps output of it differently.
+func Mod5Signed(n int32) int32 {
+	r := n
+	r = (r >> 16) + (r & 0xFFFF) // FFFF8000 to 17FFE
+	r = (r >> 8) + (r & 0x00FF)  // FFFFFF80 to 27D
+	r = (r >> 4) + (r & 0x000F)  // -8 to 53 (decimal)
+	r = int32(mod5_signed[(r + 8)])
+	return r - (((n & -r) >> 31) & 5)
+}
+
+var mod7_signed = [...]uint8{
+	5, 6,
+	0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6,
+	0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6,
+	0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6,
+	0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6,
+	0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6,
+	0, 1, 2,
+}
+
+// Mod7Signed (rems7) is similar to unsigned version, but remaps output of it differently.
+func Mod7Signed(n int32) int32 {
+	r := n
+	r = (r >> 15) + (n & 0x7FFF) // FFFF0000 to 17FFE
+	r = (r >> 9) + (r & 0x001FF) // FFFFFF80 to 2BD
+	r = (r >> 6) + (r & 0x0003F) // -2 to 72 (decimal)
+	r = int32(mod7_signed[(r + 2)])
+	return r - (((n & -r) >> 31) & 7)
+}
+
+var mod9_signed = [...]uint8{
+	7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0, 1, 2, 3, 4, 5, 6, 7, 8,
+	0,
+}
+
+// Mod9Signed (rems7) is similar to unsigned version, but remaps output of it differently.
+func Mod9Signed(n int32) int32 {
+	r := n
+	r = (r & 0x7FFF) - (r >> 15) // FFFF7001 to 17FFF
+	r = (r & 0x01FF) - (r >> 9)  // FFFFFF41 to 0x27F
+	r = (r & 0x003F) + (r >> 6)  // -2 to 72 (decimal)
+	r = int32(mod9_signed[(r + 2)])
+	return r - (((n & -r) >> 31) & 9)
+}
