@@ -35,12 +35,30 @@ var mod3_unsigned_4 = [...]uint8{
 	0, 1,
 }
 
-// Mod3Unsigned3 (remu3) is using digit summing and in-memory lookup.
+// Mod3Unsigned4 (remu3) is using digit summing and in-memory lookup.
 func Mod3Unsigned4(n uint32) uint32 {
 	n = (n >> 16) + (n & 0xFFFF) // Max 0x1FFFE
 	n = (n >> 8) + (n & 0x00FF)  // Max 0x2FD
 	n = (n >> 4) + (n & 0x000F)  // Max 0x3D
 	return uint32(mod3_unsigned_4[n])
+}
+
+// Mod3Unsigned5 (remu3) is using the fact that n % 3 == floor(4/3 * n) % 3.
+// This code is discovered in trial and error.
+// This uses only shift and multiply operations.
+// It executes in 13 instructions.
+func Mod3Unsigned5(n uint32) uint32 { return ((0x5555_5555 * n) + (n >> 1) - (n >> 3)) >> 30 }
+
+// Mod3Unsigned6 (remu3) is same as Mod3Unsigned5 but expands multiplications to shifts.
+func Mod3Unsigned6(n uint32) uint32 {
+	r := n
+	r += r << 2
+	r += r << 4
+	r += r << 8
+	r += r << 16
+	r += n >> 1
+	r -= n >> 3
+	return r >> 30
 }
 
 // Mod5Unsigned (remu5) is using CountOnes (pop) and in-memory lookup.
@@ -50,6 +68,13 @@ func Mod5Unsigned(n uint32) uint32 {
 	n = (n >> 4) + (n & 0x000F)               // Max 0x3D
 	n = (n >> 4) - ((n >> 2) & 3) + (n & 3)   // -3 to 6
 	return (01043210432 >> (3 * (n + 3))) & 7 // Octal const
+}
+
+// Mod5Unsigned2 (remu5) is using multiplication method similar to Mod3Unsigned5.
+// It executes in 11 instructions.
+func Mod5Unsigned2(n uint32) uint32 {
+	n = ((0x3333_3333 * n) + (n >> 3)) >> 29
+	return (0x0443_2210 >> (n << 2)) & 7
 }
 
 var mod7_unsigned = [...]uint8{
@@ -67,6 +92,12 @@ func Mod7Unsigned(n uint32) uint32 {
 	n = (n >> 9) + (n & 0x001FF) // Max 0x33D
 	n = (n >> 6) + (n & 0x0003F) // Max 0x4A
 	return uint32(mod7_unsigned[n])
+}
+
+// Mod75Unsigned2 (remu7) is using multiplication method similar to Mod3Unsigned5.
+func Mod7Unsigned2(n uint32) uint32 {
+	n = ((0x2492_4924 * n) + (n >> 1) + (n >> 4)) >> 29
+	return n & uint32((int32(n-7) >> 31))
 }
 
 var mod9_unsigned = [...]uint8{
@@ -87,6 +118,36 @@ func Mod9Unsigned(n uint32) uint32 {
 	r = (r & 0x01FF) - (r >> 9)          // FFFFFC1 to 2FF
 	r = (r & 0x003F) + (r >> 6)          // 0 to 4A
 	return uint32(mod9_unsigned[r])
+}
+
+var mod9_unsigned_2 = [...]uint8{0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8}
+
+// Mod9Unsigned2 (remu9) is using multiplication method similar to Mod3Unsigned5.
+func Mod9Unsigned2(n uint32) uint32 {
+	n = ((0x1C71_C71C * n) + (n >> 1)) >> 28
+	return uint32(mod9_unsigned_2[n])
+}
+
+var mod10_unsigned = [...]uint8{0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 7, 8, 8, 9, 0}
+
+// Mod10Unsigned (remu10) is using multiplication method similar to Mod3Unsigned5.
+func Mod10Unsigned(n uint32) uint32 {
+	n = ((0x1999_9999 * n) + (n >> 1) + (n >> 3)) >> 28
+	return uint32(mod10_unsigned[n])
+}
+
+// Mod63Unsigned (remu63) is mysterious code from Joe Keane that works in 12 instructions.
+func Mod63Unsigned(n uint32) uint32 {
+	t := (((n >> 12) + n) >> 10) + (n << 2)
+	t = ((t >> 6) + t + 3) & 0xFF
+	return (t - (t >> 6)) >> 2
+}
+
+// Mod63Unsigned2 (remu63) is using multiplication method similar to Mod3Unsigned5.
+// This is not as fast as Joe Keane method, unless there is fast multiplication instruction on the machine.
+func Mod63Unsigned2(n uint32) uint32 {
+	n = ((0x0410_4104 * n) + (n >> 4) + (n >> 10)) >> 26
+	return n & ((n - 63) >> 6)
 }
 
 // Mod3Signed (rems3) is similar to unsigned version, but remaps output of it differently.
