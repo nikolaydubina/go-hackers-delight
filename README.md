@@ -19,7 +19,7 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 <details><summary>Appendix: Benchmarks</summary>
 
 ```bash
-go test -bench .        
+$ go test -bench .        
 goos: darwin
 goarch: arm64
 pkg: github.com/nikolaydubina/go-hackers-delight
