@@ -16,5 +16,34 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 
 * not using any Go packages, not even standard library
 
+<details><summary>Appendix: Benchmarks</summary>
+
+```bash
+go test -bench .        
+goos: darwin
+goarch: arm64
+pkg: github.com/nikolaydubina/go-hackers-delight
+BenchmarkCompress/Compress-16         	            100000000	        10.05 ns/op
+BenchmarkCompress/Compress2-16        	            59208940	        20.69 ns/op
+BenchmarkDivMod/DivMod/3/basic-16     	            1000000000	         0.843 ns/op
+BenchmarkDivMod/DivMod/3/DivMod3Signed-16         	615786322	         1.931 ns/op
+BenchmarkDivMod/DivMod/3/DivMod3Signed2-16        	1000000000	         1.091 ns/op
+BenchmarkDivMod/DivMod/7/basic-16                 	1000000000	         0.836 ns/op
+BenchmarkDivMod/DivMod/7/DivMod7Signed-16         	578422084	         2.074 ns/op
+BenchmarkDivMod/Div/3/basic-16                    	1000000000	         0.834 ns/op
+BenchmarkDivMod/Div/3/Div3Signed-16               	791803947	         1.522 ns/op
+BenchmarkDivMod/Div/3/Div3ShiftSigned-16          	903334430	         1.328 ns/op
+BenchmarkDivMod/Div/7/basic-16                    	1000000000	         0.836 ns/op
+BenchmarkDivMod/Div/7/Div7Signed-16               	753299805	         1.607 ns/op
+BenchmarkDivMod/Div/7/Div7ShiftSigned-16          	824427794	         1.455 ns/op
+BenchmarkDivMod/DivExact/7/basic-16               	1000000000	         1.095 ns/op
+BenchmarkDivMod/DivExact/7/DivExact7-16           	1000000000	         1.105 ns/op
+BenchmarkDivMod/DivExact/7/Div7Signed-16          	709693124	         1.693 ns/op
+BenchmarkDivMod/DivExact/7/Div7ShiftSigned-16     	793241796	         1.509 ns/op
+PASS
+ok  	github.com/nikolaydubina/go-hackers-delight	23.260s
+```
+</details>
+
 [^1]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
 [^2]: showcase in `Rust` — https://github.com/victoryang00/Delight
