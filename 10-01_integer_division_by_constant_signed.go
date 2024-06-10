@@ -44,6 +44,15 @@ func DivModSignedThree(n int32) (q, r int32) {
 	return q, n - (q * 3)
 }
 
+// DivModSignedThree2 calculates reminder first.
+func DivModSignedThree2(n int32) (q, r int32) {
+	t := uint32(n)
+	t = ((0x5555_5555 * t) + (t >> 1) - (t >> 3)) >> 30
+	t -= ((uint32(n) >> 31) << (t & 2))
+	q = int32((uint32(n) - t) * 0xAAAA_AAAB)
+	return q, int32(t)
+}
+
 // DivModSignedFive is similar to DivMod3, but error terms is too large, and thus it needs slight variation of magic constant and correction with shift right.
 func DivModSignedFive(n int32) (q, r int32) {
 	const M int32 = 0x6666_6667

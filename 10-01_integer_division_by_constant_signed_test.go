@@ -46,54 +46,50 @@ func FuzzDivPow2(f *testing.F) {
 	})
 }
 
-func FuzzDivMod3(f *testing.F) {
+func FuzzDivMod_int32(f *testing.F) {
 	for _, u := range fuzzInt32 {
 		f.Add(u)
 	}
 	f.Fuzz(func(t *testing.T, x int32) {
-		Q, R := x/3, x%3
+		t.Run("mod3", func(t *testing.T) {
+			Q, R := x/3, x%3
 
-		if q, r := hd.DivModSignedThree(x); q != Q || r != R {
-			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
-		}
+			if q, r := hd.DivModSignedThree(x); q != Q || r != R {
+				t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
+			}
 
-		if q, r := hd.DivModSignedConst(x, 3); q != Q || r != R {
-			t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
-		}
-	})
-}
+			if q, r := hd.DivModSignedThree2(x); q != Q || r != R {
+				t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
+			}
 
-func FuzzDivMod5(f *testing.F) {
-	for _, u := range fuzzInt32 {
-		f.Add(u)
-	}
-	f.Fuzz(func(t *testing.T, x int32) {
-		q, r := x/5, x%5
+			if q, r := hd.DivModSignedConst(x, 3); q != Q || r != R {
+				t.Errorf("DivMod3(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
+			}
+		})
 
-		if Q, R := hd.DivModSignedFive(x); q != Q || r != R {
-			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, Q, R, q, r)
-		}
+		t.Run("mod5", func(t *testing.T) {
+			q, r := x/5, x%5
 
-		if Q, R := hd.DivModSignedConst(x, 5); q != Q || r != R {
-			t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, Q, R, q, r)
-		}
-	})
-}
+			if Q, R := hd.DivModSignedFive(x); q != Q || r != R {
+				t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, Q, R, q, r)
+			}
 
-func FuzzDivMod7(f *testing.F) {
-	for _, u := range fuzzInt32 {
-		f.Add(u)
-	}
-	f.Fuzz(func(t *testing.T, x int32) {
-		Q, R := x/7, x%7
+			if Q, R := hd.DivModSignedConst(x, 5); q != Q || r != R {
+				t.Errorf("DivMod5(%d) = got(%d, %d); want (%d, %d)", x, Q, R, q, r)
+			}
+		})
 
-		if q, r := hd.DivModSignedSeven(x); q != Q || r != R {
-			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
-		}
+		t.Run("mod7", func(t *testing.T) {
+			Q, R := x/7, x%7
 
-		if q, r := hd.DivModSignedConst(x, 7); q != Q || r != R {
-			t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
-		}
+			if q, r := hd.DivModSignedSeven(x); q != Q || r != R {
+				t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
+			}
+
+			if q, r := hd.DivModSignedConst(x, 7); q != Q || r != R {
+				t.Errorf("DivMod7(%d) = got(%d, %d); want (%d, %d)", x, q, r, Q, R)
+			}
+		})
 	})
 }
 
