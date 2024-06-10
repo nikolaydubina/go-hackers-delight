@@ -49,9 +49,14 @@ func FuzzModSigned(f *testing.F) {
 			got int32
 		}{
 			{exp: x % 3, got: hd.Mod3Signed(x)},
+			{exp: x % 3, got: hd.Mod3Signed2(x)},
 			{exp: x % 5, got: hd.Mod5Signed(x)},
+			{exp: x % 5, got: hd.Mod5Signed2(x)},
 			{exp: x % 7, got: hd.Mod7Signed(x)},
+			{exp: x % 7, got: hd.Mod7Signed2(x)},
 			{exp: x % 9, got: hd.Mod9Signed(x)},
+			{exp: x % 9, got: hd.Mod9Signed2(x)},
+			{exp: x % 10, got: hd.Mod10Signed(x)},
 		}
 		for i, tc := range got {
 			if tc.exp != tc.got {

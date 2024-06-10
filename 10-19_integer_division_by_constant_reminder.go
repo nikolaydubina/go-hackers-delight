@@ -160,6 +160,13 @@ func Mod3Signed(n int32) int32 {
 	return int32(r) - (int32((uint32(n) >> 31)) << (r & 2))
 }
 
+// Mod3Signed2 (rems3) is using multiply method.
+func Mod3Signed2(n int32) int32 {
+	r := uint32(n)
+	r = ((0x5555_5555 * r) + (r >> 1) - (r >> 3)) >> 30
+	return int32(r) - (int32((uint32(n) >> 31)) << (r & 2))
+}
+
 var mod5_signed = [...]uint8{
 	2, 3, 4,
 	0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4,
@@ -176,6 +183,18 @@ func Mod5Signed(n int32) int32 {
 	r = (r >> 4) + (r & 0x000F)  // -8 to 53 (decimal)
 	r = int32(mod5_signed[(r + 8)])
 	return r - (((n & -r) >> 31) & 5)
+}
+
+var mod5_signed_2 = [...]int8{
+	0, 1, 2, 2, 3, u, 4, 0,
+	u, 0, -4, u, -3, -2, -2, -1,
+}
+
+// Mod5Signed2 (rems5) is using multiply method.
+func Mod5Signed2(n int32) int32 {
+	r := uint32(n)
+	r = ((0x3333_3333 * r) + (r >> 3)) >> 29
+	return int32(mod5_signed_2[(r + ((uint32(n) >> 31) << 3))])
 }
 
 var mod7_signed = [...]uint8{
@@ -196,6 +215,15 @@ func Mod7Signed(n int32) int32 {
 	r = (r >> 6) + (r & 0x0003F) // -2 to 72 (decimal)
 	r = int32(mod7_signed[(r + 2)])
 	return r - (((n & -r) >> 31) & 7)
+}
+
+// Mod7Signed2 (rems7) uses multiplication method.
+func Mod7Signed2(n int32) int32 {
+	var r uint32
+	r = uint32(n) - ((uint32(n) >> 31) << 2)            // Fix for sign.
+	r = ((0x2492_4924 * r) + (r >> 1) + (r >> 4)) >> 29 //
+	r &= uint32(int32(r-7) >> 31)                       // Change 7 to 0.
+	return int32(r) - (((n & -int32(r)) >> 31) & 7)     // Fix n < 0 case.
 }
 
 var mod9_signed = [...]uint8{
@@ -219,4 +247,32 @@ func Mod9Signed(n int32) int32 {
 	r = (r & 0x003F) + (r >> 6)  // -2 to 72 (decimal)
 	r = int32(mod9_signed[(r + 2)])
 	return r - (((n & -r) >> 31) & 9)
+}
+
+var mod9_signed_2 = [...]int8{
+	0, 1, 1, 2, u, 3, u, 4,
+	5, 5, 6, 6, 7, u, 8, u,
+	-4, u, -3, u, -2, -1, -1, 0,
+	u, -8, u, -7, -6, -6, -5, -5,
+}
+
+// Mod9Signed2 (rems7) uses multiplication method.
+func Mod9Signed2(n int32) int32 {
+	r := uint32(n)
+	r = ((0x1C71_C71C * r) + (r >> 1)) >> 28
+	return int32(mod9_signed_2[(r + ((uint32(n) >> 31) << 4))])
+}
+
+var mod10_signed = [...]int8{
+	0, 1, u, 2, 3, u, 4, 5,
+	5, 6, u, 7, 8, u, 9, u,
+	-6, -5, u, -4, -3, -3, -2, u,
+	-1, 0, u, -9, u, -8, -7, u,
+}
+
+// Mod10Signed (rems10) uses multiplication method.
+func Mod10Signed(n int32) int32 {
+	r := uint32(n)
+	r = ((0x1999_9999 * r) + (r >> 1) + (r >> 3)) >> 28
+	return int32(mod10_signed[(r + ((uint32(n) >> 31) << 4))])
 }
