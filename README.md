@@ -27,6 +27,7 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 * native `math/bits.Mul32` and `math/bits.Mul64`[^3] performance is the same
 * native `Div` and `Mod` by small constants performance is better
 * native `math.Sqrt` performance is better
+* native `math.Pow(x, 3)`[^4] performance is worse than `Cbrt` algorithm ⭐️
 
 <details><summary>Appendix: Benchmarks</summary>
 
@@ -83,3 +84,4 @@ ok  	github.com/nikolaydubina/go-hackers-delight	49.760s
 [^1]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
 [^2]: showcase in `Rust` — https://github.com/victoryang00/Delight
 [^3]: given manual inlining of generic type, which produces equivalent Go code
+[^4]: we are comparing native float64 result converted to uint32, as there is no better standard function
