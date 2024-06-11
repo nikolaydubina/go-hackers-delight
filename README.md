@@ -27,11 +27,11 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 * native `math/bits.Mul32` and `math/bits.Mul64`[^3] performance is the same
 * native `Div` and `Mod` by small constants performance is better
 * native `math.Sqrt` performance is better
-* native `math.Pow(x, 1./3)`[^4] performance is worse than `Cbrt` algorithm ⭐️
-* native `math.Pow(x, n)`[^4] performance is worse than `Pow` algorithm ⭐️
-* native `math.Log2(x)`[^4] performance is worse than `Log2` algorithm ⭐️
-* native `math.Log10(x)`[^4] performance is worse than `Log10` algorithm ⭐️
-* native `math.Log10(x)` [^4][^5] is wrong for `math.MaxUint64` but `Log10` algorithm is correct ⭐️  
+* native `math.Pow(x, 1./3)`[^4] performance is worse than `Cbrt` algorithm 💥
+* native `math.Pow(x, n)`[^4] performance is worse than `Pow` algorithm 💥
+* native `math.Log2(x)`[^4] performance is worse than `Log2` algorithm 💥
+* native `math.Log10(x)`[^4] performance is worse than `Log10` algorithm 💥
+* native `math.Log10(x)` [^4][^5] is wrong for `math.MaxUint64` but `Log10` algorithm is correct 💥  
 
 <details><summary>Appendix: Benchmarks</summary>
 
