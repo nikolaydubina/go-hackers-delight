@@ -2,6 +2,7 @@ package hd_test
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -101,4 +102,49 @@ func FuzzAbsDiffUint(f *testing.F) {
 			t.Error(x, y, hd.AbsDiffUnsigned(x, y), exp)
 		}
 	})
+}
+
+func BenchmarkAbs(b *testing.B) {
+	var out int32
+
+	var vals []int32
+	for i := 0; i < 1000; i++ {
+		a := rand.Int32()
+		b := rand.Int32()
+		vals = append(vals, a-b)
+	}
+
+	// info on random numbers
+	countPositive := 0
+	for _, v := range vals {
+		if v > 0 {
+			countPositive++
+		}
+	}
+	b.Logf("positive %d/%d = %.2f", countPositive, len(vals), float64(countPositive)/float64(len(vals)))
+
+	vs := []struct {
+		name string
+		f    func(int32) int32
+	}{
+		{"basic", abs[int32]},
+		{"Abs", hd.Abs[int32]},
+		{"Abs2", hd.Abs2[int32]},
+		{"Abs3", hd.Abs3[int32]},
+		{"Abs4", hd.Abs4[int32]},
+		{"AbsFastMul", hd.AbsFastMul},
+	}
+	for _, v := range vs {
+		b.Run(v.name, func(b *testing.B) {
+			for i := 0; i < b.N; i += len(vals) {
+				for j := 0; j < len(vals); j++ {
+					out = v.f(vals[j])
+				}
+			}
+		})
+	}
+
+	if (out*2 - out - out) != 0 {
+		b.Fatal("never")
+	}
 }

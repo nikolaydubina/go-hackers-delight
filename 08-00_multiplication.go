@@ -81,6 +81,7 @@ func MultiplyHighOrder32[T uint32 | int32](u, v T) T {
 // This executes in 16 RISC instructions.
 // Go has math/bits.Mul64 that returns higher order bits, however it works only for uint64.
 // Remarkably, Go math/bits.Mul64 uses same algorithm as this function but uses 32bit words.
+// Algorithm in math/bits.Mul64 is the same, but it performs better because it does not use generics.
 func MultiplyHighOrder64[T uint64 | int64](u, v T) T {
 	u0 := uint64(u & 0xFFFF_FFFF)
 	u1 := u >> 32
