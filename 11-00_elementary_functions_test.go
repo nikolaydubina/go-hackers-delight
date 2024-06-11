@@ -178,7 +178,9 @@ func FuzzLog_uint64(f *testing.F) {
 		if x == 0 {
 			t.Skip()
 		}
-		if x > math.MaxUint32>>1 {
+		// float64 based code can is not correct with such large uint64 numbers for this function. so skipping.
+		// this was verified with big arithmetics in wolfram alpha.
+		if x > (math.MaxUint32 >> 1) {
 			t.Skip()
 		}
 		tests := []struct {
