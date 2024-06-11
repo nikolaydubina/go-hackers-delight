@@ -14,15 +14,18 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 > In the ten years since the first edition came out, it's been absolutely invaluable to my work at Sun and Google.  
 > — [Joshua Bloch](https://en.wikipedia.org/wiki/Joshua_Bloch) [PhD, Distinguished Engineer at Sun, Chief Java Architect at Google 2004~2012]
 
-<details><summary>Methodology</summary>
+### Methodology
 
-* implementing all code close to original, leaving same comments as originals
 * extensively fuzzing
 * not using any Go packages, not even standard library
 * using generics whenever possible
 * verifying compiled code via https://godbolt.org
 
-</details>
+### Observations
+
+* native `Abs` performance is the same
+* native `math/bits.Mul32` and `math/bits.Mul64`[^3] performance is the same
+* native `Div` and `Mod` by small constants performance is better
 
 <details><summary>Appendix: Benchmarks</summary>
 
@@ -73,4 +76,5 @@ ok  	github.com/nikolaydubina/go-hackers-delight	45.723s
 </details>
 
 [^1]: showcase in `C` — https://github.com/hcs0/Hackers-Delight
-[^2]: showcase in `Rust` — https://github.com/victoryang00/Delight
+[^2]: showcase in `Rust` — https://github.com/victoryang00/Delight  
+[^3]: given manual inlining of generic type, which produces equivalent Go code
