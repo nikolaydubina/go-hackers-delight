@@ -9,7 +9,7 @@ var nlz_goryavsky = [...]uint8{
 	22, u, 12, u, u, 3, 28, u, 23, u, 4, 29, u, u, 30, 31,
 }
 
-// LeadingZerosUint32 (aka nlz) is algorithm from Robert Harley.
+// LeadingZerosUint32 (nlz) is algorithm from Robert Harley.
 // It consists of 14 instructions branch-free.
 // It uses Julius Goryavsky variation for smaller lookup table size.
 // LeadingZerosUint32 has direct relationship of log2 as well, and can be used to compute it directly.
@@ -62,7 +62,7 @@ var ntz_reiser = [...]uint8{
 	6, u, 21, 14, 9, 5, 20, 8, 19, 18,
 }
 
-// TrailingZerosUint32 (aka ntz) uses John Reiser variant of David Seal method.
+// TrailingZerosUint32 (ntz) uses John Reiser variant of David Seal method.
 // Among applications of TrailingZerosUint32 is R.W.Gosper Loop Detection Algorithm.
 func TrailingZerosUint32(x uint32) uint8 { return ntz_reiser[((x & -x) % 37)] }
 

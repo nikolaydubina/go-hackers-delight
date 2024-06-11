@@ -1,6 +1,6 @@
 package hd
 
-// TransposeMatrix8bx8b (aka transpose8) uses divide and conquer method.
+// TransposeMatrix8bx8b (transpose8) uses divide and conquer method.
 // Each matrix i,j value is encoded in i-th byte and j-th bit of a byte.
 // This is 2x fewer calculating RISC instructions than straightforward masking method.
 // This is 21 calculating RISC instructions.

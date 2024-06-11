@@ -104,7 +104,7 @@ func DivModMultiWordUnsigned(q, r, u, v []uint16) {
 
 // TODO: unsigned short division from signed short division
 
-// DivModLongUnsigned64b32b (aka divlu) performs long division of 64-bit unsigned integer by 32-bit unsigned integer.
+// DivModLongUnsigned64b32b (divlu) performs long division of 64-bit unsigned integer by 32-bit unsigned integer.
 // This algorithm is slightly modified to store both lower and higher 32 bits of dividend into 64-bit number.
 // This algorithm uses shift-and-subtract operations. It illustrates how hardware is doing such division.
 // It does not work for overflow cases.
@@ -182,5 +182,5 @@ func DivModLongUnsigned64b32b2(x uint64, y uint32) (q, r uint32) {
 	return q1*b + q0, r
 }
 
-// TODO: double word division from long division (aka 64 / 64 => 64 from 64 / 32 => 32)
+// TODO: double word division from long division (64 / 64 => 64 from 64 / 32 => 32)
 // TODO: signed double word division from unsigned double word division

@@ -19,7 +19,7 @@ can be accomplished with at most n instructions of the type add, subtract, and s
 */
 package hd
 
-// MulMultiWord (aka mulmns) multiplies two multiwords word-wise. w = u * v
+// MulMultiWord (mulmns) multiplies two multiwords word-wise. w = u * v
 // This does not overflow.
 // We are using uint16 and uint32 to avoid overflow in word multiplication.
 // Most important word can be negative when converted to int16.
@@ -60,7 +60,7 @@ func MulMultiWord(w, u, v []uint16) {
 	}
 }
 
-// MultiplyHighOrder32 (aka mulhs/mulhu) multiplies two integers and returns the high-order half of the product.
+// MultiplyHighOrder32 (mulhs/mulhu) multiplies two integers and returns the high-order half of the product.
 // This executes in 16 RISC instructions.
 // Go has math/bits.Mul32 that returns higher order bits, however it does uint64 cast and works only for uint32.
 // Remarkably, Go math/bits.Mul64 uses same algorithm as this function but uses 32bit words.
@@ -77,7 +77,7 @@ func MultiplyHighOrder32[T uint32 | int32](u, v T) T {
 	return (u1 * v1) + w2 + (w1 >> 16)
 }
 
-// MultiplyHighOrder64 (aka mulhs/mulhu) multiplies two integers and returns the high-order half of the product.
+// MultiplyHighOrder64 (mulhs/mulhu) multiplies two integers and returns the high-order half of the product.
 // This executes in 16 RISC instructions.
 // Go has math/bits.Mul64 that returns higher order bits, however it works only for uint64.
 // Remarkably, Go math/bits.Mul64 uses same algorithm as this function but uses 32bit words.

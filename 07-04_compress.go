@@ -1,6 +1,6 @@
 package hd
 
-// Compress (aka Generalized Extract) selects bits from the x where m is 1 and puts them in order to least significant bits.
+// Compress (Generalized Extract) selects bits from the x where m is 1 and puts them in order to least significant bits.
 // This uses divide and conquer.
 // This executes in 169 instructions on 64bit RISC.
 // There is also hardware focused version that does not work well in general RISC.
@@ -35,7 +35,7 @@ func Compress2[T Unsigned](x, m T) T {
 	return r
 }
 
-// Expand (aka Generalized Insert, unpack, scatter, deposit) selects bits from the x where m is 1 and puts them in order to least significant bits.
+// Expand (Generalized Insert, unpack, scatter, deposit) selects bits from the x where m is 1 and puts them in order to least significant bits.
 // This is reverse of Compress steps.
 // This is 168 RISC instructions, or 200 instructions on 64bit RISC.
 // There is also hardware focused version that does not work well in general RISC.
@@ -66,4 +66,4 @@ func Expand(x, m uint32) uint32 {
 	return x & m0 // Clear out extraneous bits.
 }
 
-// TODO: compress left, GeneralizedUnshuffle (aka SheepAndGoats, SAG), bitgather, GRP
+// TODO: compress left, GeneralizedUnshuffle (SheepAndGoats, SAG), bitgather, GRP

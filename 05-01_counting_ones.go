@@ -1,6 +1,6 @@
 package hd
 
-// CountOnes (aka pop) uses divide and conquer to count number set bits.
+// CountOnes (pop) uses divide and conquer to count number set bits.
 // Folklore says counting ones is important for NSA, but nobody knows why.
 // Applications of this function include Hamming Distance.
 func CountOnes(x uint32) uint32 {
