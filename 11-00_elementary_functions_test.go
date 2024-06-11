@@ -9,6 +9,11 @@ import (
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
 
+func ExampleCbrt() {
+	fmt.Println(hd.Cbrt(64))
+	// Output: 4
+}
+
 func cbrtBasicFloat64(x uint32) uint32 { return uint32(math.Floor(math.Pow(float64(x), 1./3))) }
 
 func FuzzCbrt(f *testing.F) {
@@ -16,14 +21,15 @@ func FuzzCbrt(f *testing.F) {
 		f.Add(u)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
-		exp := cbrtBasicFloat64(x)
-		got := [...]uint32{
-			hd.Cbrt(x),
+		// detecting underflow
+		if v := math.Pow(float64(x), 1./3); math.Abs(math.Round(v)-v) < 0.0000001 {
+			t.Skip()
 		}
-		for i, q := range got {
-			if exp != q {
-				t.Errorf("%d: exp(%v) got(%v) x(%x)", i, exp, q, x)
-			}
+
+		exp := cbrtBasicFloat64(x)
+		got := hd.Cbrt(x)
+		if exp != got {
+			t.Errorf("exp(%v, float=%v) got(%v) x(%d)", exp, math.Pow(float64(x), 1./3), got, x)
 		}
 	})
 }
