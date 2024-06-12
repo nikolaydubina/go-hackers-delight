@@ -2,12 +2,12 @@
 # Chapter 8: Multiplication
 
 Any multiplication can be decomposed in a summation of left shifts.
-For example x * 13 binary (1101) is:
-- t1 := x << 2
-- t2 := x << 3
-- result := t1 + t2 + x
-
-This is decomposed into result := 8x + 4x + x.
+For example,
+  - 13 = 0b1101
+  - x * 13 = 8x + 4x + x
+  - t1 := x << 2
+  - t2 := x << 3
+  - result := t1 + t2 + x
 
 For every multiplication there are multiple paths possible that utilize registers and shifts.
 These paths can have fewer or more instructions and registers to accomplish this.
