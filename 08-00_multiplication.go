@@ -12,10 +12,8 @@ For example,
 For every multiplication there are multiple paths possible that utilize registers and shifts.
 These paths can have fewer or more instructions and registers to accomplish this.
 In general, it is nontrivial to find minimum number instructions required and which these instructions are.
-Theorem bellow gives upper bound.
-
-Theorem. Multiplication of a variable x by an n-bit constant m, m >= 1,
-can be accomplished with at most n instructions of the type add, subtract, and shift left by any given amount.
+Following theorem gives upper bound: "Multiplication of a variable x by an n-bit constant m, m >= 1,
+can be accomplished with at most n instructions of the type add, subtract, and shift left by any given amount."
 */
 package hd
 
