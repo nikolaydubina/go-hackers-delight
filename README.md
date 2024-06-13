@@ -33,6 +33,7 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 * native `math.Log2(x)`[^4] performance is worse than `Log2` algorithm 💥
 * native `math.Log10(x)`[^4] performance is worse than `Log10` algorithm 💥
 * native `math.Log10(x)` [^4][^5] overflows for `math.MaxUint64` but `Log10` algorithm is correct 💥
+* native `crc32.Checksum` performance is `30x`~`500x` better
 
 <details><summary>Appendix: Benchmarks</summary>
 

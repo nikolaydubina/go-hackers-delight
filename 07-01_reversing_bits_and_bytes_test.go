@@ -3,10 +3,39 @@ package hd_test
 import (
 	"fmt"
 	"math"
+	"math/bits"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
 )
+
+func ExampleReverseByte() {
+	fmt.Printf("%0b", hd.ReverseByte(0b1101_0101))
+	// Output: 10101011
+}
+
+func reverseByte(x byte) byte {
+	var out byte
+	out |= x & 0b0000_0001 << 7
+	out |= x & 0b0000_0010 << 5
+	out |= x & 0b0000_0100 << 3
+	out |= x & 0b0000_1000 << 1
+	out |= x & 0b0001_0000 >> 1
+	out |= x & 0b0010_0000 >> 3
+	out |= x & 0b0100_0000 >> 5
+	out |= x & 0b1000_0000 >> 7
+	return out
+}
+
+func FuzzReverseByte(f *testing.F) {
+	f.Fuzz(func(t *testing.T, x byte) {
+		exp := reverseByte(x)
+		got := hd.ReverseByte(x)
+		if exp != got {
+			t.Errorf("x=%0b exp=%0b got=%0b", x, exp, got)
+		}
+	})
+}
 
 func ExampleReverseBits() {
 	fmt.Printf("0x%X", hd.ReverseBits(0x01234567))
@@ -18,12 +47,12 @@ func FuzzReverseBitsEquality(f *testing.F) {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x uint32) {
-		exp := hd.ReverseBits(x)
-
-		vs := []uint32{
+		exp := bits.Reverse32(x)
+		got := []uint32{
+			hd.ReverseBits(x),
 			hd.ReverseBits2(x),
 		}
-		for i, got := range vs {
+		for i, got := range got {
 			if exp != got {
 				t.Error(i, "x", fmt.Sprintf("%032b", x), "exp", exp, "got", got)
 			}
@@ -36,17 +65,14 @@ func ExampleReverseBits64Knuth() {
 	// Output: 0xF7B3D1D1E6A2C480
 }
 
-func FuzzReverseBits64(f *testing.F) {
+func FuzzReverseBits_uint64(f *testing.F) {
 	for _, x := range fuzzUint64 {
 		f.Add(x)
 	}
 	f.Fuzz(func(t *testing.T, x uint64) {
-		var exp uint64
-		for i := range 64 {
-			exp = (exp << 1) | ((x >> i) & 1)
-		}
-
-		if got := hd.ReverseBits64Knuth(x); exp != got {
+		exp := bits.Reverse64(x)
+		got := hd.ReverseBits64Knuth(x)
+		if exp != got {
 			t.Errorf("x=%0X exp=%0X got=%0X", x, exp, got)
 		}
 	})

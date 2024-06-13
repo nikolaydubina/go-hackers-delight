@@ -1,5 +1,11 @@
 package hd
 
+func ReverseByte(b byte) byte {
+	b = ((b & 0x55) << 1) | ((b & 0xAA) >> 1)
+	b = ((b & 0x33) << 2) | ((b & 0xCC) >> 2)
+	return (b << 4) | (b >> 4)
+}
+
 // ReverseBits (rev) reverses bits in x using divide and conquer.
 func ReverseBits(x uint32) uint32 {
 	x = ((x & 0x5555_5555) << 1) | ((x & 0xAAAA_AAAA) >> 1)
