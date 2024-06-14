@@ -2,6 +2,7 @@ package hd_test
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -74,4 +75,39 @@ func FuzzAvgUint32(f *testing.F) {
 			}
 		})
 	})
+}
+
+func avg[T hd.Integer](x, y T) T { return (x + y) / 2 }
+
+func BenchmarkAvg(b *testing.B) {
+	var out int32
+
+	var vals []int32
+	for i := 0; i < 1000; i++ {
+		a := rand.Int32()
+		b := rand.Int32()
+		vals = append(vals, a-b)
+	}
+
+	vs := []struct {
+		name string
+		f    func(x, y int32) int32
+	}{
+		{"basic", avg[int32]},
+		{"AvgFloor", hd.AvgFloor[int32]},
+		{"AvgCeil", hd.AvgCeil[int32]},
+	}
+	for _, v := range vs {
+		b.Run(v.name, func(b *testing.B) {
+			for i := 0; i < b.N; i += len(vals) {
+				for j := 0; j < len(vals)-1; j++ {
+					out = v.f(vals[j], vals[j+1])
+				}
+			}
+		})
+	}
+
+	if (out*2 - out - out) != 0 {
+		b.Fatal("never")
+	}
 }

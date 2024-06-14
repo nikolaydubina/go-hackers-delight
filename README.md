@@ -24,8 +24,9 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 ### Observations
 
 * native `Abs` performance is the same
-* native `math/bits.Mul32` and `math/bits.Mul64`[^3] performance is the same
 * native `Div` and `Mod` by small constants performance is better
+* native `math/bits.Mul32` and `math/bits.Mul64`[^3] performance is the same
+* native `math/bits.LeadingZeros` performance is better than `LeadingZeroes` algorithm
 * native `math.Sqrt` performance is better
 * native `math.Pow(x, 1./3)`[^4] performance is worse than `Cbrt` algorithm 💥
 * native `math.Pow(x, 1./3)`[^4][^5] underflows but `Cbrt` algorithm is correct 💥
@@ -33,8 +34,10 @@ An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki
 * native `math.Log2(x)`[^4] performance is worse than `Log2` algorithm 💥
 * native `math.Log10(x)`[^4] performance is worse than `Log10` algorithm 💥
 * native `math.Log10(x)` [^4][^5] overflows for `math.MaxUint64` but `Log10` algorithm is correct 💥
-* native `crc32.Checksum` performance is `30x`~`500x` better than `CRC32` algorithms
 * native `1/math.Sqrt(x)` performance is `1.5x` better than `RSqrtFloat32` algorithm
+* native `switch` performance is better than `CycleThreeValues` algorithm
+* native `crc32.Checksum` performance is `30x`~`500x` better than `CRC32` algorithms
+* simplistic `LRUCache` performance is `3x` worse than `LRUCache` algorithm 💥 
 
 <details><summary>Appendix: Benchmarks</summary>
 
@@ -43,60 +46,76 @@ $ go test -bench .
 goos: darwin
 goarch: arm64
 pkg: github.com/nikolaydubina/go-hackers-delight
-BenchmarkNoop/---------------------------------16         	1000000000	         0.0000000 ns/op
-BenchmarkAbs/basic-16                                     	1000000000	         0.9244 ns/op
-BenchmarkAbs/Abs-16                                       	1000000000	         0.9228 ns/op
-BenchmarkAbs/Abs2-16                                      	1000000000	         0.9222 ns/op
-BenchmarkAbs/Abs3-16                                      	1000000000	         0.9266 ns/op
-BenchmarkAbs/Abs4-16                                      	1000000000	         0.9312 ns/op
-BenchmarkAbs/AbsFastMul-16                                	1000000000	         0.9387 ns/op
-BenchmarkCompress/Compress-16                             	100000000	        10.86 ns/op
-BenchmarkCompress/Compress2-16                            	57372118	        21.39 ns/op
-BenchmarkMul/uint32/basic-16                              	595723204	         2.015 ns/op
-BenchmarkMul/uint32/MultiplyHighOrder32-16                	589839883	         2.041 ns/op
-BenchmarkMul/uint64/basic-16                              	984232455	         1.215 ns/op
-BenchmarkMul/uint64/MultiplyHighOrder64-16                	591391069	         2.030 ns/op
-BenchmarkDivMod/DivMod/3/basic-16                         	1000000000	         0.8394 ns/op
-BenchmarkDivMod/DivMod/3/DivMod3Signed-16                 	617556885	         1.973 ns/op
-BenchmarkDivMod/DivMod/3/DivMod3Signed2-16                	1000000000	         1.080 ns/op
-BenchmarkDivMod/DivMod/7/basic-16                         	1000000000	         0.8374 ns/op
-BenchmarkDivMod/DivMod/7/DivMod7Signed-16                 	564408957	         2.145 ns/op
-BenchmarkDivMod/Div/3/basic-16                            	1000000000	         0.8357 ns/op
-BenchmarkDivMod/Div/3/Div3Signed-16                       	776687295	         1.542 ns/op
-BenchmarkDivMod/Div/3/Div3ShiftSigned-16                  	888967630	         1.344 ns/op
-BenchmarkDivMod/Div/7/basic-16                            	1000000000	         0.8487 ns/op
-BenchmarkDivMod/Div/7/Div7Signed-16                       	738237795	         1.624 ns/op
-BenchmarkDivMod/Div/7/Div7ShiftSigned-16                  	826423514	         1.451 ns/op
-BenchmarkDivMod/Mod/3/basic-16                            	1000000000	         0.8469 ns/op
-BenchmarkDivMod/Mod/3/Mod3Signed-16                       	798928768	         1.515 ns/op
-BenchmarkDivMod/Mod/3/Mod3Signed2-16                      	1000000000	         0.8473 ns/op
-BenchmarkDivMod/Mod/7/basic-16                            	1000000000	         0.8482 ns/op
-BenchmarkDivMod/Mod/7/Mod7Signed-16                       	734880409	         1.632 ns/op
-BenchmarkDivMod/Mod/7/Mod7Signed2-16                      	1000000000	         1.115 ns/op
-BenchmarkDivMod/Mod/10/basic-16                           	1000000000	         0.8499 ns/op
-BenchmarkDivMod/Mod/10/Mod10Signed-16                     	824417413	         1.463 ns/op
-BenchmarkDivMod/DivExact/7/basic-16                       	1000000000	         0.9435 ns/op
-BenchmarkDivMod/DivExact/7/DivExact7-16                   	1000000000	         0.9407 ns/op
-BenchmarkDivMod/DivExact/7/Div7Signed-16                  	709120321	         1.686 ns/op
-BenchmarkDivMod/DivExact/7/Div7ShiftSigned-16             	792262238	         1.511 ns/op
-BenchmarkCbrt/basic-16                                    	45397081	        26.45 ns/op
-BenchmarkCbrt/Cbrt-16                                     	68115703	        17.60 ns/op
-BenchmarkPow/basic-16                                     	20584660	        56.07 ns/op
-BenchmarkPow/Pow-16                                       	62423868	        19.33 ns/op
-BenchmarkLog/uint32/2/basic-16                            	97335441	        12.09 ns/op
-BenchmarkLog/uint32/2/Log2-16                             	981750010	         1.221 ns/op
-BenchmarkLog/uint32/10/basic-16                           	141246283	         8.538 ns/op
-BenchmarkLog/uint32/10/Log10-16                           	540736009	         2.220 ns/op
-BenchmarkLog/uint64/2/basic-16                            	100000000	        11.81 ns/op
-BenchmarkLog/uint64/2/Log2-16                             	848453780	         1.412 ns/op
-BenchmarkLog/uint64/10/basic-16                           	142674736	         8.369 ns/op
-BenchmarkLog/uint64/10/Log10-16                           	538090652	         2.263 ns/op
-BenchmarkSqrt/basic-16                                    	1000000000	         1.047 ns/op
-BenchmarkSqrt/SqrtNewton-16                               	190331125	         5.673 ns/op
-BenchmarkSqrt/SqrtBinarySearch-16                         	77246794	        15.66 ns/op
-BenchmarkSqrt/SqrtShiftAndSubtract-16                     	138441583	         8.693 ns/op
+BenchmarkNoop/---------------------------------16         	1000000000	         0.0000001 ns/op
+BenchmarkAbs/basic-16                                     	1000000000	         0.9330 ns/op
+BenchmarkAbs/Abs-16                                       	1000000000	         0.9326 ns/op
+BenchmarkAbs/Abs2-16                                      	1000000000	         0.9362 ns/op
+BenchmarkAbs/Abs3-16                                      	1000000000	         0.9324 ns/op
+BenchmarkAbs/Abs4-16                                      	1000000000	         0.9414 ns/op
+BenchmarkAbs/AbsFastMul-16                                	1000000000	         0.9493 ns/op
+BenchmarkAvg/basic-16                                     	590327602	         2.045 ns/op
+BenchmarkAvg/AvgFloor-16                                  	594028404	         2.004 ns/op
+BenchmarkAvg/AvgCeil-16                                   	592978882	         2.020 ns/op
+BenchmarkCycleThree/basic-16                              	787989288	         1.519 ns/op
+BenchmarkCycleThree/CycleThreeValues-16                   	474497178	         2.510 ns/op
+BenchmarkLeadingZeros/uint32/basic-16                     	1000000000	         0.9270 ns/op
+BenchmarkLeadingZeros/uint32/LeadingZerosUint32-16        	1000000000	         1.136 ns/op
+BenchmarkLeadingZeros/uint64/basic-16                     	1000000000	         1.099 ns/op
+BenchmarkLeadingZeros/uint64/LeadingZerosUint32-16        	877795342	         1.512 ns/op
+BenchmarkCompress/Compress-16                             	100000000	        10.77 ns/op
+BenchmarkCompress/Compress2-16                            	58750090	        21.02 ns/op
+BenchmarkLRU/basic-16                                     	239493868	         4.978 ns/op
+BenchmarkLRU/LeadingZerosUint32-16                        	981022663	         1.223 ns/op
+BenchmarkMul/uint32/basic-16                              	656605255	         2.006 ns/op
+BenchmarkMul/uint32/MultiplyHighOrder32-16                	591757071	         1.743 ns/op
+BenchmarkMul/uint64/basic-16                              	993127761	         1.207 ns/op
+BenchmarkMul/uint64/MultiplyHighOrder64-16                	975349400	         2.025 ns/op
+BenchmarkDivMod/DivMod/3/basic-16                         	1000000000	         0.8625 ns/op
+BenchmarkDivMod/DivMod/3/DivMod3Signed-16                 	607501119	         1.970 ns/op
+BenchmarkDivMod/DivMod/3/DivMod3Signed2-16                	1000000000	         1.117 ns/op
+BenchmarkDivMod/DivMod/7/basic-16                         	1000000000	         0.8537 ns/op
+BenchmarkDivMod/DivMod/7/DivMod7Signed-16                 	562010763	         2.144 ns/op
+BenchmarkDivMod/Div/3/basic-16                            	1000000000	         0.8432 ns/op
+BenchmarkDivMod/Div/3/Div3Signed-16                       	794080347	         1.528 ns/op
+BenchmarkDivMod/Div/3/Div3ShiftSigned-16                  	892143838	         1.332 ns/op
+BenchmarkDivMod/Div/7/basic-16                            	1000000000	         0.8831 ns/op
+BenchmarkDivMod/Div/7/Div7Signed-16                       	725504583	         1.657 ns/op
+BenchmarkDivMod/Div/7/Div7ShiftSigned-16                  	828426534	         1.443 ns/op
+BenchmarkDivMod/Mod/3/basic-16                            	1000000000	         0.8523 ns/op
+BenchmarkDivMod/Mod/3/Mod3Signed-16                       	780382692	         1.518 ns/op
+BenchmarkDivMod/Mod/3/Mod3Signed2-16                      	1000000000	         0.8461 ns/op
+BenchmarkDivMod/Mod/7/basic-16                            	1000000000	         0.8449 ns/op
+BenchmarkDivMod/Mod/7/Mod7Signed-16                       	747462322	         1.631 ns/op
+BenchmarkDivMod/Mod/7/Mod7Signed2-16                      	1000000000	         1.100 ns/op
+BenchmarkDivMod/Mod/10/basic-16                           	1000000000	         0.8332 ns/op
+BenchmarkDivMod/Mod/10/Mod10Signed-16                     	815590462	         1.436 ns/op
+BenchmarkDivMod/DivExact/7/basic-16                       	1000000000	         0.9324 ns/op
+BenchmarkDivMod/DivExact/7/DivExact7-16                   	1000000000	         0.9513 ns/op
+BenchmarkDivMod/DivExact/7/Div7Signed-16                  	698338923	         1.695 ns/op
+BenchmarkDivMod/DivExact/7/Div7ShiftSigned-16             	802803792	         1.504 ns/op
+BenchmarkCbrt/basic-16                                    	46489705	        26.13 ns/op
+BenchmarkCbrt/Cbrt-16                                     	82498086	        15.14 ns/op
+BenchmarkPow/basic-16                                     	22573610	        51.55 ns/op
+BenchmarkPow/Pow-16                                       	62801604	        19.12 ns/op
+BenchmarkLog/uint32/2/basic-16                            	100000000	        11.93 ns/op
+BenchmarkLog/uint32/2/Log2-16                             	977360526	         1.228 ns/op
+BenchmarkLog/uint32/10/basic-16                           	139321425	         8.559 ns/op
+BenchmarkLog/uint32/10/Log10-16                           	539884531	         2.237 ns/op
+BenchmarkLog/uint64/2/basic-16                            	100000000	        11.75 ns/op
+BenchmarkLog/uint64/2/Log2-16                             	845898448	         1.419 ns/op
+BenchmarkLog/uint64/10/basic-16                           	144678940	         8.284 ns/op
+BenchmarkLog/uint64/10/Log10-16                           	539179033	         2.222 ns/op
+BenchmarkSqrt/basic-16                                    	1000000000	         1.019 ns/op
+BenchmarkSqrt/SqrtNewton-16                               	170914454	         6.656 ns/op
+BenchmarkSqrt/SqrtBinarySearch-16                         	73125955	        16.40 ns/op
+BenchmarkSqrt/SqrtShiftAndSubtract-16                     	135757068	         8.813 ns/op
+BenchmarkCRC32/basic-16                                   	222373198	         5.397 ns/op
+BenchmarkCRC32/CRC32Basic-16                              	  447698	      2522 ns/op
+BenchmarkCRC32/CRC32TableLookup-16                        	 8125387	       147.7 ns/op
+BenchmarkRSqrtFloat32/basic-16                            	1000000000	         0.9349 ns/op
+BenchmarkRSqrtFloat32/CRC32Basic-16                       	830151805	         1.447 ns/op
 PASS
-ok  	github.com/nikolaydubina/go-hackers-delight	66.962s
+ok  	github.com/nikolaydubina/go-hackers-delight	89.462s
 ```
 </details>
 

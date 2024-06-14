@@ -37,6 +37,56 @@ func FuzzCycleThreeValues(f *testing.F) {
 	})
 }
 
+func cycleThree1(x int32) int32 {
+	switch x {
+	case 0b11111:
+		return 0b10100
+	case 0b10100:
+		return 0b10101
+	case 0b10101:
+		return 0b11111
+	default:
+		panic("not defined")
+	}
+}
+
+func cycleThreeValues1(x int32) int32 {
+	const c1, c2, c3, n1, n2 int32 = -11, 10, 21, 1, 0
+	return (((x << (31 - n1)) >> 31) & c1) + (((x << (31 - n2)) >> 31) & c2) + c3
+}
+
+func BenchmarkCycleThree(b *testing.B) {
+	var out int32
+
+	vs := []struct {
+		name string
+		f    func(v int32) int32
+	}{
+		{"basic", cycleThree1},
+		{"CycleThreeValues", cycleThreeValues1},
+	}
+	for _, v := range vs {
+		b.Run(v.name, func(b *testing.B) {
+			out = 0b11111
+			for i := 0; i < b.N; i++ {
+				out = v.f(out)
+			}
+		})
+	}
+
+	if (out*2 - out - out) != 0 {
+		b.Fatal("never")
+	}
+}
+
+func ExampleSetupCycleThreeValues() {
+	var c int32 = 0b10101 // 21
+	var a int32 = 0b11111 // 31
+	var b int32 = 0b10100 // 20
+	fmt.Println(hd.SetupCycleThreeValues(a, b, c))
+	// Output: -11 10 21 1 0
+}
+
 func ExampleCycleThreeValues() {
 	var c int32 = 0b10101 // 21
 	var a int32 = 0b11111 // 31

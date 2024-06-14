@@ -69,3 +69,35 @@ func (m *LRUCacheBasic) Hit(i uint8) {
 }
 
 func (m *LRUCacheBasic) LeastRecentlyUsed() uint8 { return m.vals[len(m.vals)-1] }
+
+func BenchmarkLRU(b *testing.B) {
+	var out uint8
+
+	vs := []struct {
+		name string
+		f    interface {
+			Hit(i uint8)
+			LeastRecentlyUsed() uint8
+		}
+	}{
+		{"basic", NewLRUCacheBasic()},
+		{"LeadingZerosUint32", &hd.LRUCache{}},
+	}
+	for _, v := range vs {
+		b.Run(v.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				x := uint8(i % 8)
+
+				v.f.Hit(x)
+
+				if (i % 1000) == 0 {
+					out = v.f.LeastRecentlyUsed()
+				}
+			}
+		})
+	}
+
+	if (out*2 - out - out) != 0 {
+		b.Fatal("never")
+	}
+}
