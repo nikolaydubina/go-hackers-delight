@@ -57,7 +57,6 @@ func BenchmarkCompress(b *testing.B) {
 	}
 
 	b.Run("Compress", func(b *testing.B) {
-		b.ResetTimer()
 		var v uint32
 		for n := 0; n < b.N; n++ {
 			v = hd.Compress(vs[n%len(vs)], vs[(n+1)%len(vs)])
@@ -68,7 +67,6 @@ func BenchmarkCompress(b *testing.B) {
 	})
 
 	b.Run("Compress2", func(b *testing.B) {
-		b.ResetTimer()
 		var v uint32
 		for n := 0; n < b.N; n++ {
 			v = hd.Compress2(vs[n%len(vs)], vs[(n+1)%len(vs)])

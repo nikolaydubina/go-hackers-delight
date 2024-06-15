@@ -45,7 +45,7 @@ func BenchmarkRSqrtFloat32(b *testing.B) {
 		f    func(x float32) float32
 	}{
 		{"basic", basicRSqrt},
-		{"CRC32Basic", hd.RSqrtFloat32},
+		{"RSqrtFloat32", hd.RSqrtFloat32},
 	}
 	for _, v := range vs {
 		b.Run(v.name, func(b *testing.B) {

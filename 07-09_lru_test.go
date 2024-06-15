@@ -81,7 +81,7 @@ func BenchmarkLRU(b *testing.B) {
 		}
 	}{
 		{"basic", NewLRUCacheBasic()},
-		{"LeadingZerosUint32", &hd.LRUCache{}},
+		{"LRUCache", &hd.LRUCache{}},
 	}
 	for _, v := range vs {
 		b.Run(v.name, func(b *testing.B) {

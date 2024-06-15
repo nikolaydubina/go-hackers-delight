@@ -184,7 +184,7 @@ func BenchmarkLeadingZeros(b *testing.B) {
 			f    func(x uint64) uint8
 		}{
 			{"basic", leadingZeros64},
-			{"LeadingZerosUint32", hd.LeadingZerosUint64},
+			{"LeadingZerosUint64", hd.LeadingZerosUint64},
 		}
 		for _, v := range vs {
 			b.Run(v.name, func(b *testing.B) {
