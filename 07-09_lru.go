@@ -13,4 +13,4 @@ func (c *LRUCache) Hit(i uint8) {
 	c.m &= ^(0x0101_0101_0101_0101 << i)
 }
 
-func (c *LRUCache) LeastRecentlyUsed() uint8 { return uint8(7 - ZByteL64(uint64(c.m))) }
+func (c *LRUCache) LeastRecentlyUsed() uint8 { return 7 - uint8(ZByteL64(c.m)) }
