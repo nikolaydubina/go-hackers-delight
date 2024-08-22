@@ -23,8 +23,6 @@ jobs:
 
       - name: test
         run: |
-          go generate ./...
-          go get -v -t -d ./...
           go install github.com/jstemmer/go-junit-report/v2@latest
           go test -coverprofile=coverage.out -covermode=atomic -cover -json -v ./... 2>&1 | go-junit-report -set-exit-code > tests.xml
 
