@@ -13,24 +13,32 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - name: get code
+        uses: actions/checkout@v4
+    
       - name: setup go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
         with:
           go-version: ^1.22
-        id: go
-
-      - name: get code
-        uses: actions/checkout@v2
 
       - name: test
-        run: go test -coverprofile=coverage.txt -covermode=atomic ./...
+        run: |
+          go generate ./...
+          go get -v -t -d ./...
+          go install github.com/jstemmer/go-junit-report/v2@latest
+          go test -coverprofile=coverage.out -covermode=atomic -cover -json -v ./... 2>&1 | go-junit-report -set-exit-code > tests.xml
 
       - name: fuzz
         run: go test -list . | grep Fuzz | xargs -P 8 -I {} go test -fuzz {} -fuzztime 5s .
 
-      - name: upload coverage to codecov
-        uses: codecov/codecov-action@v2
+      - name: Upload test results to Codecov
+        uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage.txt
-          verbose: true
+          files: tests.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.out
