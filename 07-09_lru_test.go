@@ -72,8 +72,6 @@ func (m *LRUCacheBasic) Hit(i uint8) {
 func (m *LRUCacheBasic) LeastRecentlyUsed() uint8 { return m.vals[len(m.vals)-1] }
 
 func BenchmarkLRU(b *testing.B) {
-	var out uint8
-
 	vs := []struct {
 		name string
 		f    interface {
@@ -93,13 +91,9 @@ func BenchmarkLRU(b *testing.B) {
 				v.f.Hit(x)
 
 				if (i % 1000) == 0 {
-					out = v.f.LeastRecentlyUsed()
+					v.f.LeastRecentlyUsed()
 				}
 			}
 		})
-	}
-
-	if (out*2 - out - out) != 0 {
-		b.Fatal("never")
 	}
 }
