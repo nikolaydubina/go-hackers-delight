@@ -33,8 +33,6 @@ func FuzzRSqrtFloat32(f *testing.F) {
 }
 
 func BenchmarkRSqrtFloat32(b *testing.B) {
-	var out float32
-
 	var vals []float32
 	for i := 0; i < 10000; i++ {
 		vals = append(vals, rand.Float32())
@@ -49,15 +47,11 @@ func BenchmarkRSqrtFloat32(b *testing.B) {
 	}
 	for _, v := range vs {
 		b.Run(v.name, func(b *testing.B) {
-			for i := 0; i < b.N; i += len(vals) {
+			for b.Loop() {
 				for j := 0; j < len(vals)-1; j++ {
-					out = v.f(vals[j])
+					v.f(vals[j])
 				}
 			}
 		})
-	}
-
-	if (out*2 - out - out) != 0 {
-		b.Fatal("never")
 	}
 }

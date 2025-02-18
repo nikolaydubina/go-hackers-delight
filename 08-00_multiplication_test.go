@@ -97,8 +97,6 @@ func mulhuBasic64(x, y uint64) uint64 {
 
 func BenchmarkMul(b *testing.B) {
 	b.Run("uint32", func(b *testing.B) {
-		var out uint32
-
 		var vals []uint32
 		for i := 0; i < 1000; i++ {
 			vals = append(vals, rand.Uint32())
@@ -113,22 +111,16 @@ func BenchmarkMul(b *testing.B) {
 		}
 		for _, v := range vs {
 			b.Run(v.name, func(b *testing.B) {
-				for i := 0; i < b.N; i += len(vals) {
+				for b.Loop() {
 					for j := 0; j < len(vals)-1; j++ {
-						out = v.f(vals[j], vals[j+1])
+						v.f(vals[j], vals[j+1])
 					}
 				}
 			})
 		}
-
-		if (out*2 - out - out) != 0 {
-			b.Fatal("never")
-		}
 	})
 
 	b.Run("uint64", func(b *testing.B) {
-		var out uint64
-
 		var vals []uint64
 		for i := 0; i < 10000; i++ {
 			vals = append(vals, rand.Uint64())
@@ -143,16 +135,12 @@ func BenchmarkMul(b *testing.B) {
 		}
 		for _, v := range vs {
 			b.Run(v.name, func(b *testing.B) {
-				for i := 0; i < b.N; i += len(vals) {
+				for b.Loop() {
 					for j := 0; j < len(vals)-1; j++ {
-						out = v.f(vals[j], vals[j+1])
+						v.f(vals[j], vals[j+1])
 					}
 				}
 			})
-		}
-
-		if (out*2 - out - out) != 0 {
-			b.Fatal("never")
 		}
 	})
 }

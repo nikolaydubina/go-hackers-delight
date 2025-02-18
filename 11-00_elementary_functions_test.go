@@ -35,8 +35,6 @@ func FuzzCbrt(f *testing.F) {
 }
 
 func BenchmarkCbrt(b *testing.B) {
-	var out uint32
-
 	var vals []uint32
 	for i := 0; i < 10000; i++ {
 		vals = append(vals, rand.Uint32())
@@ -51,16 +49,12 @@ func BenchmarkCbrt(b *testing.B) {
 	}
 	for _, v := range vs {
 		b.Run(v.name, func(b *testing.B) {
-			for i := 0; i < b.N; i += len(vals) {
+			for b.Loop() {
 				for j := 0; j < len(vals)-1; j++ {
-					out = v.f(vals[j])
+					v.f(vals[j])
 				}
 			}
 		})
-	}
-
-	if (out*2 - out - out) != 0 {
-		b.Fatal("never")
 	}
 }
 
@@ -84,8 +78,6 @@ func FuzzPow(f *testing.F) {
 }
 
 func BenchmarkPow(b *testing.B) {
-	var out int32
-
 	type tc struct {
 		x int32
 		n uint
@@ -109,16 +101,12 @@ func BenchmarkPow(b *testing.B) {
 	}
 	for _, v := range vs {
 		b.Run(v.name, func(b *testing.B) {
-			for i := 0; i < b.N; i += len(vals) {
+			for b.Loop() {
 				for j := 0; j < len(vals)-1; j++ {
-					out = v.f(vals[j].x, vals[j].n)
+					v.f(vals[j].x, vals[j].n)
 				}
 			}
 		})
-	}
-
-	if (out*2 - out - out) != 0 {
-		b.Fatal("never")
 	}
 }
 
@@ -207,8 +195,6 @@ func FuzzLog_uint64(f *testing.F) {
 
 func BenchmarkLog(b *testing.B) {
 	b.Run("uint32", func(b *testing.B) {
-		var out uint32
-
 		var vals []uint32
 		for x := uint32(0); len(vals) < 10000; x = rand.Uint32() {
 			vals = append(vals, x)
@@ -226,22 +212,16 @@ func BenchmarkLog(b *testing.B) {
 		}
 		for _, v := range vs {
 			b.Run(v.name, func(b *testing.B) {
-				for i := 0; i < b.N; i += len(vals) {
+				for b.Loop() {
 					for j := 0; j < len(vals)-1; j++ {
-						out = v.f(vals[j])
+						v.f(vals[j])
 					}
 				}
 			})
 		}
-
-		if (out*2 - out - out) != 0 {
-			b.Fatal("never")
-		}
 	})
 
 	b.Run("uint64", func(b *testing.B) {
-		var out uint64
-
 		var vals []uint64
 		for x := uint64(0); len(vals) < 10000; x = rand.Uint64() {
 			vals = append(vals, x)
@@ -259,16 +239,12 @@ func BenchmarkLog(b *testing.B) {
 		}
 		for _, v := range vs {
 			b.Run(v.name, func(b *testing.B) {
-				for i := 0; i < b.N; i += len(vals) {
+				for b.Loop() {
 					for j := 0; j < len(vals)-1; j++ {
-						out = v.f(vals[j])
+						v.f(vals[j])
 					}
 				}
 			})
-		}
-
-		if (out*2 - out - out) != 0 {
-			b.Fatal("never")
 		}
 	})
 }

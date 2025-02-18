@@ -58,8 +58,9 @@ func BenchmarkCompress(b *testing.B) {
 
 	b.Run("Compress", func(b *testing.B) {
 		var v uint32
-		for n := 0; n < b.N; n++ {
-			v = hd.Compress(vs[n%len(vs)], vs[(n+1)%len(vs)])
+		i := rand.Intn(len(vs) - 1)
+		for b.Loop() {
+			v = hd.Compress(vs[i], vs[i+1])
 			if (v + 1) == 0 {
 				b.Error(v)
 			}

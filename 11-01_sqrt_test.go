@@ -30,8 +30,6 @@ func FuzzSqrt(f *testing.F) {
 }
 
 func BenchmarkSqrt(b *testing.B) {
-	var out uint32
-
 	var vals []uint32
 	for i := 0; i < 10000; i++ {
 		vals = append(vals, rand.Uint32())
@@ -48,15 +46,11 @@ func BenchmarkSqrt(b *testing.B) {
 	}
 	for _, v := range vs {
 		b.Run(v.name, func(b *testing.B) {
-			for i := 0; i < b.N; i += len(vals) {
+			for b.Loop() {
 				for j := 0; j < len(vals)-1; j++ {
-					out = v.f(vals[j])
+					v.f(vals[j])
 				}
 			}
 		})
-	}
-
-	if (out*2 - out - out) != 0 {
-		b.Fatal("never")
 	}
 }

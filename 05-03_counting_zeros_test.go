@@ -142,8 +142,6 @@ func leadingZeros64(x uint64) uint8 { return uint8(bits.LeadingZeros64(x)) }
 
 func BenchmarkLeadingZeros(b *testing.B) {
 	b.Run("uint32", func(b *testing.B) {
-		var out uint8
-
 		var vals []uint32
 		for i := 0; i < 1000; i++ {
 			vals = append(vals, rand.Uint32())
@@ -158,22 +156,16 @@ func BenchmarkLeadingZeros(b *testing.B) {
 		}
 		for _, v := range vs {
 			b.Run(v.name, func(b *testing.B) {
-				for i := 0; i < b.N; i += len(vals) {
+				for b.Loop() {
 					for j := 0; j < len(vals); j++ {
-						out = v.f(vals[j])
+						v.f(vals[j])
 					}
 				}
 			})
 		}
-
-		if (out*2 - out - out) != 0 {
-			b.Fatal("never")
-		}
 	})
 
 	b.Run("uint64", func(b *testing.B) {
-		var out uint8
-
 		var vals []uint64
 		for i := 0; i < 1000; i++ {
 			vals = append(vals, rand.Uint64())
@@ -188,16 +180,12 @@ func BenchmarkLeadingZeros(b *testing.B) {
 		}
 		for _, v := range vs {
 			b.Run(v.name, func(b *testing.B) {
-				for i := 0; i < b.N; i += len(vals) {
+				for b.Loop() {
 					for j := 0; j < len(vals); j++ {
-						out = v.f(vals[j])
+						v.f(vals[j])
 					}
 				}
 			})
-		}
-
-		if (out*2 - out - out) != 0 {
-			b.Fatal("never")
 		}
 	})
 }

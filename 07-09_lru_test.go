@@ -1,6 +1,7 @@
 package hd_test
 
 import (
+	"math/rand"
 	"testing"
 
 	hd "github.com/nikolaydubina/go-hackers-delight"
@@ -84,8 +85,9 @@ func BenchmarkLRU(b *testing.B) {
 		{"LRUCache", &hd.LRUCache{}},
 	}
 	for _, v := range vs {
+		i := rand.Intn(8)
 		b.Run(v.name, func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
+			for b.Loop() {
 				x := uint8(i % 8)
 
 				v.f.Hit(x)

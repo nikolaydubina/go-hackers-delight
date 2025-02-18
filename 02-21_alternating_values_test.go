@@ -56,7 +56,7 @@ func cycleThreeValues1(x int32) int32 {
 }
 
 func BenchmarkCycleThree(b *testing.B) {
-	var out int32
+	x := int32(0b11111)
 
 	vs := []struct {
 		name string
@@ -67,15 +67,10 @@ func BenchmarkCycleThree(b *testing.B) {
 	}
 	for _, v := range vs {
 		b.Run(v.name, func(b *testing.B) {
-			out = 0b11111
-			for i := 0; i < b.N; i++ {
-				out = v.f(out)
+			for b.Loop() {
+				v.f(x)
 			}
 		})
-	}
-
-	if (out*2 - out - out) != 0 {
-		b.Fatal("never")
 	}
 }
 
