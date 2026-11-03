@@ -1,8 +1,5 @@
 # go-hackers-delight
 
-[![codecov](https://codecov.io/gh/nikolaydubina/go-hackers-delight/graph/badge.svg?token=660JQtUmiO)](https://codecov.io/gh/nikolaydubina/go-hackers-delight)
-[![Go Reference](https://pkg.go.dev/badge/github.com/nikolaydubina/go-hackers-delight.svg)](https://pkg.go.dev/github.com/nikolaydubina/go-hackers-delight)
-
 An interactive Go showcase of ["Hacker's Delight"](https://en.wikipedia.org/wiki/Hacker%27s_Delight) 2nd Edition by Henrey S.Warren Jr, 2013.[^1][^2]
 
 > If you write optimizing compilers or high-performance code, you must read this book.
